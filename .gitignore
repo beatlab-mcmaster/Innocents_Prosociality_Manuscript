@@ -4,6 +4,13 @@
 /*.lot
 /*.toc
 
+# JLS: added files from qmd
+_extensions/
+bibliography.bib
+example.qmd
+sampleimage.png
+site_libs/
+
 # History files
 .Rhistory
 .Rapp.history

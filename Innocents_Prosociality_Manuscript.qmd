@@ -1,0 +1,320 @@
+---
+title: "Media advocacy promotes prosociality through empathy for in-person and livestream audiences"
+shorttitle: "Media advocacy and audience prosociality"
+author:
+  - name: Joshua L. Schlichting
+    orcid: 0000-0001-8239-5197
+    email: schlichj@mcmaster.ca
+    roles:
+      - conceptualization
+      - methodology
+      - investigation
+      - software
+      - visualization
+      - data curation
+      - formal analysis  
+      - validation
+      - writing
+    affiliations:
+      - id: id1
+        name: "McMaster University"
+        department: Department of Psychology, Neuroscience & Behaviour
+        address: 1280 Main Street West
+        city: Hamilton
+        region: ON
+        country: Canada
+        postal-code: L8S 4K1
+  - name: Lauren K. Fink
+    orcid: 0000-0001-6699-750X
+    corresponding: true
+    roles:
+      - conceptualization
+      - methodology
+      - investigation
+      - funding acquisition
+      - project administration
+      - resources
+      - supervision
+      - editing
+    affiliations: 
+      - ref: id1
+blank-lines-above-author-note: 2
+author-note:
+  # Disclosures condensed to one paragraph, but you can start a field with two line breaks to break them up: \n\nNew Paragraph
+  disclosures:
+    study-registration: "The design, hypotheses, and analysis plan for study 2 were preregistered; see TODO."
+    data-sharing: "Data and code from this manuscript can be accessed at TODO."
+    related-report: "This article is based on the thesis completed by Schlichting (2025)."
+    conflict-of-interest: The authors have no conflicts of interest to disclose.
+    financial-support: "JLS was supported by a scholarship of the German Academic Exchange Service (DAAD)."
+    gratitude: "The authors would like to thank Allen Otte, John Lane, and Wojciech Lorenc for their artistic contribution, the LIVELab and BEAT Lab team for their crucial support in facilitating the live event, and Laurel Trainor and John Iversen for thoughtful comments on the project."
+abstract: "TODO"
+keywords: [music, film, media, social justice, prosocial, bonding, empathy, norm activation]
+impact-statement: ~
+floatsintext: true
+numbered-lines: true
+bibliography: bibliography.bib
+suppress-title-page: false
+link-citations: true
+# TODO set to true for peer review. Masks author info & references that appear in the masked-citations list
+mask: false
+masked-citations:
+  - schneider2012cattell
+  - schneider2015intelligence
+# If true, adds today's date below author affiliations. If text, can be any value.
+# This is not standard APA format, but it is convenient.
+# Works with docx, html, and typst. 
+draft-date: false
+lang: en
+language:
+  citation-last-author-separator: "and"
+  citation-masked-author: "Masked Citation"
+  citation-masked-date: "n.d."
+  citation-masked-title: "Masked Title"
+  email: "Email"
+  title-block-author-note: "Author Note"
+  title-block-correspondence-note: "Correspondence concerning this article should be addressed to"
+  title-block-role-introduction: "Author roles were classified using the Contributor Role Taxonomy (CRediT; [credit.niso.org](https://credit.niso.org)) as follows:"
+  title-impact-statement: "Impact Statement"
+format:
+  apaquarto-docx: 
+    toc: false
+  apaquarto-pdf:
+    # Can be jou (journal), man (manuscript), stu (student), or doc (document)
+    documentmode: man
+    keep-tex: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+rm(list=ls())
+require(pacman)
+p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', ' tinytable')
+
+# set preferences in case of command conflicts between loaded packages
+conflicts_prefer(dplyr::select, .quiet = TRUE)
+conflicts_prefer(dplyr::filter, .quiet = TRUE)
+conflicts_prefer(flextable::separate_header, .quiet = TRUE)
+```
+
+This is my introductory paragraph. The title will be placed above it automatically. *Do not start with an introductory heading* (e.g., "Introduction"). The title acts as your Level 1 heading for the introduction.
+
+Details about writing headings with markdown in APA style are [here](https://wjschne.github.io/apaquarto/writing.html#headings-in-apa-style). In general, level 1 headings should be reserved for the Method, Results, Discussion, References, and Appendices sections. 
+
+
+
+
+## Citations
+
+See [here](https://quarto.org/docs/authoring/footnotes-and-citations.html) for instructions on setting up citations and references.
+
+A parenthetical citation requires square brackets [@CameronTrivedi2013]. This reference was in my bibliography file. An in-text citation is done like so:
+
+@CameronTrivedi2013 make some important points ...
+
+See [here](https://wjschne.github.io/apaquarto/writing.html#references) for explanations, examples, and citation features exclusive to apaquarto. For example, apaquarto can automatically handle possessive citations:
+
+@schneider2012cattell ['s] position was ...
+
+## Masking Author Identity for Peer Review
+
+Setting `mask` to `true` will remove author names, affiliations, and correspondence from the title page. Any references listed in the `masked-citations` field will be masked as well. See [here](https://wjschne.github.io/apaquarto/writing.html#masked-citations-for-anonymous-peer-review) for more information.
+
+## Block Quotes
+
+Sometimes you want to give a longer quote that needs to go in its own paragraph. Block quotes are on their own line starting with the \> character. For example, @austenMansfieldPark1990 ['s] *Mansfield Park* has some memorable insights about the mind:
+
+> If any one faculty of our nature may be called more wonderful than the rest, I do think it is memory. There seems something more speakingly incomprehensible in the powers, the failures, the inequalities of memory, than in any other of our intelligences. The memory is sometimes so retentive, so serviceable, so obedient; at others, so bewildered and so weak; and at others again, so tyrannic, so beyond control! We are, to be sure, a miracle every way; but our powers of recollecting and of forgetting do seem peculiarly past finding out. (p. 163)
+
+
+## Math and Equations
+
+Inline math uses $\LaTeX$ syntax with single dollar signs. For example, the reliability coefficient of my measure is $r_{XX}=.95$.
+
+If you want to display and refer to a specific formula, enclose the formula in two dollar signs. After the second pair of dollar signs, place the label in curly braces. The label should have an `#eq-` prefix. To refer to the formula, use the same label but with the `@` symbol. For example, @eq-euler is Euler's Identity, which is much admired for its elegance.
+
+$$
+e^{i\pi}+1=0
+$$ {#eq-euler}
+
+A more practical example is the z-score equation seen in @eq-zscore.
+
+$$
+z=\frac{X-\mu}{\sigma}
+$$ {#eq-zscore}
+
+If no identifier label is given, a centered equation in display mode will have no identifying number:
+
+$$
+\sigma_e=\sigma_y\sqrt{1-r_{xy}^2}
+$$
+
+## Displaying Figures
+
+Do you want the tables and figures to be at the end of the document? You can set the `floatsintext` option to false. The reference labels will work no matter where they are in the text.
+
+A reference label for a figure must have the prefix `fig-`, and in a code chunk, the caption must be set with `fig-cap`. Captions are in [title case](https://apastyle.apa.org/style-grammar-guidelines/capitalization/title-case).
+
+```{r}
+#| label: fig-myplot
+#| fig-cap: The Figure Caption
+#| apa-note: This is the note below the figure.
+#| fig-height: 2
+#| fig-width: 3
+ggplot(data.frame(x = c(0, 35)), aes(x)) +
+  stat_function(fun = dchisq, 
+                args = list(df = 10),
+                geom = "area",
+                n = 1000,
+                color = NA,
+                fill = "#41448780") +
+  theme_void(base_size = 18)
+```
+
+To refer to any figure or table, use the `@` symbol followed by the reference label (e.g., @fig-myplot).
+
+## Displaying Tables
+
+We can make a table the same way as a figure. Generating a table that conforms to APA format in all document formats can be tricky. When the table is simple, the `kable` function from knitr works well. Feel free to experiment with different methods, but I have found that David Gohel's [flextable](https://davidgohel.github.io/flextable/) to be the best option when I need something more complex.
+
+
+```{r}
+#| label: tbl-mytable
+#| tbl-cap: The Table Caption. 
+#| apa-note: The note below the table.
+tibble(Numbers = seq(1,4), Letters = LETTERS[seq(Numbers)]) %>%
+  knitr::kable()
+
+```
+
+To refer to this table in text, use the `@` symbol followed by the reference label like so: As seen in @tbl-mytable, the first few numbers and letters of the alphabet are displayed.
+
+
+## Footnotes
+
+A footnote is usually displayed at the bottom of the page on which the footnote occurs.  A short note can be specified with the `^[My note here]` syntax.^[Here is my short footnote!] A longer note can be specified with the `[^id]` syntax with the text specified on a separate line like so `[^id]: Text here`.[^mylongfootnote]
+
+[^mylongfootnote]: This is a longer footnote. If it has multiple paragraphs, subsequent paragraphs need to be indented with two tabs.
+
+    This paragraph is still part of the footnote because it is indented with two tabs.
+
+A regular paragraph without any indentation is not part of the footnote and will be part of the main body of the document.
+
+## Hypotheses, Aims, and Objectives
+
+The last paragraph of the introduction usually states the specific hypotheses of the study, often in a way that links them to the research design.
+
+# Method
+
+General remarks on method. This paragraph is optional.
+
+Not all papers require each of these sections. Edit them as needed. Consult the [Journal Article Reporting Standards](https://apastyle.apa.org/jars) for what is needed for your type of article.
+
+## Participants
+
+Who are they? How were they recruited? Report criteria for participant inclusion and exclusion. Perhaps some basic demographic stats are in order. A table is a great way to avoid repetition in statistical reporting.
+
+## Measures
+
+This section can also be titled **Materials** or **Apparatus**. Whatever tools, equipment, or measurement devices used in the study should be described.
+
+### Measure A
+
+Describe Measure A.
+
+### Measure B
+
+Describe Measure B.
+
+#### Subscale B1
+
+A paragraph after a 4th-level header will appear on the same line as the header.
+
+#### Subscale B2
+
+A paragraph after a 4th-level header will appear on the same line as the header.
+
+##### Subscale B2a
+
+A paragraph after a 5th-level header will appear on the same line as the header.
+
+##### Subscale B2b
+
+A paragraph after a 5th-level header will appear on the same line as the header.
+
+## Procedure
+
+What did participants do? How are the data going to be analyzed?
+
+# Results
+
+## Descriptive Statistics
+
+Describe the basic characteristics of the primary variables. My ideal is to describe the variables well enough that someone conducting a meta-analysis can include the study without needing to ask for additional information.
+
+<!-- Add Additional Sections as Needed -->
+
+@tbl-mymarkdowntable2 is an example of a plain markdown table. Note the that the caption begins with a colon.
+
+| Letters | Numbers |
+|:-------:|:-------:|
+| A       | 1       |
+| B       | 2       |
+| C       | 3       |
+
+: My Caption. {#tbl-mymarkdowntable2 apa-note="My note"}
+
+# Discussion
+
+Describe results in non-statistical terms. <!-- Add sections as needed. -->
+
+## Limitations and Future Directions
+
+Every study has limitations. Based on this study, some additional steps might include...
+
+
+## Conclusion
+
+Describe the main point of the paper. 
+
+# References
+
+<!-- References will auto-populate in the refs div below -->
+
+::: {#refs}
+:::
+
+
+# My Appendix Title {#apx-a}
+
+Appendices are created as level 1 headings with an identifier with an  `#apx-` prefix. Appendix titles should be in title case and should describe the content of the appendix.
+
+If there is only one appendix, the label automatically inserted above the the appendix title will be **Appendix**. If there are multiple appendices, the labels **Appendix A**, **Appendix B**, **Appendix C** and so forth will be inserted above the titles.
+
+To cite an appendix as a whole, reference it with the `@apx-` prefix. For example, see @apx-a and @apx-b.
+
+This is an appendix with a table using markdown (see @tbl-letters).
+
+
+| Col 1 | Col 2 | Col 3 |
+|-------|-------|-------|
+| A     | B     | C     |
+| E     | F     | G     |
+| A     | G     | G     |
+
+: My Caption {#tbl-letters apa-note="These are letters."}
+
+
+
+
+# Another Appendix {#apx-b}
+
+
+See @fig-appendfig, an example of an imported graphic using markdown syntax. 
+
+
+
+![Appendix Figure](sampleimage.png){#fig-appendfig apa-note="A *note* below the figure"}
+
