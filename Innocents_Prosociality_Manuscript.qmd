@@ -1,6 +1,6 @@
 ---
-title: "Media advocacy promotes prosociality through empathy for in-person and livestream audiences"
-shorttitle: "Media advocacy and audience prosociality"
+title: "Media advocacy promotes in-person and livestream audiences' engagement with social justice cause through empathy"
+shorttitle: "Media advocacy and audience engagement"
 author:
   - name: Joshua L. Schlichting
     orcid: 0000-0001-8239-5197
@@ -47,7 +47,7 @@ author-note:
     related-report: "This article is based on the thesis completed by Schlichting (2025)."
     conflict-of-interest: The authors have no conflicts of interest to disclose.
     financial-support: "JLS was supported by a scholarship of the German Academic Exchange Service (DAAD)."
-    gratitude: "The authors would like to thank Allen Otte, John Lane, and Wojciech Lorenc for their artistic contribution, the LIVELab and BEAT Lab team for their crucial support in facilitating the live event, and Laurel Trainor and John Iversen for thoughtful comments on the project."
+    gratitude: "The authors would like to thank Allen Otte, John Lane, and Wojciech Lorenc for their artistic contribution, Innocence Canada for the provision of insights and materials, the LIVELab and BEAT Lab team for their crucial support in facilitating the live event, and Laurel Trainor and John Iversen for thoughtful comments on the project."
 abstract: "TODO"
 keywords: [music, film, media, social justice, prosocial, bonding, empathy, norm activation]
 impact-statement: ~
@@ -99,12 +99,55 @@ conflicts_prefer(dplyr::filter, .quiet = TRUE)
 conflicts_prefer(flextable::separate_header, .quiet = TRUE)
 ```
 
-This is my introductory paragraph. The title will be placed above it automatically. *Do not start with an introductory heading* (e.g., "Introduction"). The title acts as your Level 1 heading for the introduction.
+hook regarding social injustices or PGHS
 
-Details about writing headings with markdown in APA style are [here](https://wjschne.github.io/apaquarto/writing.html#headings-in-apa-style). In general, level 1 headings should be reserved for the Method, Results, Discussion, References, and Appendices sections. 
+## Social justice advocacy
 
+Psychological models: what does advocacy try to achieve? How? Introduce potential mediators
 
+increase empathy: motivation, rather than skill, to emphasize (Weisz & Zaki, 2017)
 
+## Artistic responses
+
+film vs. music: explanatory portrayal vs. experiential immersion approach to advocate for social justice issues –\> film could increase reasoned awareness, music could increase perspective-taking/empathy
+
+music has been related to closeness
+
+## Collective aspects
+
+in-person event: social contagion/collective action with performers (music only) or audience members (film and music) could enhance effects
+
+## The present studies
+
+Hypotheses
+
+Study 1
+
+Study 2
+
+# Study 1
+
+1 introductory paragraph
+
+## Method
+
+## Results
+
+## Discussion
+
+2 paragraphs
+
+# Study 2
+
+1 introductory paragraph: explain relation to hypotheses, gap of study 1, and how study 2 fills the gap (procedure)
+
+## Method
+
+## Results
+
+## Discussion
+
+# General Discussion
 
 ## Citations
 
@@ -127,7 +170,6 @@ Setting `mask` to `true` will remove author names, affiliations, and corresponde
 Sometimes you want to give a longer quote that needs to go in its own paragraph. Block quotes are on their own line starting with the \> character. For example, @austenMansfieldPark1990 ['s] *Mansfield Park* has some memorable insights about the mind:
 
 > If any one faculty of our nature may be called more wonderful than the rest, I do think it is memory. There seems something more speakingly incomprehensible in the powers, the failures, the inequalities of memory, than in any other of our intelligences. The memory is sometimes so retentive, so serviceable, so obedient; at others, so bewildered and so weak; and at others again, so tyrannic, so beyond control! We are, to be sure, a miracle every way; but our powers of recollecting and of forgetting do seem peculiarly past finding out. (p. 163)
-
 
 ## Math and Equations
 
@@ -179,7 +221,6 @@ To refer to any figure or table, use the `@` symbol followed by the reference la
 
 We can make a table the same way as a figure. Generating a table that conforms to APA format in all document formats can be tricky. When the table is simple, the `kable` function from knitr works well. Feel free to experiment with different methods, but I have found that David Gohel's [flextable](https://davidgohel.github.io/flextable/) to be the best option when I need something more complex.
 
-
 ```{r}
 #| label: tbl-mytable
 #| tbl-cap: The Table Caption. 
@@ -191,12 +232,13 @@ tibble(Numbers = seq(1,4), Letters = LETTERS[seq(Numbers)]) %>%
 
 To refer to this table in text, use the `@` symbol followed by the reference label like so: As seen in @tbl-mytable, the first few numbers and letters of the alphabet are displayed.
 
-
 ## Footnotes
 
-A footnote is usually displayed at the bottom of the page on which the footnote occurs.  A short note can be specified with the `^[My note here]` syntax.^[Here is my short footnote!] A longer note can be specified with the `[^id]` syntax with the text specified on a separate line like so `[^id]: Text here`.[^mylongfootnote]
+A footnote is usually displayed at the bottom of the page on which the footnote occurs. A short note can be specified with the `^[My note here]` syntax.[^1] A longer note can be specified with the `[^id]` syntax with the text specified on a separate line like so `[^id]: Text here`.[^2]
 
-[^mylongfootnote]: This is a longer footnote. If it has multiple paragraphs, subsequent paragraphs need to be indented with two tabs.
+[^1]: Here is my short footnote!
+
+[^2]: This is a longer footnote. If it has multiple paragraphs, subsequent paragraphs need to be indented with two tabs.
 
     This paragraph is still part of the footnote because it is indented with two tabs.
 
@@ -260,9 +302,9 @@ Describe the basic characteristics of the primary variables. My ideal is to desc
 
 | Letters | Numbers |
 |:-------:|:-------:|
-| A       | 1       |
-| B       | 2       |
-| C       | 3       |
+|    A    |    1    |
+|    B    |    2    |
+|    C    |    3    |
 
 : My Caption. {#tbl-mymarkdowntable2 apa-note="My note"}
 
@@ -274,10 +316,9 @@ Describe results in non-statistical terms. <!-- Add sections as needed. -->
 
 Every study has limitations. Based on this study, some additional steps might include...
 
-
 ## Conclusion
 
-Describe the main point of the paper. 
+Describe the main point of the paper.
 
 # References
 
@@ -286,17 +327,15 @@ Describe the main point of the paper.
 ::: {#refs}
 :::
 
-
 # My Appendix Title {#apx-a}
 
-Appendices are created as level 1 headings with an identifier with an  `#apx-` prefix. Appendix titles should be in title case and should describe the content of the appendix.
+Appendices are created as level 1 headings with an identifier with an `#apx-` prefix. Appendix titles should be in title case and should describe the content of the appendix.
 
 If there is only one appendix, the label automatically inserted above the the appendix title will be **Appendix**. If there are multiple appendices, the labels **Appendix A**, **Appendix B**, **Appendix C** and so forth will be inserted above the titles.
 
 To cite an appendix as a whole, reference it with the `@apx-` prefix. For example, see @apx-a and @apx-b.
 
 This is an appendix with a table using markdown (see @tbl-letters).
-
 
 | Col 1 | Col 2 | Col 3 |
 |-------|-------|-------|
@@ -306,15 +345,8 @@ This is an appendix with a table using markdown (see @tbl-letters).
 
 : My Caption {#tbl-letters apa-note="These are letters."}
 
-
-
-
 # Another Appendix {#apx-b}
 
-
-See @fig-appendfig, an example of an imported graphic using markdown syntax. 
-
-
+See @fig-appendfig, an example of an imported graphic using markdown syntax.
 
 ![Appendix Figure](sampleimage.png){#fig-appendfig apa-note="A *note* below the figure"}
-
