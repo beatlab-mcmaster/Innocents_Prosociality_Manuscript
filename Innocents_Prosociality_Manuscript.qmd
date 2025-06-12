@@ -1,5 +1,5 @@
 ---
-title: "Media advocacy promotes in-person and livestream audiences' engagement with social justice cause through empathy"
+title: "Media advocacy promotes in-person and online audiences' engagement with social justice cause through empathy"
 shorttitle: "Media advocacy and audience engagement"
 author:
   - name: Joshua L. Schlichting
@@ -99,7 +99,9 @@ conflicts_prefer(dplyr::filter, .quiet = TRUE)
 conflicts_prefer(flextable::separate_header, .quiet = TRUE)
 ```
 
-hook regarding social injustices or PGHS
+Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were instantiated to ensure a just society, but across governments, systemic issues lead to wrongful imprisonment of innocent individuals. How do we mobilize support to fight social injustice such as wrongful imprisonment? Arts and media are a way of reaching and engaging broad audiences. Using the power of storytelling, theatre, soap operas, and film can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it, few studies have investigated how music influences our views of people and issues that are the subject of music. Given that music typically has less narration than the previously studied media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. In addition, theories of prosocial behaviour and social engagement put forward various predictors that could explain how arts and media can advocate for social justice issues. This plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
+
+Here, we evaluate how a music performance engages audiences with the issue of wrongful imprisonment, compared to a more narrative documentary film. We assess changes in three affective and cognitive variables, empathic concern, relationship closeness, and problem awareness, and compare their influence on audiences' supportive behaviour. This study provides empirical support for the mobilizing potential of music as a medium with less narration, and highlights which facet of audiences' attitudes artists should appeal to in order to gain support for their cause.
 
 ## Social justice advocacy
 
