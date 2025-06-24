@@ -89,7 +89,10 @@ format:
 #| label: setup
 #| include: false
 
+# clear environment
 rm(list=ls())
+
+# load/install required packages
 require(pacman)
 p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'effsize', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', ' tinytable')
 
@@ -97,6 +100,165 @@ p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'here', 'lmerTe
 conflicts_prefer(dplyr::select, .quiet = TRUE)
 conflicts_prefer(dplyr::filter, .quiet = TRUE)
 conflicts_prefer(flextable::separate_header, .quiet = TRUE)
+
+# load custom functions
+source(here("src/LMMfunctions.R"), local = knitr::knit_global()) 
+
+# sessionInfo()
+```
+
+```{r}
+#| label: prepstudy1
+#| include: false
+
+# load study 1 data
+here::i_am("Innocents_Prosociality_Manuscript.qmd") # find project root
+study1_df <- read_csv(here("data/study1_df.csv")) # TODO load deident df, then calculate indices in here
+
+#### Exclude responses that lack variance ###
+# TODO define mapping of variables to constructs
+
+# within participants, count unique values across the items making up one construct
+count_unique_values <- function(data, instruments) {
+  # @data (data.frame, required): dataframe holding the items specified in the list of constucts
+  # @instruments (list, required): list of instruments and the items each constructis made up of
+  df_variance <- data # copy dataframe
+  
+  for (instrument in names(instruments)) {
+    items <- instruments[[instrument]] # item columns
+    unique_column <- paste0(instrument, "_unique") # name of the new column that stores the number of unique values
+    
+    # count unique values per instrument
+    df_variance <- df_variance %>%
+      rowwise() %>%
+      mutate(!!unique_column := n_distinct(c_across(all_of(items)), na.rm = TRUE)) %>%
+      ungroup()
+  }
+  
+  return(df_variance)
+}
+
+study1_variance <- count_unique_values(study1_df, study1_constructs)
+
+
+
+#### cALCULATE SCALE SCORES IF AT LEAST 80% OF ITEMS HAVE BEEN ANSWERED AND IF THERE IS SUFFICIENT VARIANCE ###
+
+calculate_scale_score <- function(scales) {
+  n_items <- length(items)
+  valid_items <- sum(!is.na(items))
+  threshold <- 0.8 * n_items
+  
+  if (valid_items >= threshold) {
+    return(mean(items, na.rm = TRUE))
+  } else {
+    return(NA)
+  }
+}
+```
+
+```{r}
+#| label: prepstudy2
+#| include: false
+
+# load study 2 data
+study2_df_deident <- read_csv(here("data/study2_df_deident.csv"))
+
+
+
+#### CHECK FOR SUFFICIENT VARIANCE ACROSS ITEMS OF ONE INSTRUMENT ###
+
+# define mapping of variables to instruments
+study2_instruments <- list(
+  "base_target_empathy" = grep("base_target_", colnames(study2_df_deident), value = TRUE),
+  "base_ios" = c("base_ios_allen", "base_ios_john", "base_ios_anna", "base_ios_inperson", "base_ios_remote"),
+  "base_anna_empathy" = grep("base_anna_", colnames(study2_df_deident), value = TRUE),
+  "base_namtpb" = c(grep("base_nam", colnames(study2_df_deident), value = TRUE), grep("base_tpb", colnames(study2_df_deident), value = TRUE)), 
+  "base_affect" = grep("base_emotion", colnames(study2_df_deident), value = TRUE),
+  "post_affect" = grep("post_emotion", colnames(study2_df_deident), value = TRUE),
+  "post_engagement" = c("post_enjoy", "post_interest", "post_moved", "post_insight", "post_concentration", "post_chills", "post_tears", "post_reengage"),
+  "post_target_empathy" = grep("post_target_", colnames(study2_df_deident), value = TRUE),
+  "post_ios" = c("post_ios_allen", "post_ios_john", "post_ios_anna", "post_ios_inperson", "post_ios_remote"),
+  "post_anna_empathy" = grep("post_anna_", colnames(study2_df_deident), value = TRUE),
+  "post_namtpb" = c(grep("post_nam", colnames(study2_df_deident), value = TRUE), grep("post_tpb", colnames(study2_df_deident), value = TRUE)), 
+  "post_presence" = grep("_presence", colnames(study2_df_deident), value = TRUE),
+  "demo_openness" = grep("open", colnames(study2_df_deident), value = TRUE)
+)
+
+# count unique values within participants within instruments
+study2_df_variance <- count_unique_values(study2_df_deident, study2_instruments)
+
+# across sample, count ratio of instruments that lack variances
+total_instrument_observations <- 0
+novariance_observations <- 0
+for (instrument in names(study2_instruments)) {
+  cutoff <- ifelse(length(items) > 10, 2, 1)
+  
+  total <- sum(!is.na(study2_df_variance[[paste0(instrument, "_unique")]])) # count total observations per instrument
+  novariance <- sum(study2_df_variance[[paste0(instrument, "_unique")]] <= cutoff, na.rm = TRUE) # count cases where unique values are below cutoff
+  
+  total_instrument_observations = total_instrument_observations + total
+  novariance_observations = novariance_observations + novariance
+} 
+
+rm(study2_instruments, total, novariance, study2_df_deident)
+
+
+
+#### RECODE REVERSE-CODED ITEMS ###
+
+study2_df_recoded <- study2_df_variance %>%
+  rowwise() %>%
+  mutate(across(.cols = c(age, caffeine, liking, income, education, politics, mailing),
+                .fns = ~ case_match(.x, -9 ~ NA, .default = .x)),
+         resource_click = case_match(resource_noclick, 0 ~ FALSE, .default = resource_click),
+         donation_click = case_match(donation_noclick, 0 ~ FALSE, .default = donation_click),
+         across(.cols = c(base_nam3, base_tpb11, post_nam3, post_tpb11),
+                .fns = ~ 8 - .x),
+         across(.cols = c(open1, open6, open11),
+                .fns = ~ 6 - .x)) %>%
+  ungroup() %>%
+  select(-c(resource_noclick, donation_noclick))
+
+rm(study2_df_variance)
+
+
+
+#### cALCULATE CONSTRUCT SCORES IF AT LEAST 80% OF ITEMS HAVE BEEN ANSWERED AND IF THERE IS SUFFICIENT VARIANCE ###
+
+# Define mapping of items to scales
+study2_scales <- list(
+  "base_target_empathic_concern" = c("base_target_ec1", "base_target_ec2", "base_target_ec3", "base_target_ec4", "base_target_ec5", "base_target_ec6"),
+  "base_target_personal_distress" = c("base_target_pd1", "base_target_pd2", "base_target_pd3", "base_target_pd4", "base_target_pd5", "base_target_pd6", "base_target_pd7", "base_target_pd8"),
+  "base_anna_empathic_concern" = c("base_anna_ec1", "base_anna_ec2", "base_anna_ec3", "base_anna_ec4", "base_anna_ec5", "base_anna_ec6"),
+  "base_anna_personal_distress" = c("base_anna_pd1", "base_anna_pd2", "base_anna_pd3", "base_anna_pd4", "base_anna_pd5", "base_anna_pd6", "base_anna_pd7", "base_anna_pd8"),
+  "base_problem_awareness" = c("base_nam1", "base_nam2", "base_nam3", "base_nam4"),
+  "base_ascribed_responsibility" = c("base_nam5", "base_nam6", "base_nam7", "base_nam8"),
+  "base_personal_norm" = c("base_nam9", "base_nam10", "base_nam11", "base_nam12"),
+  "base_attitude" = c("base_tpb1", "base_tpb2", "base_tpb3", "base_tpb4"),
+  "base_subjective_norm" = c("base_tpb5", "base_tpb6", "base_tpb7", "base_tpb8"),
+  "base_behavioural_control" = c("base_tpb9", "base_tpb10", "base_tpb11", "base_tpb12"),
+  "base_behavioural_intention" = c("base_tpb13", "base_tpb14", "base_tpb15"),
+  "post_target_empathic_concern" = c("post_target_ec1", "post_target_ec2", "post_target_ec3", "post_target_ec4", "post_target_ec5", "post_target_ec6"),
+  "post_target_personal_distress" = c("post_target_pd1", "post_target_pd2", "post_target_pd3", "post_target_pd4", "post_target_pd5", "post_target_pd6", "post_target_pd7", "post_target_pd8"),
+  "post_anna_empathic_concern" = c("post_anna_ec1", "post_anna_ec2", "post_anna_ec3", "post_anna_ec4", "post_anna_ec5", "post_anna_ec6"),
+  "post_anna_personal_distress" = c("post_anna_pd1", "post_anna_pd2", "post_anna_pd3", "post_anna_pd4", "post_anna_pd5", "post_anna_pd6", "post_anna_pd7", "post_anna_pd8"),
+  "post_problem_awareness" = c("post_nam1", "post_nam2", "post_nam3", "post_nam4"),
+  "post_ascribed_responsibility" = c("post_nam5", "post_nam6", "post_nam7", "post_nam8"),
+  "post_personal_norm" = c("post_nam9", "post_nam10", "post_nam11", "post_nam12"),
+  "post_attitude" = c("post_tpb1", "post_tpb2", "post_tpb3", "post_tpb4"),
+  "post_subjective_norm" = c("post_tpb5", "post_tpb6", "post_tpb7", "post_tpb8"),
+  "post_behavioural_control" = c("post_tpb9", "post_tpb10", "post_tpb11", "post_tpb12"),
+  "post_behavioural_intention" = c("post_tpb13", "post_tpb14", "post_tpb15"),
+  "physical_presence" = c("physical_presence1", "physical_presence2", "physical_presence3", "physical_presence4"),
+  "social_presence" = c("social_presence1", "social_presence2", "social_presence3"),
+  "trait_openess" = c("open1", "open4", "open6", "open8", "open11", "open12")
+)
+
+
+test_listoflists <- list(
+  "instrument1" = list(scales = list("scale1" = c("item1", "item2"), "scale2" = c("item3", "item4")), unique_col = "instrument1_unique")
+)
 ```
 
 Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were implemented to ensure a just society, but across governments, systemic issues lead to the wrongful imprisonment of innocent individuals. How do we mobilize support to fight social injustice such as wrongful imprisonment? Arts and media are a way of reaching and engaging broad audiences. Theatre, soap operas, and film, using the power of storytelling, can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it, few studies have investigated how music influences our views of people and issues that are the subject of music. Given that music typically has less narration than the previously studied media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. In addition, theories of prosocial behaviour and social engagement put forward various predictors that could explain how arts and media can advocate for social justice issues. This plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
