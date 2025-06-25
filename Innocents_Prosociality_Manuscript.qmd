@@ -338,6 +338,34 @@ Study 2
 
 ## Method
 
+### Participants
+
+### Procedure
+
+add webcam calibration for livestream participants, cite Shreshth
+
+describe stimuli
+
+describe implementation of surveys in jatos on tablets (in-person) or PCs (livestream)
+
+### Measures
+
+#### Interpersonal closeness
+
+#### State empathy
+
+#### Problem awareness
+
+#### Supportive behaviour
+
+#### Affect
+
+#### Event experience
+
+#### Person-level covariates
+
+### Analysis
+
 ## Results
 
 ## Discussion
@@ -349,6 +377,46 @@ Study 2
 1 introductory paragraph: explain relation to hypotheses, gap of study 1, and how study 2 fills the gap (procedure)
 
 ## Method
+
+Study 2 manipulated one factor with two levels: Participants watched either the film or the performance. Therefore, there were only two measurement time points, before and after watching. All participants watched a stream at home, so Study 2 followed many of the same methods used for the livestream audience in Study 1. The methods for Study 2 were preregistered at OSF on June 18th, 2025 (see <https://osf.io/suyef/>), and any deviations from the preregistration are reported here. The OSF repository also contains the survey. <!-- TODO and data and analysis code? -->
+
+### Participants
+
+<!-- TODO after data collection: fill in final sample size. If smaller than 200, conduct sensitivity analysis? -->
+
+<!-- TODO describe pertinent characteristics, refer to suppl for detailed tables -->
+
+For Study 2, we recruited all participants through Prolific between June and July 2025. The study was open Tuesday through Sunday evening roughly between 5:30 and 8:30 pm Eastern Time to imitate the conditions of a livestreamed event as in Study 1. Participants had to be between 18 and 60 years old, be fluent in English, have healthy hearing, watch the event without glasses (healthy vision or correction with contact lenses), have not seen the film or the performance before, and reside in Canada. We added the last requirement to match the area of activity of our partner charity, Innocence Canada. We aimed to recruit 200 participants, 100 per condition. A simulation-based power analysis indicated that this sample size would yield a 75% power to detect the most ambiguous effect from Study 1, the interaction of medium and time on empathic concern (see preregistration for details). A total of xyz participants started the study and xyz (%) completed it, with xyz participants in the film and xyz in the performance condition. Because the film is 15 minutes longer than the performance, we set up two parallel studies on Prolific with identical descriptions, but differing duration and compensation. By signing up to the study, participants therefore blindly self-assigned to a condition (film or performance). Upon completion of the study, participants in the performance condition were compensated with 11.50 GBP, while participants in the film condition received 13 GBP (equivalent to a rate of 6 GBP per hour).
+
+### Procedure
+
+<!-- TODO after data collection: update how many participants -->
+
+For Study 2, the pre-survey was administered in the same session as the event stream and the post-survey (except for one participant who filled out the pre-survey and asked to finish the remainder of the study the next day). Therefore, the procedure was similar to that used for the impromptu participants of Study 1: After giving informed consent, participants filled out a pre-survey, which assessed a baseline of the behavioural predictors interpersonal closeness, state empathy, and problem awareness. Moreover, the pre-survey included the other NAM-TPB variables and an affect measure. Participants then saw a recording of the event stream from Study 1, containing either the film (first half of the April 2nd, 2024, event) or the performance (first half of the April 4th event). After watching the stream, participants rated their event experience and the same measures already assessed at baseline, and finally the person-level covariates. At the end, we asked participants what they thought the study investigated, and we observed behaviour in support of *Innocence Canada*. Study 2 additionally included some new measures described in the next section, as well as some measures that were used to answer other research questions (see preregistration for details). The implementation of the web surveys and the integrated stream was identical to Study 1. Throughout the study, participants were instructed that they would watch a live event, even though they actually watched a recording, to create an experience comparable to the livestream in Study 1. After the study, participants were debriefed about this deception and reconsented to the use of their data. Study 2 received ethics approval under the same project number as Study 1.
+
+### Measures
+
+Study 2 assessed the same measures as Study 1 (interpersonal closeness, state empathy, the variables of the NAM and TPB, supportive behaviour, affect, event experience, and person-level covariates), except for the following changes:
+
+#### Interpersonal closeness
+
+As in Study 1, we measured interpersonal closeness with the IOS scale [@aron1992], rated for the same target persons/groups. In addition, participants were asked to imagine an acquaintance and prompted to describe them to make sure they were visualizing a person they actually know [@cialdini1997]. Participants were then asked to imagine that this acquaintance fell victim to wrongful imprisonment (the vignette was modeled after a real case, @verschwele2020; for the full vignette see the OSF repository), and rated their closeness with the acquaintance.
+
+#### State empathy
+
+As in Study 1, participants read a vignette about the wrongful imprisonment of Anna Vasquez and rated their empathic concern and personal distress using the Empathic Concern Index [@batson1987]. In addition, the Empathic Concern Index was also administered after the vignette about the hypothetical wrongful imprisonment of the participant's acquaintance.
+
+#### Problem awareness
+
+Problem awareness and the other NAM and TPB variables were assessed using the same self-worded instrument from Study 1. The only change was in the items measuring behavioural intentions: Rather than naming *Innocence Canada,* we asked about participants' intentions to join the mailing list and donate to "an organization that fights wrongful imprisonment". Our partner organization *Innocence Canada* was only presented at the end of the study, when assessing actual behaviour, to reduce the risk of participants looking up the organization and engaging in any of the behaviours beforehand.
+
+#### Person-level covariates
+
+Because all participants were recruited through Prolific, rather than self-initiatively buying a ticket to the event, we did not ask participants for their motivation to attend, nor for their personal relationship with the researchers or the artists. To shorten the post-survey, we abridged the trait empathy measure, which had not shown consistent associations with supportive behaviour or its predictors in Study 1.
+
+### Analysis
+
+TODO
 
 ## Results
 
