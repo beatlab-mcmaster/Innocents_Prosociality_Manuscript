@@ -105,6 +105,20 @@ conflicts_prefer(flextable::separate_header, .quiet = TRUE)
 source(here("src/LMMfunctions.R"), local = knitr::knit_global()) 
 
 # sessionInfo()
+
+#### PLOTTING PARAMETERS ###
+
+# set custom colour palette
+ordermedium_cols <- c("#FFB000", "#661BFF", "#1D95FF", "#FFEB00") # "F-P: Film", "F-P: Performance", "P-F: Performance", "P-F: Film"  
+# NeuroMusic palette: "#6472FF", "#FE6100", "#FFB000", "#8ECEFE"
+medium_cols <- ordermedium_cols[c(1, 2)] # Film, Performance
+
+# load icons
+icon_close <- readPNG(here("images/Innocents_Icon_Closeness.png"))
+icon_empath <- readPNG(here("images/Innocents_Icon_Empathy.png"))
+icon_aware <- readPNG(here("images/Innocents_Icon_Awareness.png"))
+icon_intent <- readPNG(here("images/Innocents_Icon_Intention.png"))
+icon_behav <- readPNG(here("images/Innocents_Icon_Behaviour.png"))
 ```
 
 ```{r}
@@ -113,34 +127,275 @@ source(here("src/LMMfunctions.R"), local = knitr::knit_global())
 
 # load study 1 data
 here::i_am("Innocents_Prosociality_Manuscript.qmd") # find project root
-study1_df <- read_csv(here("data/study1_df.csv")) # TODO load deident df, then calculate indices in here
+study1_df_deident <- read_csv(here("data/innocents_df_deident.csv")) # TODO load deident df, then calculate indices in here
 
-#### TODO Exclude responses that lack variance ###
+#### Exclude responses that lack variance ###
+# TODO discuss with Lauren whether to check variance per instrument or per survey page
 # define mapping of variables to scales to instruments
+study1_instruments <- list(
+  base_ios = list(
+    base_ios = c("base_ios_allen", "base_ios_john", "base_ios_anna", "base_ios_inperson", "base_ios_remote")),
+  base_anna_empathy = list(
+    base_anna_empathic_concern = c("base_ec1", "base_ec2", "base_ec3", "base_ec4", "base_ec5", "base_ec6"),
+    base_anna_personal_distress = c("base_pd1", "base_pd2", "base_pd3", "base_pd4", "base_pd5", "base_pd6", "base_pd7", "base_pd8")),
+  base_namtpb = list(
+    base_problem_awareness = c("base_nam1", "base_nam2", "base_nam3", "base_nam4"),
+    base_ascribed_responsibility = c("base_nam5", "base_nam6", "base_nam7", "base_nam8"),
+    base_personal_norm = c("base_nam9", "base_nam10", "base_nam11", "base_nam12"),
+    base_attitude = c("base_tpb1", "base_tpb2", "base_tpb3", "base_tpb4"),
+    base_subjective_norm = c("base_tpb5", "base_tpb6", "base_tpb7", "base_tpb8"),
+    base_behavioural_control = c("base_tpb9", "base_tpb10", "base_tpb11", "base_tpb12"),
+    base_behavioural_intention = c("base_tpb13", "base_tpb14", "base_tpb15")),
+  base_affect = list(
+    base_affect = grep("base_emotion", colnames(study1_df_deident), value = TRUE)),
+  perfo_affect = list(
+    perfo_affect = grep("perfo_emotion", colnames(study1_df_deident), value = TRUE)),
+  perfo_engagement = list(
+    perfo_engagement = c("perfo_enjoy", "perfo_interest", "perfo_moved", "perfo_insight", "perfo_concentration", "perfo_chills", "perfo_tears", "perfo_reengage")),
+  perfo_ios = list(
+    perfo_ios = c("perfo_ios_allen", "perfo_ios_john", "perfo_ios_anna", "perfo_ios_inperson", "perfo_ios_remote")),
+  perfo_anna_empathy = list(
+    perfo_anna_empathic_concern = c("perfo_ec1", "perfo_ec2", "perfo_ec3", "perfo_ec4", "perfo_ec5", "perfo_ec6"),
+    perfo_anna_personal_distress = c("perfo_pd1", "perfo_pd2", "perfo_pd3", "perfo_pd4", "perfo_pd5", "perfo_pd6", "perfo_pd7", "perfo_pd8")),
+  perfo_namtpb = list(
+    perfo_problem_awareness = c("perfo_nam1", "perfo_nam2", "perfo_nam3", "perfo_nam4"),
+    perfo_behavioural_intention = c("perfo_tpb13", "perfo_tpb14", "perfo_tpb15")),
+  docu_affect = list(
+    docu_affect = grep("docu_emotion", colnames(study1_df_deident), value = TRUE)),
+  docu_engagement = list(
+    docu_engagement = c("docu_enjoy", "docu_interest", "docu_moved", "docu_insight", "docu_concentration", "docu_chills", "docu_tears", "docu_reengage")),
+  docu_ios = list(
+    docu_ios = c("docu_ios_allen", "docu_ios_john", "docu_ios_anna", "docu_ios_inperson", "docu_ios_remote")),
+  docu_anna_empathy = list(
+    docu_anna_empathic_concern = c("docu_ec1", "docu_ec2", "docu_ec3", "docu_ec4", "docu_ec5", "docu_ec6"),
+    docu_anna_personal_distress = c("docu_pd1", "docu_pd2", "docu_pd3", "docu_pd4", "docu_pd5", "docu_pd6", "docu_pd7", "docu_pd8")),
+  docu_namtpb = list(
+    docu_problem_awareness = c("docu_nam1", "docu_nam2", "docu_nam3", "docu_nam4"),
+    docu_behavioural_intention = c("docu_tpb13", "docu_tpb14", "docu_tpb15")),
+  post_namtpb = list(
+    post_ascribed_responsibility = c("final_nam5", "final_nam6", "final_nam7", "final_nam8"),
+    post_personal_norm = c("final_nam9", "final_nam10", "final_nam11", "final_nam12"),
+    post_attitude = c("final_tpb1", "final_tpb2", "final_tpb3", "final_tpb4"),
+    post_subjective_norm = c("final_tpb5", "final_tpb6", "final_tpb7", "final_tpb8"),
+    post_behavioural_control = c("final_tpb9", "final_tpb10", "final_tpb11", "final_tpb12")),
+  demo_openness = list(
+    demo_openness = grep("open", colnames(study1_df_deident), value = TRUE)),
+  demo_trait_empathy = list(
+    trait_empathic_concern = c("iri2", "iri4", "iri9", "iri14", "iri18", "iri20", "iri22"),
+    trait_personal_distress = c("iri6", "iri10", "iri13", "iri17", "iri19", "iri24", "iri27")
+  )
+)
 
 #### CHECK FOR SUFFICIENT VARIANCE ACROSS ITEMS OF ONE INSTRUMENT ###
+variance_for_manyitems <- 2
+variance_for_fewitems <- 1
+threshold_fewormanyitems <- 10
+
+study1_df_variance <- study1_df_deident # make copy of dataframe
+
+study1_total_instrument_observations <- 0 # counter for total instruments checked across participants
+study1_novariance_observations <- 0 # counter for instruments with lack of variance
+
+# iterate over instruments
+for (instrument in names(study1_instruments)) {
+  # get all item columns of the instrument
+  items <- c()
+  for (scale in names(study1_instruments[[instrument]])) {
+    items <- c(items, study1_instruments[[instrument]][[scale]])
+  }
+  
+  # count unique values and store in new column
+  unique_column <- paste0(instrument, "_unique") # name of the new column that stores the number of unique values
+  study1_df_variance <- study1_df_variance %>%
+    rowwise() %>%
+    mutate(!!unique_column := n_distinct(c_across(all_of(items)), na.rm = TRUE)) %>%
+    ungroup()
+  
+  # count number of observations that lack variances
+  cutoff <- ifelse(length(items) > threshold_fewormanyitems, variance_for_manyitems, variance_for_fewitems) # define what constitutes a lack of variance depending on the number of items in the instrument
+  
+  total <- sum(!is.na(study1_df_variance[[unique_column]])) # count total observations per instrument
+  novariance <- sum(study1_df_variance[[unique_column]] <= cutoff, na.rm = TRUE) # count cases where unique values are below cutoff
+  
+  study1_total_instrument_observations = study1_total_instrument_observations + total # update counters
+  study1_novariance_observations = study1_novariance_observations + novariance
+}
+
+rm(instrument, items, scale, unique_column, cutoff, total, novariance, study1_df_deident)
 
 #### RECODE REVERSE-CODED ITEMS ###
 
+study1_df_recoded <- study1_df_variance %>%
+  rowwise() %>%
+  mutate(across(.cols = c(age, caffeine, liking, income, education, politics, mailing),
+                .fns = ~ case_match(.x, -1 ~ NA, -9 ~ NA, .default = .x)), # recode "prefer not to answer" as NA
+         across(.cols = c(base_nam3, base_tpb11, perfo_nam3, docu_nam3, final_tpb11),
+                .fns = ~ 8 - .x),
+         across(.cols = c(open1, open6, open11, iri4, iri13, iri14, iri18, iri19),
+                .fns = ~ 6 - .x),
+         flyer = replace(flyer, is.na(flyer), 0)) %>% # for online participants, those who did not click the resource had NA here; set to 0
+  ungroup() 
+
+rm(study1_df_variance)
+
 #### cALCULATE CONSTRUCT SCORES IF AT LEAST 80% OF ITEMS HAVE BEEN ANSWERED AND IF THERE IS SUFFICIENT VARIANCE ###
 
-calculate_scale_score <- function(items, unique_column, cutoff) {
-  # @items (character vector, required): names of items to average over
-  # @unique_column (character string, required): name of column that stores the number of unique values across these items
-  # @cutoff (numeric): number of unique values that would be considered a lack of variance
+study1_df <- study1_df_recoded %>%
+  rowwise() %>%
+  mutate(
+    # calculate affect scales
+    base_pleasure = base_emotion3 - base_emotion6,
+    base_awake = base_emotion5 - base_emotion1,
+    base_tense = base_emotion2 - base_emotion4,
+    perfo_pleasure = perfo_emotion3 - perfo_emotion6,
+    perfo_awake = perfo_emotion5 - perfo_emotion1,
+    perfo_tense = perfo_emotion2 - perfo_emotion4,
+    docu_pleasure = docu_emotion3 - docu_emotion6,
+    docu_awake = docu_emotion5 - docu_emotion1,
+    docu_tense = docu_emotion2 - docu_emotion4
+  ) %>%
+  ungroup()
+
+# iterate over instruments
+for (instrument in names(study1_instruments)) {
+  if (instrument %in% c("base_ios", "base_affect", "post_affect", "post_engagement", "post_ios")) next # skip instruments that should not be averaged
   
-  # calculate percentage of items that have been answered
-  n_items <- length(items)
-  valid_items <- sum(!is.na(items))
-  threshold <- 0.8 * n_items
+  unique_column <- paste0(instrument, "_unique") # name of the column that stores the number of unique values
   
-  if (valid_items >= threshold & unique_column > cutoff) {
-    return(mean(items, na.rm = TRUE))
-  } else {
-    return(NA)
+  # get all item columns of the instrument
+  instrument_items <- c()
+  for (scale in names(study1_instruments[[instrument]])) {
+    instrument_items <- c(instrument_items, study1_instruments[[instrument]][[scale]])
+  }
+  
+  cutoff <- ifelse(length(instrument_items) > threshold_fewormanyitems, variance_for_manyitems, variance_for_fewitems) # define what constitutes a lack of variance depending on the number of items in the instrument
+  
+  # iterate over scales
+  for (scale in names(study1_instruments[[instrument]])) {
+    scale_items <- study1_instruments[[instrument]][[scale]]
+    
+    # Average rowwise if conditions are met using apply()
+    study1_df[[scale]] <- apply(study1_df[scale_items], 1, calculate_scale_score, unique_column = unique_column, cutoff = cutoff)
   }
 }
 
+rm(study1_instruments, instrument, unique_column, instrument_items, cutoff, scale, scale_items, study1_df_recoded, variance_for_manyitems, variance_for_fewitems, threshold_fewormanyitems)
+
+# rename multiple choice options to have meaningful names
+study1_df <- study1_df %>%
+  rename(base_intent_mailing = base_tpb13,
+         base_intent_flyer = base_tpb14,
+         base_intent_donation = base_tpb15,
+         perfo_intent_mailing = perfo_tpb13,
+         perfo_intent_flyer = perfo_tpb14,
+         perfo_intent_donation = perfo_tpb15,
+         docu_intent_mailing = docu_tpb13,
+         docu_intent_flyer = docu_tpb14,
+         docu_intent_donation = docu_tpb15,
+         motivation_curious = motivation1,
+         motivation_interested = motivation2,
+         motivation_socialjustice = motivation3,
+         motivation_helpresearch = motivation4,
+         motivation_enjoy = motivation5,
+         relationship_artist = relationship1,
+         relationship_researcher = relationship2,
+         relationship_none = `relationship-1`,
+         identity_woman = identity1,
+         identity_genderdiverse = identity2,
+         identity_lgbq = identity3,
+         identity_indigenous = identity4,
+         identity_poc = identity5,
+         identity_none = `identity-1`,
+         identity_NA = `identity-9`,
+         experience_disability = experience1,
+         experience_charges = experience2,
+         experience_unsheltered = experience3,
+         experience_none = `experience-1`,
+         experience_NA = `experience-9`)
+
+# set dummy variable indicating whether participant completed both halves of the event (copied from Schlichting_MSc_Thesis.Rmd)
+study1_df$completed <- ifelse(study1_df$NA_count.event <= 59, 1, 0) # cutoff determined upon inspection of the data, see 003_event_preprocessing.Rmd
+
+# if only interested in participants who stayed until the end, filter participants who left at intermission:
+# study1_df <- study1_df %>%
+#   filter(NA_count.event <= 59) 
+
+# factorize order and attendance (copied from Schlichting_MSc_Thesis.Rmd)
+study1_df <- study1_df %>%
+  mutate(order = factor(order, levels=c("film-perfo", "perfo-film"), labels=c("Film+Perf", "Perf+Film")),
+         attendance = factor(attendance, levels=c("in-person", "livestream"), labels=c("In-person", "Livestream")),
+         base_behavioural_intention_z = my_z_score(base_behavioural_intention),
+         cell = factor(interaction(order, attendance), levels = c("Film+Perf.In-person", "Film+Perf.Livestream", "Perf+Film.In-person", "Perf+Film.Livestream"), labels = c("F-P: In-person", "F-P: Livestream", "P-F: In-person", "P-F: Livestream"))) %>%
+  rowwise() %>%
+  # compute behaviour indices
+  mutate(sum_behaviour = ifelse(completed == 0, NA, sum(mailing, flyer, post_donation)),
+         sum_behaviour_fact = factor(sum_behaviour, levels = c("0", "1", "2", "3"), ordered = TRUE),
+         sum_behaviour_inclNA = ifelse(completed == 0, NA, sum(mailing, flyer, post_donation, na.rm = TRUE)),
+         behaviour_dich = ifelse(completed == 0, NA, 
+                                 ifelse(sum_behaviour_inclNA %in% c(1:3), 1, 0)))
+
+
+#### DF over 2 timepoints (intermission, end) for baseline-corrected analyses (copied from Schlichting_MSc_Thesis.Rmd) ###
+
+docu_vars <- grep("^docu_", colnames(study1_df), value=TRUE)
+perfo_vars <- grep("^perfo_", colnames(study1_df), value=TRUE)
+docu_vars <- setdiff(docu_vars, "docu_understand_anna")
+perfo_vars <- setdiff(perfo_vars, grep("describe", perfo_vars, value=TRUE))
+
+study1_2long <- study1_df %>%
+  pivot_longer(all_of(c(docu_vars, perfo_vars)), names_to = c("medium_2", ".value"), names_pattern = "^(.*?)_(.*)$") %>%
+  mutate(medium_2 = factor(medium_2, levels=c("docu", "perfo"), labels=c("Film", "Performance")), # factorize medium
+         timepoint_2 = factor(interaction(day, medium_2), levels = c("0.Film", "1.Film", "0.Performance", "1.Performance"), labels = c("Intermission", "End", "End", "Intermission")), # determine timepoint
+         ordermedium = factor(interaction(day, medium_2), levels = c("0.Film", "0.Performance", "1.Performance", "1.Film"), labels = c("F-P: Film", "F-P: Performance", "P-F: Performance", "P-F: Film")), # concatenate order and medium
+         cell = factor(paste(attendance, order, medium_2, sep="."))) %>% # concatenate attendance, order, & medium
+  mutate(across(.cols = all_of(c("base_ios_anna", "base_anna_empathic_concern", "base_problem_awareness", "base_behavioural_intention", "base_anna_personal_distress", "ios_anna", "anna_empathic_concern", "problem_awareness", "behavioural_intention", "anna_personal_distress")), .fns = my_z_score, .names = "{.col}_z")) %>% # z-score variables
+  rowwise() %>%
+  mutate(sum_behaviour = sum(mailing, flyer, post_donation),
+         sum_behaviour_fact = factor(sum_behaviour, levels = c("0", "1", "2", "3"), ordered = TRUE),
+         sum_behaviour_inclNA = sum(mailing, flyer, post_donation, na.rm = TRUE)) %>%
+  ungroup()
+
+rm(docu_vars, perfo_vars)
+
+# set contrasts
+contrasts(study1_2long$order) <- cbind(FPvsPF = c(1, -1))
+# attr(,"contrasts")
+#           FPvsPF
+# Film+Perf      1
+# Perf+Film     -1
+# Levels: Film+Perf Perf+Film
+
+contrasts(study1_2long$medium_2) <- cbind(PerfvsFilm = c(-1, 1))
+# attr(,"contrasts")
+#             PerfvsFilm
+# Film                -1
+# Performance          1
+# Levels: Film Performance
+
+contrasts(study1_2long$timepoint_2) <- cbind(EndvsInter = c(-1, 1))
+# attr(,"contrasts")
+#              EndvsInter
+# Intermission         -1
+# End                   1
+# Levels: Intermission End
+
+contrasts(study1_2long$attendance) <- cbind(InpersonvsStream = c(1, -1))
+# attr(,"contrasts")
+#            InpersonvsStream
+# In-person                 1
+# Livestream               -1
+# Levels: In-person Livestream
+
+# dichotomize control variable
+study1_2long <- study1_2long %>%
+  mutate(motivation_socialjustice_dich = replace(motivation_socialjustice, is.na(motivation_socialjustice), 0),
+         motivation_socialjustice_dich = factor(motivation_socialjustice_dich, levels = c(0, 1), labels = c("No", "Yes")))
+contrasts(study1_2long$motivation_socialjustice_dich) <- cbind(YesvsNo = c(-1, 1))
+
+# z-score control variables
+study1_2long$trait_empathic_concern_z <- my_z_score(study1_2long$trait_empathic_concern)
+study1_2long$politics_z <- my_z_score(study1_2long$politics)
+study1_2long$trait_openness_z <- my_z_score(study1_2long$demo_openness)
 ```
 
 ```{r}
@@ -292,6 +547,23 @@ for (instrument in names(study2_instruments)) {
 }
 
 rm(instrument, unique_column, instrument_items, cutoff, scale, scale_items, study2_df_recoded, variance_for_manyitems, variance_for_fewitems, threshold_fewormanyitems)
+
+# rename intention items to have meaningful names
+study1_df <- study1_df %>%
+  rename(base_intent_mailing = base_tpb13,
+         base_intent_flyer = base_tpb14,
+         base_intent_donation = base_tpb15,
+         post_intent_mailing = post_tpb13,
+         post_intent_flyer = post_tpb14,
+         post_intent_donation = post_tpb15)
+```
+
+```{r}
+#| label: combinestudies
+#| include: false
+
+# TODO: combine study 1 & 2
+# TODO: wrangle into long df for plotting
 ```
 
 Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were implemented to ensure a just society, but across governments, systemic issues lead to the wrongful imprisonment of innocent individuals. How do we mobilize support to fight social injustice such as wrongful imprisonment? Arts and media are a way of reaching and engaging broad audiences. Theatre, soap operas, and film, using the power of storytelling, can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it, few studies have investigated how music influences our views of people and issues that are the subject of music. Given that music typically has less narration than the previously studied media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. In addition, theories of prosocial behaviour and social engagement put forward various predictors that could explain how arts and media can advocate for social justice issues. This plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
@@ -392,7 +664,7 @@ For Study 2, we recruited all participants through Prolific between June and Jul
 
 <!-- TODO after data collection: update how many participants -->
 
-For Study 2, the pre-survey was administered in the same session as the event stream and the post-survey (except for one participant who filled out the pre-survey and asked to finish the remainder of the study the next day). Therefore, the procedure was similar to that used for the impromptu participants of Study 1: After giving informed consent, participants filled out a pre-survey, which assessed a baseline of the behavioural predictors interpersonal closeness, state empathy, and problem awareness. Moreover, the pre-survey included the other NAM-TPB variables and an affect measure. Participants then saw a recording of the event stream from Study 1, containing either the film (first half of the April 2nd, 2024, event) or the performance (first half of the April 4th event). After watching the stream, participants rated their event experience and the same measures already assessed at baseline, and finally the person-level covariates. At the end, we asked participants what they thought the study investigated, and we observed behaviour in support of *Innocence Canada*. Study 2 additionally included some new measures described in the next section, as well as some measures that were used to answer other research questions (see preregistration for details). The implementation of the web surveys and the integrated stream was identical to Study 1. Throughout the study, participants were instructed that they would watch a live event, even though they actually watched a recording, to create an experience comparable to the livestream in Study 1. After the study, participants were debriefed about this deception and reconsented to the use of their data. Study 2 received ethics approval under the same project number as Study 1.
+For Study 2, the pre-survey was administered in the same session as the event stream and the post-survey (except for one participant who filled out the pre-survey and asked to finish the remainder of the study the next day). Therefore, the procedure was similar to that used for the impromptu participants of Study 1: After giving informed consent, participants filled out a pre-survey, which assessed a baseline of the behavioural predictors interpersonal closeness, state empathy, and problem awareness. Moreover, the pre-survey included the other NAM-TPB variables and an affect measure. Participants then saw a recording of the event stream from Study 1, containing either the film (first half of the April 2nd, 2024, event) or the performance (first half of the April 4th event). After watching the stream, participants rated their event experience and the same measures already assessed at baseline, and finally the person-level covariates. At the end, we asked participants what they thought the study investigated, and we observed behaviour in support of *Innocence Canada*. Study 2 additionally included some new measures described in the next section, as well as some measures that were used to answer other research questions (see preregistration for details). The implementation of the web surveys and the integrated stream was identical to Study 1. Throughout the study, participants were instructed that they would watch a live event, even though they actually watched a recording, to create an experience comparable to the livestream in Study 1. After the study, participants were debriefed about this deception and reconsented to the use of their data. Study 2 was approved by the McMaster Research Ethics Board (#7202).
 
 ### Measures
 

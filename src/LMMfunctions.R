@@ -469,3 +469,30 @@ get_OR_CI <- function(model) {
   
   return(my_table)
 }
+
+calculate_scale_score <- function(items, unique_column, cutoff) {
+  # @items (character vector, required): names of items to average over
+  # @unique_column (character string, required): name of column that stores the number of unique values across these items
+  # @cutoff (numeric): number of unique values that would be considered a lack of variance
+  
+  # calculate percentage of items that have been answered
+  n_items <- length(items)
+  valid_items <- sum(!is.na(items))
+  threshold <- 0.8 * n_items
+  
+  if (valid_items >= threshold & unique_column > cutoff) {
+    return(mean(items, na.rm = TRUE))
+  } else {
+    return(NA)
+  }
+}
+
+# function for annotating faceted plots from https://stackoverflow.com/a/44897816
+annotation_custom2 <- 
+  function (grob, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, data){ 
+    layer(data = data, stat = StatIdentity, position = PositionIdentity, 
+          geom = ggplot2:::GeomCustomAnn,
+          inherit.aes = TRUE, params = list(grob = grob, 
+                                            xmin = xmin, xmax = xmax, 
+                                            ymin = ymin, ymax = ymax))
+  }
