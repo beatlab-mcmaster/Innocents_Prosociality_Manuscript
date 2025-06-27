@@ -574,7 +574,7 @@ Here, we evaluate how a music performance engages audiences with the issue of wr
 
 <!-- Psychological models: what does advocacy try to achieve? How? Introduce potential mediators -->
 
-The aim of social justice advocacy is to foster engagement with a social justice issue and mobilize supportive behaviour for that cause. Various psychological theories attempt to explain behaviour and could be applicable in the context of social justice advocacy. This plurality hinders theory integration across studies of socially responsible behaviour. It is therefore necessary to empirically compare the relevance of different theories and constructs for predicting the behaviour of interest [TODO CITE THAT REVIEW]. In this study, we compare normative, empathic, and relational predictors. The following paragraphs will review the respective theoretical backgrounds, explaining support for social justice causes within the framework of the norm activation model [NAM; @schwartz1977], the empathy-altruism hypothesis [@batson1987], and the theory of bounded generalized reciprocity [@yamagishi1999].
+The aim of social justice advocacy is to foster engagement with a social justice issue and mobilize supportive behaviour for that cause. Various psychological theories attempt to explain behaviour and could be applicable in the context of social justice advocacy. This plurality hinders theory integration across studies of socially responsible behaviour. It is therefore necessary to empirically compare the relevance of different theories and constructs for predicting the behaviour of interest [TODO CITE THAT DUTCH REVIEW]. In this study, we compare normative, empathic, and relational predictors. The following paragraphs will review the respective theoretical backgrounds, explaining support for social justice causes within the framework of the norm activation model [NAM; @schwartz1977], the empathy-altruism hypothesis [@batson1987], and the theory of bounded generalized reciprocity [@yamagishi1999].
 
 Justice is a moral concept, and fighting injustices or supporting social justice causes can be conceived as morally-driven behaviour. The NAM lays out the process of how personal norms create a moral obligation to act. According to the model, an actor first has to become aware of a problematic situation like wrongful imprisonment, resulting in the knowledge that the current conditions of the situation will cause negative consequences for a person in need, like innocent prisoners. Subsequently, the actor evaluates their responsibility for the problem, coming to the conclusion that they can change the conditions to avert the negative consequences. As a third component, the problem must be relevant to the personal norms of the actor, like a just legal system or fighting injustices, so that the norms are activated and guide the behaviour in the situation. In combination, problem awareness, ascription of responsibility, and personal norms create a moral obligation for the actor to help solve the problem, thus acting in accordance with their norms [@schwartz1977; @degroot2009]. Importantly, the NAM postulates a causal chain of the three components, which explains why we do not always behave normatively: If we are not aware of a problem or we do not believe that we can change it, our norms do not activate in that situation and therefore do not guide our behaviour [although the empirical evidence regarding the causal chain is mixed; @klöckner2013].
 
@@ -586,9 +586,31 @@ Finally, supporting social justice causes might be motivated by group cohesion. 
 
 <!-- Finally, supporting social justice causes might be motivated by expectations of reciprocity. Through the lens of interpersonal relations, we are more likely to help those closer to us because xyz [@yamagishi1999]. Therefore, social justice advocacy can mobilize supportive behaviour by increasing the perceived relationship closeness between audiences and those affected by the social justice issue, which the audience to help in return for reciprocity xyz. -->
 
-## Artistic responses
+## Advocacy through art
+
+Artists are inspired by society and contribute to it, often using their art to advocate for social justice.
+
+As such, advocacy through art has become an object of psychological investigation, evaluating the effects on its audience. Media like documentary films, visual art, and songs have been proven to affect the aforementioned normative, empathic, and relational dimensions, and to mobilize behaviour in support of social justice causes. For example,
+
+-   documentary film about wrongful imprisonment increased empathic responses towards prisoners, attitudes towards prison reform, and intention to support a petition regarding voting rights for people with felony convictions [@reddan2024]
+
+-   TODO specify: documentaries about climate change raise awareness and change intention and behaviour regarding sustainability [@howell2011; @nolan2010; @sakellari2015]
+
+-   TODO visual art: Pelowski & Specker; Pizzolante & Pelowski –\> is that narrative tho? Otherwise, stick with theatre. Or frame around naturalistic images (visual or auditory) vs. abstract (performance)
+
+-   TODO specify lyrical content and type of helping behaviour: songs with prosocial lyrics prompt prosocial thoughts and empathic responses; empathy mediates effect on helping behaviour [@greitemeyer2009] & greitemeyer2009b; TODO read Greitemeyer 2011 review
+
+-   tighten relationships: nature documentaries might elicit self-transcendent experiences that increase connection between viewer and nature, which has been suggested as driving factor for pro-environmental behaviour [@mccormack2021]. Watching documentary about a disabled abuse victim increased bonding with other audience members compared to neutral documentaries [@dunbar2016].
+
+The advocacy through art that has been studied so far focuses on concrete narration and images to convey its message. However, not all art works on this level. Music beyond the song form, such as (contemporary) classical or folk music, is carried more by instruments and sounds and less by lyrics. Therefore, this kind of music has less tools for concrete narrative or imagery. Still, it is often intended to advocate for specific issues, such as TODO find more examples, maybe among Klezmer or Jazz?:
+
+-   East-Western Divan orchestra: classical symphony orchestra to promote peace and understanding between Israel and Palestine
+
+-   Innocents: contemporary percussion piece about wrongful incarceration
 
 film vs. music: narrative portrayal vs. experiential immersion approach to advocate for social justice issues –\> film could increase reasoned awareness, music could increase perspective-taking/empathy
+
+How does this kind of abstract, experiential music mobilize supportive behaviour?
 
 music has been related to closeness
 
