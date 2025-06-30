@@ -94,7 +94,7 @@ rm(list=ls())
 
 # load/install required packages
 require(pacman)
-p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'effsize', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', ' tinytable')
+p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'effsize', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', 'tinytable')
 
 # set preferences in case of command conflicts between loaded packages
 conflicts_prefer(dplyr::select, .quiet = TRUE)
@@ -173,11 +173,11 @@ study1_instruments <- list(
     docu_problem_awareness = c("docu_nam1", "docu_nam2", "docu_nam3", "docu_nam4"),
     docu_behavioural_intention = c("docu_tpb13", "docu_tpb14", "docu_tpb15")),
   post_namtpb = list(
-    post_ascribed_responsibility = c("final_nam5", "final_nam6", "final_nam7", "final_nam8"),
-    post_personal_norm = c("final_nam9", "final_nam10", "final_nam11", "final_nam12"),
-    post_attitude = c("final_tpb1", "final_tpb2", "final_tpb3", "final_tpb4"),
-    post_subjective_norm = c("final_tpb5", "final_tpb6", "final_tpb7", "final_tpb8"),
-    post_behavioural_control = c("final_tpb9", "final_tpb10", "final_tpb11", "final_tpb12")),
+    post_ascribed_responsibility = c("post_nam5", "post_nam6", "post_nam7", "post_nam8"),
+    post_personal_norm = c("post_nam9", "post_nam10", "post_nam11", "post_nam12"),
+    post_attitude = c("post_tpb1", "post_tpb2", "post_tpb3", "post_tpb4"),
+    post_subjective_norm = c("post_tpb5", "post_tpb6", "post_tpb7", "post_tpb8"),
+    post_behavioural_control = c("post_tpb9", "post_tpb10", "post_tpb11", "post_tpb12")),
   demo_openness = list(
     demo_openness = grep("open", colnames(study1_df_deident), value = TRUE)),
   demo_trait_empathy = list(
@@ -191,7 +191,11 @@ variance_for_manyitems <- 2
 variance_for_fewitems <- 1
 threshold_fewormanyitems <- 10
 
-study1_df_variance <- study1_df_deident # make copy of dataframe
+study1_df_variance <- study1_df_deident %>% # make copy of dataframe
+  rename_with(
+    .fn = ~ str_replace(., "^final_", "post_"), # rename final_ to post_ for consistency
+    .cols = starts_with("final_")
+  )
 
 study1_total_instrument_observations <- 0 # counter for total instruments checked across participants
 study1_novariance_observations <- 0 # counter for instruments with lack of variance
@@ -229,7 +233,7 @@ study1_df_recoded <- study1_df_variance %>%
   rowwise() %>%
   mutate(across(.cols = c(age, caffeine, liking, income, education, politics, mailing),
                 .fns = ~ case_match(.x, -1 ~ NA, -9 ~ NA, .default = .x)), # recode "prefer not to answer" as NA
-         across(.cols = c(base_nam3, base_tpb11, perfo_nam3, docu_nam3, final_tpb11),
+         across(.cols = c(base_nam3, base_tpb11, perfo_nam3, docu_nam3, post_tpb11),
                 .fns = ~ 8 - .x),
          across(.cols = c(open1, open6, open11, iri4, iri13, iri14, iri18, iri19),
                 .fns = ~ 6 - .x),
@@ -258,7 +262,7 @@ study1_df <- study1_df_recoded %>%
 
 # iterate over instruments
 for (instrument in names(study1_instruments)) {
-  if (instrument %in% c("base_ios", "base_affect", "post_affect", "post_engagement", "post_ios")) next # skip instruments that should not be averaged
+  if (instrument %in% c("base_ios", "base_affect", "perfo_ios", "perfo_affect", "perfo_engagement", "docu_ios", "docu_affect", "docu_engagement")) next # skip instruments that should not be averaged
   
   unique_column <- paste0(instrument, "_unique") # name of the column that stores the number of unique values
   
@@ -313,6 +317,13 @@ study1_df <- study1_df %>%
          experience_none = `experience-1`,
          experience_NA = `experience-9`)
 
+# recode motivation variables
+study1_df <- study1_df %>%
+  mutate(across(
+    .cols = starts_with("motivation_"),
+    .fns = ~ ifelse(!is.na(.), 1, 0)
+  ))
+
 # set dummy variable indicating whether participant completed both halves of the event (copied from Schlichting_MSc_Thesis.Rmd)
 study1_df$completed <- ifelse(study1_df$NA_count.event <= 59, 1, 0) # cutoff determined upon inspection of the data, see 003_event_preprocessing.Rmd
 
@@ -340,22 +351,20 @@ study1_df <- study1_df %>%
 docu_vars <- grep("^docu_", colnames(study1_df), value=TRUE)
 perfo_vars <- grep("^perfo_", colnames(study1_df), value=TRUE)
 docu_vars <- setdiff(docu_vars, "docu_understand_anna")
-perfo_vars <- setdiff(perfo_vars, grep("describe", perfo_vars, value=TRUE))
+# perfo_vars <- setdiff(perfo_vars, grep("describe", perfo_vars, value=TRUE))
 
 study1_2long <- study1_df %>%
-  pivot_longer(all_of(c(docu_vars, perfo_vars)), names_to = c("medium_2", ".value"), names_pattern = "^(.*?)_(.*)$") %>%
-  mutate(medium_2 = factor(medium_2, levels=c("docu", "perfo"), labels=c("Film", "Performance")), # factorize medium
-         timepoint_2 = factor(interaction(day, medium_2), levels = c("0.Film", "1.Film", "0.Performance", "1.Performance"), labels = c("Intermission", "End", "End", "Intermission")), # determine timepoint
-         ordermedium = factor(interaction(day, medium_2), levels = c("0.Film", "0.Performance", "1.Performance", "1.Film"), labels = c("F-P: Film", "F-P: Performance", "P-F: Performance", "P-F: Film")), # concatenate order and medium
-         cell = factor(paste(attendance, order, medium_2, sep="."))) %>% # concatenate attendance, order, & medium
+  pivot_longer(all_of(c(docu_vars, perfo_vars)), names_to = c("medium", ".value"), names_pattern = "^(.*?)_(.*)$") %>%
+  mutate(medium = factor(medium, levels=c("docu", "perfo"), labels=c("Film", "Performance")), # factorize medium
+         timepoint = factor(interaction(day, medium), levels = c("0.Film", "1.Film", "0.Performance", "1.Performance"), labels = c("Intermission", "End", "End", "Intermission")), # determine timepoint
+         ordermedium = factor(interaction(day, medium), levels = c("0.Film", "0.Performance", "1.Performance", "1.Film"), labels = c("F-P: Film", "F-P: Performance", "P-F: Performance", "P-F: Film")), # concatenate order and medium
+         cell = factor(paste(attendance, order, medium, sep="."))) %>% # concatenate attendance, order, & medium
   mutate(across(.cols = all_of(c("base_ios_anna", "base_anna_empathic_concern", "base_problem_awareness", "base_behavioural_intention", "base_anna_personal_distress", "ios_anna", "anna_empathic_concern", "problem_awareness", "behavioural_intention", "anna_personal_distress")), .fns = my_z_score, .names = "{.col}_z")) %>% # z-score variables
   rowwise() %>%
   mutate(sum_behaviour = sum(mailing, flyer, post_donation),
          sum_behaviour_fact = factor(sum_behaviour, levels = c("0", "1", "2", "3"), ordered = TRUE),
          sum_behaviour_inclNA = sum(mailing, flyer, post_donation, na.rm = TRUE)) %>%
   ungroup()
-
-rm(docu_vars, perfo_vars)
 
 # set contrasts
 contrasts(study1_2long$order) <- cbind(FPvsPF = c(1, -1))
@@ -365,14 +374,14 @@ contrasts(study1_2long$order) <- cbind(FPvsPF = c(1, -1))
 # Perf+Film     -1
 # Levels: Film+Perf Perf+Film
 
-contrasts(study1_2long$medium_2) <- cbind(PerfvsFilm = c(-1, 1))
+contrasts(study1_2long$medium) <- cbind(PerfvsFilm = c(-1, 1))
 # attr(,"contrasts")
 #             PerfvsFilm
 # Film                -1
 # Performance          1
 # Levels: Film Performance
 
-contrasts(study1_2long$timepoint_2) <- cbind(EndvsInter = c(-1, 1))
+contrasts(study1_2long$timepoint) <- cbind(EndvsInter = c(-1, 1))
 # attr(,"contrasts")
 #              EndvsInter
 # Intermission         -1
@@ -388,14 +397,44 @@ contrasts(study1_2long$attendance) <- cbind(InpersonvsStream = c(1, -1))
 
 # dichotomize control variable
 study1_2long <- study1_2long %>%
-  mutate(motivation_socialjustice_dich = replace(motivation_socialjustice, is.na(motivation_socialjustice), 0),
-         motivation_socialjustice_dich = factor(motivation_socialjustice_dich, levels = c(0, 1), labels = c("No", "Yes")))
+  mutate(
+  motivation_socialjustice_dich = factor(motivation_socialjustice, levels = c(0, 1), labels = c("No", "Yes")))
 contrasts(study1_2long$motivation_socialjustice_dich) <- cbind(YesvsNo = c(-1, 1))
 
 # z-score control variables
 study1_2long$trait_empathic_concern_z <- my_z_score(study1_2long$trait_empathic_concern)
 study1_2long$politics_z <- my_z_score(study1_2long$politics)
 study1_2long$trait_openness_z <- my_z_score(study1_2long$demo_openness)
+
+
+
+#### DF over three timepoints (base, intermission, end) for plotting (copied from Schlichting_MSc_Thesis.Rmd) ###
+
+# get names of variables that were tested across three timepoints
+base_vars <- grep("^base_", colnames(study1_df), value=TRUE)
+post_vars <- grep("^post_", colnames(study1_df), value=TRUE)
+
+# gather to long format across base, docu, and perfo timepoints
+study1_3long <- study1_df %>%
+  pivot_longer(all_of(c(base_vars, docu_vars, perfo_vars, post_vars)), names_to = c("medium", ".value"), names_pattern = "^(.*?)_(.*)$") %>%
+  # merge post measures with the medium that came last
+  mutate(
+    medium = case_when(
+      medium == "post" & order == "Film+Perf" ~ "perfo",
+      medium == "post" & order == "Perf+Film" ~ "docu",
+      TRUE ~ medium
+    )
+  ) %>%
+  # pivot_long over post_vars introduced duplicate rows, so summarise those duplicates into one row by taking the first non-NA value for each variable
+  group_by(p_id, medium) %>%
+  summarise(across(everything(), ~ first(na.omit(.))), .groups = "drop") %>% 
+  mutate(medium = factor(medium, levels=c("base", "docu", "perfo"), labels=c("Baseline", "Film", "Performance")),
+         timepoint = factor(interaction(day, medium), levels = c("0.Baseline", "1.Baseline", "0.Film", "1.Film", "0.Performance", "1.Performance"), labels = c("Baseline", "Baseline", "Intermission", "End", "End", "Intermission"))) %>%
+  arrange(p_id, match(timepoint, c("Baseline", "Intermission", "End"))) %>%
+  # rename personal distress/empathic concern variables to specify target
+  rename_with(.fn = ~ paste0("anna_", .), .cols = c(starts_with("pd"), starts_with("ec")))
+
+rm(base_vars, docu_vars, perfo_vars, post_vars)
 ```
 
 ```{r}
@@ -428,7 +467,7 @@ study2_instruments <- list(
   post_affect = list(
     post_affect = grep("post_emotion", colnames(study2_df_deident), value = TRUE)),
   post_engagement = list(
-    post_engagement = c("post_enjoy", "post_interest", "post_moved", "post_insight", "post_concentration", "post_chills", "post_tears", "post_reengage")),
+    post_engagement = c("enjoy", "interest", "moved", "insight", "concentration", "chills", "tears", "reengage")),
   post_target_empathy = list(
     post_target_empathic_concern = c("post_target_ec1", "post_target_ec2", "post_target_ec3", "post_target_ec4", "post_target_ec5", "post_target_ec6"),
     post_target_personal_distress = c("post_target_pd1", "post_target_pd2", "post_target_pd3", "post_target_pd4", "post_target_pd5", "post_target_pd6", "post_target_pd7", "post_target_pd8")),
@@ -455,7 +494,11 @@ variance_for_manyitems <- 2
 variance_for_fewitems <- 1
 threshold_fewormanyitems <- 10
 
-study2_df_variance <- study2_df_deident # make copy of dataframe
+study2_df_variance <- study2_df_deident %>% # make copy of dataframe
+  rename_with(
+    .fn = ~ str_replace(., "^post_", ""), # rename engagement variables for consistency with study1
+    .cols = c("post_enjoy", "post_interest", "post_moved", "post_insight", "post_concentration", "post_chills", "post_tears", "post_reengage")
+  )
 
 study2_total_instrument_observations <- 0 # counter for total instruments checked across participants
 study2_novariance_observations <- 0 # counter for instruments with lack of variance
@@ -546,24 +589,59 @@ for (instrument in names(study2_instruments)) {
   }
 }
 
-rm(instrument, unique_column, instrument_items, cutoff, scale, scale_items, study2_df_recoded, variance_for_manyitems, variance_for_fewitems, threshold_fewormanyitems)
+rm(instrument, study2_instruments, unique_column, instrument_items, cutoff, scale, scale_items, study2_df_recoded, variance_for_manyitems, variance_for_fewitems, threshold_fewormanyitems)
 
-# rename intention items to have meaningful names
-study1_df <- study1_df %>%
+# rename items to have meaningful names
+study2_df <- study2_df %>%
   rename(base_intent_mailing = base_tpb13,
          base_intent_flyer = base_tpb14,
          base_intent_donation = base_tpb15,
          post_intent_mailing = post_tpb13,
          post_intent_flyer = post_tpb14,
-         post_intent_donation = post_tpb15)
+         post_intent_donation = post_tpb15,
+         identity_woman = identity4,
+         # identity_genderdiverse = identity5, # TODO uncomment if full sample includes a genderdiverse participant
+         identity_lgbq = identity3,
+         identity_indigenous = identity1,
+         identity_poc = identity2,
+         identity_religious = identity6,
+         identity_none = `identity-1`,
+         # identity_NA = `identity-9`,
+         experience_disability = experience1,
+         experience_charges = experience2,
+         experience_unsheltered = experience3,
+         experience_none = `experience-1`,
+         experience_NA = `experience-9`,
+         flyer = resource_click)
+
+
+
+#### DF over two timepoints (base, end) for plotting & analysis ###
+
+# get names of variables that were tested across two timepoints
+base_vars <- grep("^base_", colnames(study2_df), value=TRUE)
+post_vars <- grep("^post_", colnames(study2_df), value=TRUE)
+
+# remove non-overlapping variables
+# post_vars <- setdiff(post_vars, grep("^post_describe", post_vars, value = TRUE))
+# post_vars <- setdiff(post_vars, grep("^post_immersion", post_vars, value = TRUE))
+# post_vars <- setdiff(post_vars, c("post_concentration", "post_moved", "post_tears", "post_enjoy", "post_interest", "post_chills", "post_reengage", "post_insight", "post_duration", "post_engagement_unique"))
+
+# gather to long format across base, docu, and perfo timepoints
+study2_long <- study2_df %>%
+  pivot_longer(all_of(c(base_vars, post_vars)), names_to = c("timepoint", ".value"), names_pattern = "^(.*?)_(.*)$") %>%
+  mutate(timepoint = factor(timepoint, levels = c("base", "post"), labels = c("Baseline", "End")))
+
+rm(base_vars, post_vars)
 ```
 
 ```{r}
 #| label: combinestudies
 #| include: false
 
-# TODO: combine study 1 & 2
-# TODO: wrangle into long df for plotting
+# Combine study 1 & 2 for plotting
+combined_long <- study1_3long %>%
+  bind_rows(study2_long, .id = "study")
 ```
 
 Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were implemented to ensure a just society, but across governments, systemic issues lead to the wrongful imprisonment of innocent individuals. How do we mobilize support to fight social injustice such as wrongful imprisonment? Arts and media are a way of reaching and engaging broad audiences. Theatre, soap operas, and film, using the power of storytelling, can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it, few studies have investigated how music influences our views of people and issues that are the subject of music. Given that music typically has less narration than the previously studied media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. In addition, theories of prosocial behaviour and social engagement put forward various predictors that could explain how arts and media can advocate for social justice issues. This plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
