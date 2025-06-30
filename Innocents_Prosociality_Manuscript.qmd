@@ -588,21 +588,19 @@ Finally, supporting social justice causes might be motivated by group cohesion. 
 
 ## Advocacy through art
 
-Artists are inspired by society and contribute to it, often using their art to advocate for social justice.
+Social injustices often become the subject of art. Beyond a mere inspiration or description of society, such art usually criticizes social injustices and advocates for social justice. Empirical evaluations of such advocacy through art have proven effects of media like documentary films, theatre, and songs on the aforementioned normative, empathic, and relational dimensions, and on behaviour in support of social justice causes. For example, @reddan2024 compared audience responses to a documentary about wrongful imprisonment and two documentaries about injustices in sports, and found that the former enhanced audiences' empathic responses towards prisoners, attitudes towards prison reform, and intentions to support a petition to restore voting rights for people with felony convictions. Moreover, @dunbar2016 showed that a documentary about a dramatic personal life story increased social bonding with other audience members compared to documentaries about natural history. Audiences of theatre performances about disadvantaged groups have been shown to be more empathetic with the represented groups and more willing to donate to charity after the performance, compared to before. Effects on theatre audiences' attitudes remained ambiguous[@rathje2021].
 
-As such, advocacy through art has become an object of psychological investigation, evaluating the effects on its audience. Media like documentary films, visual art, and songs have been proven to affect the aforementioned normative, empathic, and relational dimensions, and to mobilize behaviour in support of social justice causes. For example,
+-   Theatre: see alse Troxler et al,, 2022 & Greene et al., 2018
 
--   documentary film about wrongful imprisonment increased empathic responses towards prisoners, attitudes towards prison reform, and intention to support a petition regarding voting rights for people with felony convictions [@reddan2024]
-
--   TODO specify: documentaries about climate change raise awareness and change intention and behaviour regarding sustainability [@howell2011; @nolan2010; @sakellari2015]
-
--   TODO visual art: Pelowski & Specker; Pizzolante & Pelowski –\> is that narrative tho? Otherwise, stick with theatre. Or frame around naturalistic images (visual or auditory) vs. abstract (performance)
+<!-- -->
 
 -   TODO specify lyrical content and type of helping behaviour: songs with prosocial lyrics prompt prosocial thoughts and empathic responses; empathy mediates effect on helping behaviour [@greitemeyer2009] & greitemeyer2009b; TODO read Greitemeyer 2011 review
 
--   tighten relationships: nature documentaries might elicit self-transcendent experiences that increase connection between viewer and nature, which has been suggested as driving factor for pro-environmental behaviour [@mccormack2021]. Watching documentary about a disabled abuse victim increased bonding with other audience members compared to neutral documentaries [@dunbar2016].
+-   TODO specify: documentaries about climate change raise awareness and change intention and behaviour regarding sustainability [@howell2011; @nolan2010; @sakellari2015]. Nature documentaries might elicit self-transcendent experiences that increase connection between viewer and nature, which has been suggested as driving factor for pro-environmental behaviour [@mccormack2021].
 
-The advocacy through art that has been studied so far focuses on concrete narration and images to convey its message. However, not all art works on this level. Music beyond the song form, such as (contemporary) classical or folk music, is carried more by instruments and sounds and less by lyrics. Therefore, this kind of music has less tools for concrete narrative or imagery. Still, it is often intended to advocate for specific issues, such as TODO find more examples, maybe among Klezmer or Jazz?:
+What unites previous studies on advocacy through art is that the artistic stimuli under investigation use explicit and naturalistic imagery and narration to convey their advocacy messages. However, this leaves out implicit, symbolic, or abstract art, that conveys social critique through other artistic means.
+
+Music beyond the song form, such as (contemporary) classical or folk music, is carried more by instruments and sounds and less by lyrics. Therefore, this kind of music has less tools for concrete narrative or imagery. Still, it is often intended to advocate for specific issues, such as TODO find more examples, maybe among Klezmer or Jazz?:
 
 -   East-Western Divan orchestra: classical symphony orchestra to promote peace and understanding between Israel and Palestine
 
@@ -617,6 +615,8 @@ music has been related to closeness
 ## Collective aspects
 
 in-person event: social contagion/collective action with performers (music only) or audience members (film and music) could enhance effects
+
+Pelowski et al., 2017 <https://doi.org/10.1037/aca0000141>
 
 ## The present studies
 
