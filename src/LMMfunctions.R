@@ -200,7 +200,7 @@ plot_meanSE <- function(df, dv, facet_var=NULL, ylab, my_colours, show_labels=F)
                linetype = order,
                shape = medium)) + 
     geom_line(aes(group = p_id),
-              alpha = 0.6,
+              alpha = 0.5,
               position = position_jitter(width = 0, height = my_linejitter)) +
     scale_colour_manual(values = c("darkgrey", "lightgrey"), guide = "none") +
     new_scale_color() +
@@ -234,10 +234,10 @@ plot_meanSE <- function(df, dv, facet_var=NULL, ylab, my_colours, show_labels=F)
          y = ylab) +
     theme(panel.grid.major.x = element_blank(), # remove vertical grid line,
           # legend.text=element_text(size=6),
-          legend.title=element_text(margin = margin(b = 0)),
+          # legend.title=element_text(margin = margin(b = 0)),
           legend.background = element_rect(fill = "white", color = "black"),
-          # axis.title = element_text(size=9.5),
-          axis.text.x = element_text(angle=20, hjust=0.8))
+          # axis.title = element_text(size=9.5)
+          )
   
   if (!is.null(facet_var)) {
     facet_var = sym(facet_var)
@@ -252,7 +252,8 @@ plot_meanSE <- function(df, dv, facet_var=NULL, ylab, my_colours, show_labels=F)
       mutate(myaxis = paste0(timepoint, "\n", "n=", num))
     
     splot <- splot +
-      scale_x_discrete(label = sample_size[["myaxis"]])
+      scale_x_discrete(label = sample_size[["myaxis"]]) +
+      theme(axis.text.x = element_text(angle=20, hjust=0.8)) # tilt x-axis labels
   }
   
   if (show_labels==T) {

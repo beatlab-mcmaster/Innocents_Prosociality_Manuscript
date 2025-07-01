@@ -53,7 +53,7 @@ keywords: [music, film, media, social justice, prosocial, bonding, empathy, norm
 impact-statement: ~
 floatsintext: true
 numbered-lines: true
-bibliography: bibliography.bib
+bibliography: innocentsref.bib
 suppress-title-page: false
 link-citations: true
 # TODO set to true for peer review. Masks author info & references that appear in the masked-citations list
@@ -682,17 +682,11 @@ Finally, supporting social justice causes might be motivated by group cohesion. 
 
 ## Advocacy through art
 
-Social injustices often become the subject of art. Beyond a mere inspiration or description of society, such art usually criticizes social injustices and advocates for social justice. Empirical evaluations of such advocacy through art have proven effects of media like documentary films, theatre, and songs on the aforementioned normative, empathic, and relational dimensions, and on behaviour in support of social justice causes. For example, @reddan2024 compared audience responses to a documentary about wrongful imprisonment and two documentaries about injustices in sports, and found that the former enhanced audiences' empathic responses towards prisoners, attitudes towards prison reform, and intentions to support a petition to restore voting rights for people with felony convictions. Moreover, @dunbar2016 showed that a documentary about a dramatic personal life story increased social bonding with other audience members compared to documentaries about natural history. Audiences of theatre performances about disadvantaged groups have been shown to be more empathetic with the represented groups and more willing to donate to charity after the performance, compared to before. Effects on theatre audiences' attitudes remained ambiguous[@rathje2021].
+Social injustices often become the subject of art. Beyond a mere inspiration or description of society, art is used to criticize social injustices and advocate for social justice. Empirical evaluations of such advocacy through art have proven effects of media like documentary films, theatre, and songs on the aforementioned normative, empathic, and relational dimensions, and on behaviour in support of social justice causes. For example, @reddan2024 compared audience responses to a documentary about wrongful imprisonment and two documentaries about injustices in sports, and found that the former enhanced audiences' empathic responses towards prisoners, attitudes towards prison reform, and intentions to support a petition to restore voting rights for people with felony convictions. Documentaries about personal life stories also increase social bonding with other audience members \[@dunbar2016\]. These studies are comparable to the somewhat larger body of literature attesting that documentaries about climate change increase audiences' concern and pro-environmental intentions \[@howell2011; @nolan2010; @sakellari2015\]. Turning to live media, audiences of theatre performances about disadvantaged groups have been shown to be more empathetic with the represented groups and more willing to donate to charity after the performance, compared to before. Effects on theatre audiences' attitudes remained ambiguous \[@rathje2021\]. Moreover, songs with prosocial lyrics like "Love Generation" by Bob Sinclair have been shown to prompt prosocial thoughts and empathic responses in listeners, with empathy mediating the effect of the lyrical content on charitable donations [@greitemeyer2009; @greitemeyer2009a].
 
--   Theatre: see alse Troxler et al,, 2022 & Greene et al., 2018
+<!-- Theatre: see alse Troxler et al., 2022 & Greene et al., 2018 -->
 
-<!-- -->
-
--   TODO specify lyrical content and type of helping behaviour: songs with prosocial lyrics prompt prosocial thoughts and empathic responses; empathy mediates effect on helping behaviour [@greitemeyer2009] & greitemeyer2009b; TODO read Greitemeyer 2011 review
-
--   TODO specify: documentaries about climate change raise awareness and change intention and behaviour regarding sustainability [@howell2011; @nolan2010; @sakellari2015]. Nature documentaries might elicit self-transcendent experiences that increase connection between viewer and nature, which has been suggested as driving factor for pro-environmental behaviour [@mccormack2021].
-
-What unites previous studies on advocacy through art is that the artistic stimuli under investigation use explicit and naturalistic imagery and narration to convey their advocacy messages. However, this leaves out implicit, symbolic, or abstract art, that conveys social critique through other artistic means.
+What unites previous studies on advocacy through art is that the artistic stimuli under investigation use explicit and naturalistic imagery and narration to convey their advocacy messages. However, this leaves out art that conveys social critique in an implicit, symbolic, or abstract manner.
 
 Music beyond the song form, such as (contemporary) classical or folk music, is carried more by instruments and sounds and less by lyrics. Therefore, this kind of music has less tools for concrete narrative or imagery. Still, it is often intended to advocate for specific issues, such as TODO find more examples, maybe among Klezmer or Jazz?:
 
@@ -758,11 +752,25 @@ describe implementation of surveys in jatos on tablets (in-person) or PCs (lives
 
 ```{r}
 #| label: fig-closeness-plot
-#| fig-cap: "Mean and CI of closeness with Anna Vasquez across the event by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and the audience of study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap)."
+#| fig-cap: "Mean and CI of closeness with Anna Vasquez across the event by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant."
 #| echo: false
 
 closeness_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B")) +
-  theme(legend.position = c(.07, .88))
+  theme(legend.position = c(.163, .94), # move legend inside plot
+        legend.direction = "horizontal") + 
+  annotation_custom2(rasterGrob(icon_close, interpolate = TRUE), # add icon
+                    xmin = 0.6, 1.5, 6.4, 7.2,
+                    data = subset(combined_long, facet == "1:Livestream"))
+  # TODO add pairwise significance tests
+  # geom_signif(y_position = c(4.3, 4.3, 1.3, 1.3),
+  #                     xmin = c(0.9, 1.95, 1.1, 2.15),
+  #                     xmax = c(1.85, 2.9, 2.05, 3.2),
+  #                     annotation = c("***", "n.s.", "*", "***"),
+  #                     tip_length = 0,
+  #                     # textsize = ,
+  #                     # vjust = ,
+  #                     color = rep(c("#41AB5D", "#41AB5D", "#A1D99B", "#A1D99B"), 3)
+  #                     )
 
 # closeness_lineplot <- combined_long %>%
 #     ggplot(aes(x = timepoint,
@@ -817,6 +825,19 @@ closeness_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var
 #   facet_wrap(vars(facet), scales = "free_x")
  
 print(closeness_lineplot)
+```
+
+```{r}
+#| label: fig-closeness-plot
+#| fig-cap: "Mean and CI of empathy with Anna Vasquez across the event by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Empathy was rated on a scale ranging from 1 (not at all) to 7 (extremely). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant."
+#| echo: false
+
+empathy_lineplot <- plot_meanSE(df = combined_long, dv = "anna_empathic_concern", facet_var = "facet", ylab = "Rating", my_colours = c("#DC267F", "#D4ABB7")) +
+  theme(legend.position = "top", # move legend inside plot
+        legend.direction = "horizontal")
+
+annotate_figure(empathy_lineplot, top = rasterGrob(icon_empath, x = 0.1, y = -0.5, width = 0.07, interpolate = TRUE))
+
 ```
 
 ## Discussion
