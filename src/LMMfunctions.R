@@ -163,7 +163,7 @@ plot_dotbars <- function(df, dv, by_v, ylab, xlab, my_colour) {
 }
 
 # Plot means and CI by order across timepoint function
-plot_meanSE <- function(df, dv, ylab, my_colours, filter_sd=c(), show_labels=T) {
+plot_meanSE <- function(df, dv, facet_var=NULL, ylab, my_colours, show_labels=F) {
   
   if(endsWith(dv, "_z")) {
     my_yaxis <- c(-2, 2) # y axis limits
@@ -182,27 +182,15 @@ plot_meanSE <- function(df, dv, ylab, my_colours, filter_sd=c(), show_labels=T) 
   
   # remove missings
   data <- df %>%
-    filter(!is.na(!!sym(dv))) # drop rows where no rating was made
-    
-  # if applicable, filter for zero variance
-  if(!is.null(filter_sd)){
-    data <- data %>%
-      filter(!!sym(filter_sd)>0)
-  }
-  
-  # sample size
-  sample_size = data %>% 
-    group_by(timepoint_3) %>% 
-    summarise(num=n()) %>%
-    mutate(myaxis = paste0(timepoint_3, "\n", "n=", num))
+    filter(!is.na(!!dv)) # drop rows where no rating was made
   
   splot <- data %>%
-    ggplot(aes(x = timepoint_3, 
+    ggplot(aes(x = timepoint, 
                y = !!dv, 
                group = order,
                color = order,
                linetype = order,
-               shape = medium_3)) + 
+               shape = medium)) + 
     stat_summary(fun = "mean", # connect means
                  geom = "line",
                  linewidth = 0.56, 
@@ -223,8 +211,7 @@ plot_meanSE <- function(df, dv, ylab, my_colours, filter_sd=c(), show_labels=T) 
       linetype = guide_legend("Order"),
       shape = "none"
     ) +
-    coord_fixed(ratio = my_ratio, ylim = my_yaxis ) + 
-    scale_x_discrete(label = sample_size[["myaxis"]]) +
+    scale_y_continuous(limits = my_yaxis) +
     theme_bw(base_size = 11) +
     labs(x = "Time point",
          y = ylab) +
@@ -234,17 +221,34 @@ plot_meanSE <- function(df, dv, ylab, my_colours, filter_sd=c(), show_labels=T) 
           # axis.title = element_text(size=9.5),
           axis.text.x = element_text(angle=20, hjust=0.8))
   
-    if(show_labels==T) {
+  if (!is.null(facet_var)) {
+    facet_var = sym(facet_var)
+    
+    splot <- splot +
+      facet_wrap(vars(!!facet_var), scales = "free_x")
+  } else {
+    # only add sample size if not faceting x-axis
+    sample_size = data %>% 
+      group_by(timepoint) %>% 
+      summarise(num=n()) %>%
+      mutate(myaxis = paste0(timepoint, "\n", "n=", num))
+    
+    splot <- splot +
+      scale_x_discrete(label = sample_size[["myaxis"]])
+  }
+  
+  if (show_labels==T) {
     label_position <- data %>%
-      filter(!timepoint_3 == "Baseline") %>%
-      group_by(order, timepoint_3, medium_3) %>%
+      filter(!timepoint == "Baseline") %>%
+      group_by(order, timepoint, medium) %>%
       summarise(mean = mean(!!dv, na.rm = TRUE), 
                 .groups = "keep") %>% 
       bind_cols(my_nudge) %>%
       mutate(nudged_mean = mean + nudge) # calculate label positions as nudged group mean
+    
     splot <- splot +
       geom_label(data = label_position, # add labels for film and performance
-                 aes(x = timepoint_3, y = nudged_mean, label = medium_3),
+                 aes(x = timepoint, y = nudged_mean, label = medium),
                  position = position_dodge(1.7),
                  size = 5
       )

@@ -333,10 +333,10 @@ study1_df$completed <- ifelse(study1_df$NA_count.event <= 59, 1, 0) # cutoff det
 
 # factorize order and attendance (copied from Schlichting_MSc_Thesis.Rmd)
 study1_df <- study1_df %>%
-  mutate(order = factor(order, levels=c("film-perfo", "perfo-film"), labels=c("Film+Perf", "Perf+Film")),
+  mutate(order = factor(order, levels=c("film-perfo", "perfo-film"), labels=c("Film first", "Perf first")),
          attendance = factor(attendance, levels=c("in-person", "livestream"), labels=c("In-person", "Livestream")),
          base_behavioural_intention_z = my_z_score(base_behavioural_intention),
-         cell = factor(interaction(order, attendance), levels = c("Film+Perf.In-person", "Film+Perf.Livestream", "Perf+Film.In-person", "Perf+Film.Livestream"), labels = c("F-P: In-person", "F-P: Livestream", "P-F: In-person", "P-F: Livestream"))) %>%
+         cell = factor(interaction(order, attendance), levels = c("Film first.In-person", "Film first.Livestream", "Perf first.In-person", "Perf first.Livestream"), labels = c("F-P: In-person", "F-P: Livestream", "P-F: In-person", "P-F: Livestream"))) %>%
   rowwise() %>%
   # compute behaviour indices
   mutate(sum_behaviour = ifelse(completed == 0, NA, sum(mailing, flyer, post_donation)),
@@ -370,9 +370,9 @@ study1_2long <- study1_df %>%
 contrasts(study1_2long$order) <- cbind(FPvsPF = c(1, -1))
 # attr(,"contrasts")
 #           FPvsPF
-# Film+Perf      1
-# Perf+Film     -1
-# Levels: Film+Perf Perf+Film
+# Film first      1
+# Perf first     -1
+# Levels: Film first Perf first
 
 contrasts(study1_2long$medium) <- cbind(PerfvsFilm = c(-1, 1))
 # attr(,"contrasts")
@@ -420,8 +420,8 @@ study1_3long <- study1_df %>%
   # merge post measures with the medium that came last
   mutate(
     medium = case_when(
-      medium == "post" & order == "Film+Perf" ~ "perfo",
-      medium == "post" & order == "Perf+Film" ~ "docu",
+      medium == "post" & order == "Film first" ~ "perfo",
+      medium == "post" & order == "Perf first" ~ "docu",
       TRUE ~ medium
     )
   ) %>%
@@ -612,7 +612,16 @@ study2_df <- study2_df %>%
          experience_unsheltered = experience3,
          experience_none = `experience-1`,
          experience_NA = `experience-9`,
-         flyer = resource_click)
+         flyer = resource_click) %>%
+  # add metadata to match study 1
+  mutate(order = case_match(group,
+                            "group_film" ~ "Film first",
+                            "group_perf" ~ "Perf first",
+                            .default = group),
+         attendance = "Livestream",
+         p_nr = as.character(c(1:nrow(study2_df))),
+         p_id = paste0("sub-on2", p_nr)
+  )
 
 
 
@@ -630,7 +639,13 @@ post_vars <- grep("^post_", colnames(study2_df), value=TRUE)
 # gather to long format across base, docu, and perfo timepoints
 study2_long <- study2_df %>%
   pivot_longer(all_of(c(base_vars, post_vars)), names_to = c("timepoint", ".value"), names_pattern = "^(.*?)_(.*)$") %>%
-  mutate(timepoint = factor(timepoint, levels = c("base", "post"), labels = c("Baseline", "End")))
+  mutate(timepoint = factor(timepoint, levels = c("base", "post"), labels = c("Baseline", "End")),
+         medium = case_when(
+           timepoint == "Baseline" ~ "Baseline",
+           timepoint == "End" & order == "Film first" ~ "Film",
+           timepoint == "End" & order == "Perf first" ~ "Performance",
+           TRUE ~ NA
+         ))
 
 rm(base_vars, post_vars)
 ```
@@ -641,7 +656,8 @@ rm(base_vars, post_vars)
 
 # Combine study 1 & 2 for plotting
 combined_long <- study1_3long %>%
-  bind_rows(study2_long, .id = "study")
+  bind_rows(study2_long, .id = "study") %>%
+  mutate(facet = paste(study, attendance, sep = ":"))
 ```
 
 Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were implemented to ensure a just society, but across governments, systemic issues lead to the wrongful imprisonment of innocent individuals. How do we mobilize support to fight social injustice such as wrongful imprisonment? Arts and media are a way of reaching and engaging broad audiences. Theatre, soap operas, and film, using the power of storytelling, can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it, few studies have investigated how music influences our views of people and issues that are the subject of music. Given that music typically has less narration than the previously studied media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. In addition, theories of prosocial behaviour and social engagement put forward various predictors that could explain how arts and media can advocate for social justice issues. This plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
@@ -739,6 +755,68 @@ describe implementation of surveys in jatos on tablets (in-person) or PCs (lives
 ### Analysis
 
 ## Results
+
+```{r}
+#| label: fig-closeness-plot
+#| fig-cap: "Mean and CI of closeness with Anna Vasquez across the event by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and the audience of study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap)."
+#| echo: false
+
+# closeness_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B")) +
+  theme(legend.position = c(.07, .88))
+
+closeness_lineplot <- combined_long %>%
+    ggplot(aes(x = timepoint,
+               y = ios_anna,
+               group = order,
+               color = order,
+               linetype = order,
+               shape = medium)) +
+    # geom_point(color = "darkgrey",
+    #            alpha = 0.4,
+    #            position = position_jitterdodge(jitter.width = .2, jitter.height = .1, dodge.width = 0.5)) +
+    geom_line(aes(group = p_id),
+              color = "darkgrey",
+               alpha = 0.4,
+               position = position_jitterdodge(jitter.width = .2, jitter.height = .1, dodge.width = 0.5)) +
+    # TODO look into this ggnewscale::new_scale_color() +
+    stat_summary(fun = "mean", # connect means
+                 geom = "line",
+                 linewidth = 0.9,
+                 position = position_dodge(0.5)) +
+    stat_summary(fun = "mean", # add mean
+                 geom = "point",
+                 size = 3,
+                 position = position_dodge(0.5)) +
+    stat_summary(fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
+                 geom = "errorbar",
+                 width = 0.35,
+                 linewidth = 0.9,
+                 linetype = "solid",
+                 position = position_dodge(0.5),
+                 show.legend = FALSE) +
+    scale_colour_manual(values = c("#41AB5D", "#A1D99B")) +
+    guides(
+      colour = guide_legend("Order", override.aes = list(shape = NA)),
+      linetype = guide_legend("Order"),
+      shape = "none"
+    ) +
+    # coord_fixed(ratio = 0.6, ylim = c(1,7) ) +
+    # scale_x_discrete(label = sample_size[["myaxis"]]) +
+    scale_y_continuous(limits = c(1,7)) +
+    theme_bw(base_size = 11) +
+    labs(x = "Time point",
+         y = "Closeness (Anna)") +
+    theme(# legend.text=element_text(size=6),
+          legend.title=element_text(margin = margin(b = 0)),
+          legend.background = element_rect(fill = "white", color = "black"),
+          # axis.title = element_text(size=9.5),
+          axis.text.x = element_text(angle=20, hjust=0.8))
+
+closeness_lineplot <- closeness_lineplot +
+  facet_wrap(vars(facet), scales = "free_x")
+ 
+print(closeness_lineplot)
+```
 
 ## Discussion
 
