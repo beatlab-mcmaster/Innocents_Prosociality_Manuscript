@@ -178,11 +178,19 @@ plot_meanSE <- function(df, dv, facet_var=NULL, ylab, my_colours, show_labels=F)
     my_ratio <- 0.6
     my_nudge <- data.frame("nudge" = c(0.3, 0.3, -0.3, -0.3))
   }
-  dv = sym(dv)
   
   # remove missings
   data <- df %>%
-    filter(!is.na(!!dv)) # drop rows where no rating was made
+    filter(!is.na(!!sym(dv))) # drop rows where no rating was made
+  
+  # if dv has less than 10 unique values, jitter the individual participants' lines to avoid overlapping
+  if (nrow(unique(data[dv])) < 10) {
+    my_linejitter <- 0.2
+  } else {
+    my_linejitter <- 0
+  }
+  
+  dv = sym(dv)
   
   splot <- data %>%
     ggplot(aes(x = timepoint, 
@@ -191,17 +199,26 @@ plot_meanSE <- function(df, dv, facet_var=NULL, ylab, my_colours, show_labels=F)
                color = order,
                linetype = order,
                shape = medium)) + 
-    stat_summary(fun = "mean", # connect means
+    geom_line(aes(group = p_id),
+              alpha = 0.6,
+              position = position_jitter(width = 0, height = my_linejitter)) +
+    scale_colour_manual(values = c("darkgrey", "lightgrey"), guide = "none") +
+    new_scale_color() +
+    stat_summary(aes(color = order),
+                 fun = "mean", # connect means
                  geom = "line",
-                 linewidth = 0.56, 
+                 linewidth = 0.9, 
                  position = position_dodge(0.5)) + 
-    stat_summary(fun = "mean", # add mean
+    stat_summary(aes(color = order),
+                 fun = "mean", # add mean
                  geom = "point",
-                 size = 2, 
+                 size = 3, 
                  position = position_dodge(0.5)) + 
-    stat_summary(fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
+    stat_summary(aes(color = order),
+                 fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
                  geom = "errorbar", 
-                 width = 0.21,
+                 width = 0.35,
+                 linewidth = 0.9,
                  linetype = "solid", 
                  position = position_dodge(0.5),
                  show.legend = FALSE) + 
@@ -215,7 +232,8 @@ plot_meanSE <- function(df, dv, facet_var=NULL, ylab, my_colours, show_labels=F)
     theme_bw(base_size = 11) +
     labs(x = "Time point",
          y = ylab) +
-    theme(# legend.text=element_text(size=6),
+    theme(panel.grid.major.x = element_blank(), # remove vertical grid line,
+          # legend.text=element_text(size=6),
           legend.title=element_text(margin = margin(b = 0)),
           legend.background = element_rect(fill = "white", color = "black"),
           # axis.title = element_text(size=9.5),

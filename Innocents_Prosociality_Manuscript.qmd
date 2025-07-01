@@ -94,7 +94,7 @@ rm(list=ls())
 
 # load/install required packages
 require(pacman)
-p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'effsize', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', 'tinytable')
+p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'ggnewscale', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'effsize', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', 'tinytable')
 
 # set preferences in case of command conflicts between loaded packages
 conflicts_prefer(dplyr::select, .quiet = TRUE)
@@ -761,59 +761,60 @@ describe implementation of surveys in jatos on tablets (in-person) or PCs (lives
 #| fig-cap: "Mean and CI of closeness with Anna Vasquez across the event by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and the audience of study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap)."
 #| echo: false
 
-# closeness_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B")) +
+closeness_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B")) +
   theme(legend.position = c(.07, .88))
 
-closeness_lineplot <- combined_long %>%
-    ggplot(aes(x = timepoint,
-               y = ios_anna,
-               group = order,
-               color = order,
-               linetype = order,
-               shape = medium)) +
-    # geom_point(color = "darkgrey",
-    #            alpha = 0.4,
-    #            position = position_jitterdodge(jitter.width = .2, jitter.height = .1, dodge.width = 0.5)) +
-    geom_line(aes(group = p_id),
-              color = "darkgrey",
-               alpha = 0.4,
-               position = position_jitterdodge(jitter.width = .2, jitter.height = .1, dodge.width = 0.5)) +
-    # TODO look into this ggnewscale::new_scale_color() +
-    stat_summary(fun = "mean", # connect means
-                 geom = "line",
-                 linewidth = 0.9,
-                 position = position_dodge(0.5)) +
-    stat_summary(fun = "mean", # add mean
-                 geom = "point",
-                 size = 3,
-                 position = position_dodge(0.5)) +
-    stat_summary(fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
-                 geom = "errorbar",
-                 width = 0.35,
-                 linewidth = 0.9,
-                 linetype = "solid",
-                 position = position_dodge(0.5),
-                 show.legend = FALSE) +
-    scale_colour_manual(values = c("#41AB5D", "#A1D99B")) +
-    guides(
-      colour = guide_legend("Order", override.aes = list(shape = NA)),
-      linetype = guide_legend("Order"),
-      shape = "none"
-    ) +
-    # coord_fixed(ratio = 0.6, ylim = c(1,7) ) +
-    # scale_x_discrete(label = sample_size[["myaxis"]]) +
-    scale_y_continuous(limits = c(1,7)) +
-    theme_bw(base_size = 11) +
-    labs(x = "Time point",
-         y = "Closeness (Anna)") +
-    theme(# legend.text=element_text(size=6),
-          legend.title=element_text(margin = margin(b = 0)),
-          legend.background = element_rect(fill = "white", color = "black"),
-          # axis.title = element_text(size=9.5),
-          axis.text.x = element_text(angle=20, hjust=0.8))
-
-closeness_lineplot <- closeness_lineplot +
-  facet_wrap(vars(facet), scales = "free_x")
+# closeness_lineplot <- combined_long %>%
+#     ggplot(aes(x = timepoint,
+#                y = ios_anna,
+#                group = order,
+#                color = order,
+#                linetype = order,
+#                shape = medium)) +
+#     geom_line(aes(group = p_id),
+#                alpha = 0.6,
+#                position = position_jitter(width = 0, height = 0.2)) +
+#     scale_colour_manual(values = c("darkgrey", "lightgrey"), guide = "none") +
+#     new_scale_color() +
+#     stat_summary(aes(color = order),
+#                  fun = "mean", # connect means
+#                  geom = "line",
+#                  linewidth = 0.9,
+#                  position = position_dodge(0.5)) +
+#     stat_summary(aes(color = order),
+#                  fun = "mean", # add mean
+#                  geom = "point",
+#                  size = 3,
+#                  position = position_dodge(0.5)) +
+#     stat_summary(aes(color = order),
+#                  fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
+#                  geom = "errorbar",
+#                  width = 0.35,
+#                  linewidth = 0.9,
+#                  linetype = "solid",
+#                  position = position_dodge(0.5),
+#                  show.legend = FALSE) +
+#     scale_colour_manual(values = c("#41AB5D", "#A1D99B")) +
+#     guides(
+#       colour = guide_legend("Order", override.aes = list(shape = NA)),
+#       linetype = guide_legend("Order"),
+#       shape = "none"
+#     ) +
+#     # coord_fixed(ratio = 0.6, ylim = c(1,7) ) +
+#     # scale_x_discrete(label = sample_size[["myaxis"]]) +
+#     scale_y_continuous(limits = c(1,7)) +
+#     theme_bw(base_size = 11) +
+#     labs(x = "Time point",
+#          y = "Closeness (Anna)") +
+#     theme(panel.grid.major.x = element_blank(), # remove vertical grid line
+#           # legend.text=element_text(size=6),
+#           legend.title=element_text(margin = margin(b = 0)),
+#           legend.background = element_rect(fill = "white", color = "black"),
+#           # axis.title = element_text(size=9.5),
+#           axis.text.x = element_text(angle=20, hjust=0.8))
+# 
+# closeness_lineplot <- closeness_lineplot +
+#   facet_wrap(vars(facet), scales = "free_x")
  
 print(closeness_lineplot)
 ```
