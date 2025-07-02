@@ -53,7 +53,9 @@ keywords: [music, film, media, social justice, prosocial, bonding, empathy, norm
 impact-statement: ~
 floatsintext: true
 numbered-lines: true
-bibliography: innocentsref.bib
+bibliography: 
+  - innocentsref.bib
+  - r-references.bib
 suppress-title-page: false
 link-citations: true
 # TODO set to true for peer review. Masks author info & references that appear in the masked-citations list
@@ -100,6 +102,9 @@ p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'ggnewscale', '
 conflicts_prefer(dplyr::select, .quiet = TRUE)
 conflicts_prefer(dplyr::filter, .quiet = TRUE)
 conflicts_prefer(flextable::separate_header, .quiet = TRUE)
+
+# update R references
+r_refs("r-references.bib") 
 
 # load custom functions
 source(here("src/LMMfunctions.R"), local = knitr::knit_global()) 
@@ -800,7 +805,15 @@ We assessed participants' age, income, education, and political orientation. Fur
 
 ### Analysis
 
-We screened for rushing within each survey component, but no participant was faster than our cutoff criterion of 1.5 times the interquartile range of the completion times. We further screened for insufficient variance in the response patterns of each participant, which can indicate inattentiveness or dishonesty. For each participant and each multi-item instrument, we calculated the number of unique response values. Responses were excluded if they consisted of only a single repeated value (for instruments with up to 10 items) or only two unique values (for instruments with more items), which was the case for `r printnum(study1_novariance_observations)` out of `r printnum(study1_total_instrument_observations)` (`r printnum(``study1_novariance_observations/study1_total_instrument_observations``, digits = 2)`%) responses. Finally, multi-item indices were only computed if a participant had replied to at least 80% of the items making up that index. The resulting sample size for each analysis is reported alongside the results.
+All analyses were performed in R 4.5.0 [@R-base]. First, we screened for rushing within each survey component, but no participant was faster than our cutoff criterion of 1.5 times the interquartile range of the completion times. We further screened for insufficient variance in the response patterns of each participant, which can indicate inattentiveness or dishonesty. For each participant and each multi-item instrument, we calculated the number of unique response values. Responses were excluded if they consisted of only a single repeated value (for instruments with up to 10 items) or only two unique values (for instruments with more items), which was the case for `r printnum(study1_novariance_observations)` out of `r printnum(study1_total_instrument_observations)` (``` r printnum(``study1_novariance_observations/study1_total_instrument_observations``, digits = 2) ```%) responses. Finally, multi-item indices were only computed if a participant had replied to at least 80% of the items making up that index. The resulting sample size for each analysis is reported alongside the results.
+
+To test the effect of the event on each of the potential drivers of prosociality (closeness, emphatic concern, and problem awareness), we used linear mixed models (LMMs). Sum-to-Zero contrasts tested whether the outcomes were higher for in-person compared to livestream attendance, after watching the performance compared to after the film, and at the end of the event compared to at intermission. We added the baseline rating of the respective outcome as a covariate, estimating a fixed effect for the entire sample to account for measured variances in the outcome prior to the event. We also added random intercepts for each participant to account for unmeasured variances and capture intra-participant correlations due to the repeated measures design. The outcomes and baseline covariates were z-scored. Missing values for the baseline covariate were imputed with zero (the mean value after z-scoring). Control variables that had a sizable correlation with the outcome variables ($r \geq .30$) were included as additional covariates in the models. All models met the assumptions of normally distributed residuals and random intercepts, homogeneity of variances, and did not have multicollinearity issues, unless reported otherwise. The model fit was evaluated against a covariate model predicting the outcome from only the baseline and the random intercept using a Likelihood Ratio Test of the maximum likelihood (ML)-generated models. Main and interaction effects were evaluated using the t-statistic of the parameter estimates and Satterthwaite approximations for degrees of freedom of the restricted maximum likelihood (REML)-generated models, as recommended by @meteyard2020. Cohen's $d$ as effect size measure for the fixed effects was calculated using the equation by @westfall2014 [see @brysbaert2018], and interpreted according to the norms by @cohen1992. Significant interactions were decomposed using one-sided paired t-tests.
+
+To test the influence of closeness, empathic concern, and problem awareness on behavioural intention, we used multiple linear regression. Again, covariates that were sizably correlated with intention were included in the model. All predictors and the outcome were z-scored. Predictors were evaluated with t-test of their regression weights against zero.
+
+To test the influence of intention on observed behaviour, we used ordinal logistic regression to predict the number of behaviours participants performed. No control variables were sizably correlated with the outcome, and hence no further variables were added to the model. All predictors were z-scored. Predictors were interpreted as having a significant effect if the 95% confidence interval of the Odd's Ratio (calculated as $(Coefficient \pm 1.96*Standard Error)^2$) did not cross 1.
+
+Figures were created with *ggplot2* [@R-ggplot2], *ggpubr* [@R-ggpubr], *ggridges* [@R-ggridges], *ggsignif* [@R-ggsignif], *ggnewscale* [@R-ggnewscale], and *png* [@R-png]. Error bars represent 95% confidence intervals (CI) based on 1000 bootstrap resamples implemented in *Hmisc* [@R-Hmisc].
 
 ## Results
 
@@ -893,6 +906,8 @@ empathy_lineplot <- plot_meanSE(df = combined_long, dv = "anna_empathic_concern"
 annotate_figure(empathy_lineplot, top = rasterGrob(icon_empath, x = 0.1, y = -0.5, width = 0.07, interpolate = TRUE))
 
 ```
+
+The only correlation reaching that threshold was between problem awareness and openness to experience, `r apa_print(cor.test(study1_2long$problem_awareness_z, study1_2long$trait_openness, method = "spearman"))$full_result`. Therefore, the problem awareness model includes openness as an additional covariate.
 
 ## Discussion
 
