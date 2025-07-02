@@ -218,8 +218,8 @@ for (instrument in names(study1_instruments)) {
   # count number of observations that lack variances
   cutoff <- ifelse(length(items) > threshold_fewormanyitems, variance_for_manyitems, variance_for_fewitems) # define what constitutes a lack of variance depending on the number of items in the instrument
   
-  total <- sum(!is.na(study1_df_variance[[unique_column]])) # count total observations per instrument
-  novariance <- sum(study1_df_variance[[unique_column]] <= cutoff, na.rm = TRUE) # count cases where unique values are below cutoff
+  total <- sum(study1_df_variance[[unique_column]] > 0 & !is.na(study1_df_variance[[unique_column]])) # count total observations per instrument
+  novariance <- sum(study1_df_variance[[unique_column]] > 0 & study1_df_variance[[unique_column]] <= cutoff, na.rm = TRUE) # count cases where unique values are below cutoff
   
   study1_total_instrument_observations = study1_total_instrument_observations + total # update counters
   study1_novariance_observations = study1_novariance_observations + novariance
@@ -521,8 +521,8 @@ for (instrument in names(study2_instruments)) {
   # count number of observations that lack variances
   cutoff <- ifelse(length(items) > threshold_fewormanyitems, variance_for_manyitems, variance_for_fewitems) # define what constitutes a lack of variance depending on the number of items in the instrument
   
-  total <- sum(!is.na(study2_df_variance[[unique_column]])) # count total observations per instrument
-  novariance <- sum(study2_df_variance[[unique_column]] <= cutoff, na.rm = TRUE) # count cases where unique values are below cutoff
+  total <- sum(study2_df_variance[[unique_column]] > 0 & !is.na(study2_df_variance[[unique_column]])) # count total observations per instrument
+  novariance <- sum(study2_df_variance[[unique_column]] > 0 & study2_df_variance[[unique_column]] <= cutoff, na.rm = TRUE) # count cases where unique values are below cutoff
   
   study2_total_instrument_observations = study2_total_instrument_observations + total # update counters
   study2_novariance_observations = study2_novariance_observations + novariance
@@ -741,7 +741,7 @@ Leading up to the event, all ticket holders were invited to sign up for particip
 
 Study 1 consisted of three surveys: A pre-survey before the event, a survey at intermission evaluating the stimulus presented in the first half of the event, and a survey at the end, evaluating the second half of the event. In addition, person-level covariates were assessed either in the pre-survey or in the survey at the end. After obtaining informed consent, the pre-survey assessed a baseline of the behavioural predictors interpersonal closeness with a wrongfully imprisoned person, state empathy for their story, problem awareness of wrongful imprisonment, and intentions to support organizations fighting wrongful imprisonment. Moreover, the pre-survey included the other NAM-TPB variables and an affect measure. Participants filled out the pre-survey either in the days leading up to the event, or in the hour right before the event. Closeness with the other audience members and affect were always assessed immediately before the event, because they are specific to the time and context of the event. Participants then saw the film or the performance in the first half of the event, and, after a 30-minute intermission, the other stimulus. After both the film and the performance, we assessed participants' affect, experience of the event, and again measured their closeness, empathy, awareness, and intentions. The end survey additionally included the remaining NAM-TPB variables, and some questions that were used to answer other research questions not analysed here. At the end of the event, we observed actual behaviour in support of *Innocence Canada*, an organization that advocates for innocent prisoners in Canada. Study 1 was approved by the McMaster Research Ethics Board (MREB#1975).
 
-The events took place in McMaster University's Large Interactive Virtual Environment laboratory (LIVELab, <https://livelab.mcmaster.ca/>), a concert venue equipped for psychological research, and were livestreamed via YouTube. Livestream participants opened a custom website on their personal computers which presented the surveys and the event stream. To create a controlled experience, the website prohibited access to stream controls (like pausing the stream) and only displayed the video stream, not any additional YouTube features like the chat. Livestream participants were instructed to sit in a quiet environment and use headphones for the best experience, but `r printnum(nrow(subset(innocents_df, speaker == 3)))` participants self-reported that they still used the built-in speakers of their machine. Nonetheless, the sound quality was rated as very good ($M = `r printnum(mean(innocents_df$sound_quality, na.rm = TRUE), digits = 2)`$ on a 7-point scale), as was the video quality ($M =`r printnum(mean(innocents_df$video_quality, na.rm = TRUE), digits = 2)`$), the video fluency ($M = `r printnum(mean(innocents_df$video_fluency, na.rm = TRUE), digits = 2)`$), and the camera framing ($M =`r printnum(mean(innocents_df$camera_frame, na.rm = TRUE), digits = 2)`$). In-person participants filled out the surveys on LIVELab's tablets or on paper. Participants who signed up in advance were given a link to fill out the pre-survey on their own machines. All surveys, and the presentation of the stream for livestream participants, were coded in jsPsych [@leeuw2023] and hosted through JATOS [@lange2015] on our lab server. Print versions and codebooks of the survey are available at <https://doi.org/10.5281/zenodo.15282949>. Note that in-person participants were equipped with mobile eye-tracking glasses and smartwatches for physiological measurements that were analysed for other research questions. For the same reason, livestream participants were recorded via their webcam. Both in-person and livestream participants had to undergo brief calibrations before and after the event and at intermission. For the full technical details of the event, see Supplementary.
+The events took place in McMaster University's Large Interactive Virtual Environment laboratory (LIVELab, <https://livelab.mcmaster.ca/>), a concert venue equipped for psychological research, and were livestreamed via YouTube. Livestream participants opened a custom website on their personal computers which presented the surveys and the event stream. To create a controlled experience, the website prohibited access to stream controls (like pausing the stream) and only displayed the video stream, not any additional YouTube features like the chat. Livestream participants were instructed to sit in a quiet environment and use headphones for the best experience, but `r printnum(nrow(subset(innocents_df, speaker == 3)))` participants self-reported that they still used the built-in speakers of their machine. Nonetheless, the sound quality was rated as very good ($M = `r printnum(mean(innocents_df$sound_quality, na.rm = TRUE), digits = 2)`$ on a 7-point scale), as was the video quality ($M =`r printnum(mean(innocents_df$video_quality, na.rm = TRUE), digits = 2)`$), the video fluency ($M = `r printnum(mean(innocents_df$video_fluency, na.rm = TRUE), digits = 2)`$), and the camera framing ($M =`r printnum(mean(innocents_df$camera_frame, na.rm = TRUE), digits = 2)`$). In-person participants filled out the surveys on LIVELab's tablets or on paper. Participants who signed up in advance were given a link to fill out the pre-survey on their own machines. All surveys, and the presentation of the stream for livestream participants, were coded in jsPsych [@leeuw2023] and hosted through JATOS [@lange2015] on our lab server. Print versions and codebooks of the survey are available at <https://doi.org/10.5281/zenodo.15282949>. Note that in-person participants were equipped with mobile eye-tracking glasses and smartwatches for physiological measurements that were analysed for other research questions. For the same reason, livestream participants were recorded via their webcam. Both in-person and livestream participants had to undergo brief calibrations before and after the event and at intermission. For the full technical details of the event, see @apx-implementation.
 
 ### Stimuli
 
@@ -780,17 +780,27 @@ To measure state empathy, participants read a vignette about the story of Anna V
 
 #### Problem awareness
 
-We created an instrument to measure the variables of the NAM and TPB with regards to fighting wrongful imprisonment. The item wordings were based on previous studies using the NAM and TPB to explain social justice engagement [@torres-harding2012], charitable giving [@smith2007], and pro-environmental behaviour [@degroot2009; @savari2023; @steg2010].
+We created an instrument to measure the variables of the NAM and TPB with regards to fighting wrongful imprisonment. The item wordings were based on previous studies using the NAM and TPB to explain social justice engagement [@torres-harding2012], charitable giving [@smith2007], and pro-environmental behaviour [@degroot2009; @savari2023; @steg2010]. The instrument consists of four items for each of the NAM variables problem awareness (e.g., "Wrongful incarcerations are an urgent problem in our society"; $\alpha = `r printnum(alpha_pa$alpha)`$), ascription of responsibility (e.g., "Everyone must do something against social injustices in the legal system"; $\alpha =`r printnum(alpha_ar$alpha)`$), and personal norm (e.g., "I would feel guilty if I didn’t do something to make the criminal justice system more fair"; $\alpha = `r printnum(alpha_pn$alpha)`$), and the TPB variables attitude (e.g., "I believe that it is essential to make sure that defendants and convicts receive adequate legal support"; $\alpha =`r printnum(alpha_at$alpha)`$), subjective norm (e.g., "Other people around me support organizations and groups that fight injustices in the legal system"; $\alpha = `r printnum(alpha_sn$alpha)`$), and perceived behavioural control (e.g., "I believe that I have the power to advocate for social justice in the legal system, if I choose to do so"; $\alpha =`r printnum(alpha_pbc$alpha)`$). Behavioural intentions to support the fight against wrongful imprisonment was measured with three items relating to *Innocence Canada*, a local charity: "I intend to join the mailing list of an organization like *Innocence Canada*", "I intend to read up on wrongful incarceration", and "I intend to donate to an organization like *Innocence Canada*" ($\alpha = `r printnum(alpha_intention$alpha)\`\$). All NAM-TPB items were rated on a 7-point scale ranging from 1 ("strongly disagree") to 7 ("strongly agree") and were averaged within each construct.
 
 #### Supportive behaviour
 
+At the end of the event, we observed whether participants took a flyer of *Innocence Canada* (in-person: paper flyer; livestream: digital download), and whether they signed up for their mailing list. We also provided opportunities to donate (in-person: donation box; livestream: donation link). Because we were ethically not allowed to observe donations directly, we followed up with participants one to two weeks after the event to ask whether and how much they had donated. Note that the *Innocents* performance and film were created in the USA, informed by and referring to wrongful imprisonment in the US-American criminal justice system. On the other hand, *Innocence Canada* fights wrongful imprisonment in Canada. Nonetheless, both countries' legal systems face related issues, and the advocacy of *The Innocents* is equally relevant in Canada. Audiences' support for *Innocence Canada*, therefore, further illustrates the advocacy's ability to transfer to a new local context.
+
 #### Affect
+
+We assessed affect with six items rated on a 4-point scale ranging from 1 ("I do not feel it") to 4 ("I feel it strongly"). The six items were combined into three bipolar dimensions alert-tired, relaxed-tense, and positive-negative by subtracting the rating of one pole from the rating of the opposite pole [@schimmack2000].
 
 #### Event experience
 
+We asked participants to rate their experience of the film and the performance in terms of enjoyment, interest, being moved, gaining insight, being attentive, experiencing chills or shivers, tearing up or crying, and likelihood of reengaging with a similar event [cf. @fink2024; @schindler2017; @swarbrick2023]. These items were rated on a 7-point scale ranging from 1 ("not at all") to 7 ("extremely"). Furthermore, we assessed the perceived duration on a 7-point scale from -3 ("much too short") to 3 ("much too long"). For the performance only, we asked participants to describe the performance in up to ten of their own words. At the end of the event, we also asked participants whether they liked the order of film and performance that they saw.
+
 #### Person-level covariates
 
+We assessed participants' age, income, education, and political orientation. Furthermore, based on the Wheel of Power/Privilege [@bauer2021; @duckworth2020; @canadiancouncilforrefugees], we asked participants whether they feel part of equity-deserving groups (Women, genderdiverse, LGBQ+, Indigenous Peoples, and Persons of colour) and inquired about their lived experiences (of disability, justice-involvement, and unshelteredness). We assessed participants' musical background with one item from the Ollen Musical Sophistication Index [@ollen2006; @zhang2019]. Moreover, we asked for participants' familiarity with and preference for contemporary percussion music, on scales ranging from 1 ("very unfamiliar"/"strongly dislike") to 7 ("very familiar"/"strongly like"). We also asked for their motivations to attend the event, and whether they had a personal relationship to the researchers or the artists. Finally, we measured relevant personality traits: Openness to experience with the six-item facet of the Big Five Inventory-2-Short [@soto2017], and trait empathy with 14 items making up the empathic concern and personal distress facets of the Interpersonal Reactivity Index [@davis1980].
+
 ### Analysis
+
+We screened for rushing within each survey component, but no participant was faster than our cutoff criterion of 1.5 times the interquartile range of the completion times. We further screened for insufficient variance in the response patterns of each participant, which can indicate inattentiveness or dishonesty. For each participant and each multi-item instrument, we calculated the number of unique response values. Responses were excluded if they consisted of only a single repeated value (for instruments with up to 10 items) or only two unique values (for instruments with more items), which was the case for `r printnum(study1_novariance_observations)` out of `r printnum(study1_total_instrument_observations)` (`r printnum(``study1_novariance_observations/study1_total_instrument_observations``, digits = 2)`%) responses. Finally, multi-item indices were only computed if a participant had replied to at least 80% of the items making up that index. The resulting sample size for each analysis is reported alongside the results.
 
 ## Results
 
@@ -926,9 +936,13 @@ As in Study 1, participants read a vignette about the wrongful imprisonment of A
 
 Problem awareness and the other NAM and TPB variables were assessed using the same self-worded instrument from Study 1. The only change was in the items measuring behavioural intentions: Rather than naming *Innocence Canada,* we asked about participants' intentions to join the mailing list and donate to "an organization that fights wrongful imprisonment". Our partner organization *Innocence Canada* was only presented at the end of the study, when assessing actual behaviour, to reduce the risk of participants looking up the organization and engaging in any of the behaviours beforehand.
 
+#### Event experience
+
+We asked participants in both conditions to describe the stimulus they had seen in up to ten of their own words. Given that participants only saw one of the two stimuli, we abridged the question whether participants liked the order of film and performance.
+
 #### Person-level covariates
 
-Because all participants were recruited through Prolific, rather than self-initiatively buying a ticket to the event, we did not ask participants for their motivation to attend, nor for their personal relationship with the researchers or the artists. To shorten the post-survey, we abridged the trait empathy measure, which had not shown consistent associations with supportive behaviour or its predictors in Study 1.
+Because all participants were recruited through Prolific, rather than self-initiatively buying a ticket to the event, we did not ask participants for their motivation to attend, nor for their personal relationship with the researchers or the artists. To shorten the post-survey, we abridged the trait empathy measure, which had not shown consistent associations with supportive behaviour or its predictors in Study 1. In the question about participants' identity, we added an option for religious minorities.
 
 ### Analysis
 
@@ -939,50 +953,6 @@ TODO
 ## Discussion
 
 # General Discussion
-
-## Citations
-
-See [here](https://quarto.org/docs/authoring/footnotes-and-citations.html) for instructions on setting up citations and references.
-
-A parenthetical citation requires square brackets [@CameronTrivedi2013]. This reference was in my bibliography file. An in-text citation is done like so:
-
-@CameronTrivedi2013 make some important points ...
-
-See [here](https://wjschne.github.io/apaquarto/writing.html#references) for explanations, examples, and citation features exclusive to apaquarto. For example, apaquarto can automatically handle possessive citations:
-
-@schneider2012cattell ['s] position was ...
-
-## Masking Author Identity for Peer Review
-
-Setting `mask` to `true` will remove author names, affiliations, and correspondence from the title page. Any references listed in the `masked-citations` field will be masked as well. See [here](https://wjschne.github.io/apaquarto/writing.html#masked-citations-for-anonymous-peer-review) for more information.
-
-## Block Quotes
-
-Sometimes you want to give a longer quote that needs to go in its own paragraph. Block quotes are on their own line starting with the \> character. For example, @austenMansfieldPark1990 ['s] *Mansfield Park* has some memorable insights about the mind:
-
-> If any one faculty of our nature may be called more wonderful than the rest, I do think it is memory. There seems something more speakingly incomprehensible in the powers, the failures, the inequalities of memory, than in any other of our intelligences. The memory is sometimes so retentive, so serviceable, so obedient; at others, so bewildered and so weak; and at others again, so tyrannic, so beyond control! We are, to be sure, a miracle every way; but our powers of recollecting and of forgetting do seem peculiarly past finding out. (p. 163)
-
-## Math and Equations
-
-Inline math uses $\LaTeX$ syntax with single dollar signs. For example, the reliability coefficient of my measure is $r_{XX}=.95$.
-
-If you want to display and refer to a specific formula, enclose the formula in two dollar signs. After the second pair of dollar signs, place the label in curly braces. The label should have an `#eq-` prefix. To refer to the formula, use the same label but with the `@` symbol. For example, @eq-euler is Euler's Identity, which is much admired for its elegance.
-
-$$
-e^{i\pi}+1=0
-$$ {#eq-euler}
-
-A more practical example is the z-score equation seen in @eq-zscore.
-
-$$
-z=\frac{X-\mu}{\sigma}
-$$ {#eq-zscore}
-
-If no identifier label is given, a centered equation in display mode will have no identifying number:
-
-$$
-\sigma_e=\sigma_y\sqrt{1-r_{xy}^2}
-$$
 
 ## Displaying Figures
 
@@ -1007,6 +977,10 @@ ggplot(data.frame(x = c(0, 35)), aes(x)) +
 ```
 
 To refer to any figure or table, use the `@` symbol followed by the reference label (e.g., @fig-myplot).
+
+See @fig-appendfig, an example of an imported graphic using markdown syntax.
+
+![Appendix Figure](sampleimage.png){#fig-appendfig apa-note="A *note* below the figure"}
 
 ## Displaying Tables
 
@@ -1035,59 +1009,7 @@ A footnote is usually displayed at the bottom of the page on which the footnote 
 
 A regular paragraph without any indentation is not part of the footnote and will be part of the main body of the document.
 
-## Hypotheses, Aims, and Objectives
-
-The last paragraph of the introduction usually states the specific hypotheses of the study, often in a way that links them to the research design.
-
-# Method
-
-General remarks on method. This paragraph is optional.
-
-Not all papers require each of these sections. Edit them as needed. Consult the [Journal Article Reporting Standards](https://apastyle.apa.org/jars) for what is needed for your type of article.
-
-## Participants
-
-Who are they? How were they recruited? Report criteria for participant inclusion and exclusion. Perhaps some basic demographic stats are in order. A table is a great way to avoid repetition in statistical reporting.
-
-## Measures
-
-This section can also be titled **Materials** or **Apparatus**. Whatever tools, equipment, or measurement devices used in the study should be described.
-
-### Measure A
-
-Describe Measure A.
-
-### Measure B
-
-Describe Measure B.
-
-#### Subscale B1
-
-A paragraph after a 4th-level header will appear on the same line as the header.
-
-#### Subscale B2
-
-A paragraph after a 4th-level header will appear on the same line as the header.
-
-##### Subscale B2a
-
-A paragraph after a 5th-level header will appear on the same line as the header.
-
-##### Subscale B2b
-
-A paragraph after a 5th-level header will appear on the same line as the header.
-
-## Procedure
-
-What did participants do? How are the data going to be analyzed?
-
-# Results
-
-## Descriptive Statistics
-
-Describe the basic characteristics of the primary variables. My ideal is to describe the variables well enough that someone conducting a meta-analysis can include the study without needing to ask for additional information.
-
-<!-- Add Additional Sections as Needed -->
+## Tables
 
 @tbl-mymarkdowntable2 is an example of a plain markdown table. Note the that the caption begins with a colon.
 
@@ -1099,18 +1021,6 @@ Describe the basic characteristics of the primary variables. My ideal is to desc
 
 : My Caption. {#tbl-mymarkdowntable2 apa-note="My note"}
 
-# Discussion
-
-Describe results in non-statistical terms. <!-- Add sections as needed. -->
-
-## Limitations and Future Directions
-
-Every study has limitations. Based on this study, some additional steps might include...
-
-## Conclusion
-
-Describe the main point of the paper.
-
 # References
 
 <!-- References will auto-populate in the refs div below -->
@@ -1118,7 +1028,7 @@ Describe the main point of the paper.
 ::: {#refs}
 :::
 
-# My Appendix Title {#apx-a}
+# Detailed sample descriptions {#apx-sampledescription}
 
 Appendices are created as level 1 headings with an identifier with an `#apx-` prefix. Appendix titles should be in title case and should describe the content of the appendix.
 
@@ -1136,8 +1046,16 @@ This is an appendix with a table using markdown (see @tbl-letters).
 
 : My Caption {#tbl-letters apa-note="These are letters."}
 
-# Another Appendix {#apx-b}
+# Technical implementation {#apx-implementation}
 
-See @fig-appendfig, an example of an imported graphic using markdown syntax.
+## Surveys
 
-![Appendix Figure](sampleimage.png){#fig-appendfig apa-note="A *note* below the figure"}
+All surveys were coded in jsPsych [@leeuw2023] and hosted through JATOS [@lange2015] on our lab server located at McMaster University, and managed by McMaster’s Research and High Performance Computing Support. Codebooks and print versions are available at https://doi.org/10.5281/zenodo.15282949. All participants completed the survey via web browser: In-person participants were provided with LIVELab's Samsung Galaxy Tab A 8.0 SM-T380 tablets, which they could store in a pouch attached to their seat during the event. Livestream participants used their own machines. Since this was a live event, participants had limited time to fill out the surveys before the event and at intermission so as not to delay the performance and the film screening. To ensure that participants progressed through the surveys as planned, we monitored the incoming data using the JATOS logs. If participants did not complete the surveys in the designated time, we skipped the remaining questions so that the surveys would not distract participants from the event. For in-person participants, research assistants went up to their seats and manually skipped the remaining survey questions, whereas for livestream participants, we signaled the JATOS server to move every participant to the livestream once the first and second half of the event began, respectively.
+
+## Physiological measures
+
+Both in-person and online participants consented to eye-tracking and cardiac monitoring. In-person participants were equipped with Bangle.js 2 watches collecting a photoplethysmogram signal [@flannery2024], and with Pupil Labs' NEON eye-tracking glasses, controlled via a multi-person mobile eye-tracking system [@saxena2025]. Livestream participants were recorded via webcam to extract their eye-movements and cardiac activity post-hoc. The calibration for the eye-tracking glasses is described in @saxena2025 and the calibration for the webcam is described in @saxena2023.
+
+## Environment
+
+The LIVELab is equipped with technology that meets the demands of concert halls as well as psychological laboratories. It has a capacity of 106 seats. For this study, in-person participants were seated in the second, third and fourth front rows. Including participants, the event was attended by 55 in-person audience members on April 2nd and 60 audience members on April 4th. The performance took place on the stage, where the sound was recorded by eight microphones for the different instruments and two microphones for the audience (e.g., to capture applause), and presented over a PA system consisting of two Meyer 500HP subwoofers and 5 Meyer UPJ-1P speakers. For the livestream, the performance was filmed from a static PTZOptics pt30x-sdi-g2 camera positioned behind and above the audience seating to capture an unobstructed view of the stage. The livestream audio was the same mix presented in the concert hall. The film was screened for the in-person audience on a 384.5 cm x 216 cm Samsung LH015IER LED video wall, using the same PA sound system. The film video and audio were streamed directly to YouTube. For livestream participants, the stream was presented in the jsPsych environment using the AVOKE plugin \[TODO cite\].
