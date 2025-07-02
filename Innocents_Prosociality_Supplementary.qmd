@@ -1,28 +1,24 @@
 ---
 title: "Innocents_Prosociality_Supplementary"
+bibliography: innocentsref.bib
 format: 
   docx:
     toc: true
     number-sections: true
 ---
 
-## Quarto
+## Detailed sample descriptions
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+## Technical implementation
 
-## Running Code
+### Surveys
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+All surveys were coded in jsPsych [@leeuw2023] and hosted through JATOS [@lange2015] on our lab server located at McMaster University, and managed by McMaster’s Research and High Performance Computing Support. Codebooks and print versions are available at https://doi.org/10.5281/zenodo.15282949. All participants completed the survey via web browser: In-person participants were provided with LIVELab's Samsung Galaxy Tab A 8.0 SM-T380 tablets, which they could store in a pouch attached to their seat during the event. Livestream participants used their own machines. Since this was a live event, participants had limited time to fill out the surveys before the event and at intermission so as not to delay the performance and the film screening. To ensure that participants progressed through the surveys as planned, we monitored the incoming data using the JATOS logs. If participants did not complete the surveys in the designated time, we skipped the remaining questions so that the surveys would not distract participants from the event. For in-person participants, research assistants went up to their seats and manually skipped the remaining survey questions, whereas for livestream participants, we signaled the JATOS server to move every participant to the livestream once the first and second half of the event began, respectively.
 
-```{r}
-1 + 1
-```
+### Physiological measures
 
-You can add options to executable code like this 
+Both in-person and online participants consented to eye-tracking and cardiac monitoring. In-person participants were equipped with Bangle.js 2 watches, running our lab's custom software [@flannery2024], and with Pupil Labs' NEON eye-tracking glasses, controlled via our lab's custom, multi-person mobile eye-tracking system [@saxena2025]. Livestream participants were recorded via webcam to extract their eye-movements and cardiac activity post-hoc. The calibration for the eye-tracking glasses is described in @saxena2025 and the calibration for the webcam is described in @saxena2023.
 
-```{r}
-#| echo: false
-2 * 2
-```
+### Environment
 
-The `echo: false` option disables the printing of code (only output is displayed).
+The LIVELab is equipped with technology that meets the demands of concert halls as well as psychological laboratories. It has a capacity of 106 seats. For this study, in-person participants were seated in the second, third and fourth front rows. Including participants, the event was attended by 55 in-person audience members on April 2nd and 60 audience members on April 4th. The performance took place on the stage, where the sound was recorded by eight microphones for the different instruments and two microphones for the audience (e.g., to capture applause), and presented over a PA system consisting of two Meyer 500HP subwoofers and 5 Meyer UPJ-1P speakers. For the livestream, the performance was filmed from a static PTZOptics pt30x-sdi-g2 camera positioned behind and above the audience seating to capture an unobstructed view of the stage. The livestream audio was the same mix presented in the concert hall. The film was screened for the in-person audience on a 384.5 cm x 216 cm Samsung LH015IER LED video wall, using the same PA sound system. The film video and audio were streamed directly to YouTube. For livestream participants, the stream was presented in the jsPsych environment using the AVOKE plugin \[TODO cite\].

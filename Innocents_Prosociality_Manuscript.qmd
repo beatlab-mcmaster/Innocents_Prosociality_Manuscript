@@ -739,19 +739,48 @@ Leading up to the event, all ticket holders were invited to sign up for particip
 
 ### Procedure
 
-The events took place in McMaster's LIVELab ... and livestreamed via YouTube. In-person participants filled out web surveys on a provided tablet or on paper, while livestream participants filled our the surveys and watched the event through a website on their personal computers ... Surveys were coded in jsPsych and hosted via Jatos... Note that in-person participants were equipped with mobile eye-tracking glasses and smartwatches for physiological measurements that were analysed for other research questions. For the same reason, livestream participants were recorded via their webcam. Both in-person and livestream participants had to undergo brief calibrations before and after the event and at intermission (cite Shreshth).
-
 Study 1 consisted of three surveys: A pre-survey before the event, a survey at intermission evaluating the stimulus presented in the first half of the event, and a survey at the end, evaluating the second half of the event. In addition, person-level covariates were assessed either in the pre-survey or in the survey at the end. After obtaining informed consent, the pre-survey assessed a baseline of the behavioural predictors interpersonal closeness with a wrongfully imprisoned person, state empathy for their story, problem awareness of wrongful imprisonment, and intentions to support organizations fighting wrongful imprisonment. Moreover, the pre-survey included the other NAM-TPB variables and an affect measure. Participants filled out the pre-survey either in the days leading up to the event, or in the hour right before the event. Closeness with the other audience members and affect were always assessed immediately before the event, because they are specific to the time and context of the event. Participants then saw the film or the performance in the first half of the event, and, after a 30-minute intermission, the other stimulus. After both the film and the performance, we assessed participants' affect, experience of the event, and again measured their closeness, empathy, awareness, and intentions. The end survey additionally included the remaining NAM-TPB variables, and some questions that were used to answer other research questions not analysed here. At the end of the event, we observed actual behaviour in support of *Innocence Canada*, an organization that advocates for innocent prisoners in Canada. Study 1 was approved by the McMaster Research Ethics Board (MREB#1975).
+
+The events took place in McMaster University's Large Interactive Virtual Environment laboratory (LIVELab, <https://livelab.mcmaster.ca/>), a concert venue equipped for psychological research, and were livestreamed via YouTube. Livestream participants opened a custom website on their personal computers which presented the surveys and the event stream. To create a controlled experience, the website prohibited access to stream controls (like pausing the stream) and only displayed the video stream, not any additional YouTube features like the chat. Livestream participants were instructed to sit in a quiet environment and use headphones for the best experience, but `r printnum(nrow(subset(innocents_df, speaker == 3)))` participants self-reported that they still used the built-in speakers of their machine. Nonetheless, the sound quality was rated as very good ($M = `r printnum(mean(innocents_df$sound_quality, na.rm = TRUE), digits = 2)`$ on a 7-point scale), as was the video quality ($M =`r printnum(mean(innocents_df$video_quality, na.rm = TRUE), digits = 2)`$), the video fluency ($M = `r printnum(mean(innocents_df$video_fluency, na.rm = TRUE), digits = 2)`$), and the camera framing ($M =`r printnum(mean(innocents_df$camera_frame, na.rm = TRUE), digits = 2)`$). In-person participants filled out the surveys on LIVELab's tablets or on paper. Participants who signed up in advance were given a link to fill out the pre-survey on their own machines. All surveys, and the presentation of the stream for livestream participants, were coded in jsPsych [@leeuw2023] and hosted through JATOS [@lange2015] on our lab server. Print versions and codebooks of the survey are available at <https://doi.org/10.5281/zenodo.15282949>. Note that in-person participants were equipped with mobile eye-tracking glasses and smartwatches for physiological measurements that were analysed for other research questions. For the same reason, livestream participants were recorded via their webcam. Both in-person and livestream participants had to undergo brief calibrations before and after the event and at intermission. For the full technical details of the event, see Supplementary.
 
 ### Stimuli
 
+*The Innocents* [@lane_innocents_2006] is a 1-hour contemporary percussion performance by musicians John Lane and Allen Otte. The performance explores issues of the US-American criminal justice system, such as mistaken identity, interrogation malpractices, and forced prison labor. Associated objects, like keys and newspapers, are utilized to create a diverse soundscape ranging from conventional song to experimental noise. In some parts, the musicians speak or sing text fragments, while other parts feature field recordings of demonstrations, interrogations, or police radio. With the performance, the musicians intend to motivate their audiences to engage with the topic of wrongful imprisonment, which they aim to achieve by means of an emotional and experiential immersion, all while remaining artistically abstract [@lane_innocents_2021]. A full recording of the performance from April 4th, 2024 is available on YouTube (<https://www.youtube.com/watch?v=sQW0a3NlQUo&ab_channel=BEATLab>).
+
+Director Wojciech Lorenc created an eponymous documentary film about *The Innocents* [@lorenc_innocents_2022]. Over 80 minutes, the film features conversations between the musicians Lane and Otte about their creative process and personal rapport with the issue of wrongful imprisonment, and recordings of their rehearsals and interactions with audiences on tour. A third protagonist of the film is Anna Vasquez, who shares her personal story of being convicted for a crime she did not commit, and her thoughts and feelings about the *Innocents* performance. The film's score includes excerpts from the performance. Compared to the performance, the film has a more explicit narrative and educates through first-person accounts and realistic, unambiguous images. A trailer for the film is available on YouTube (<https://www.youtube.com/watch?v=PyYSohg-FpI&ab_channel=WojciechLorenc>).
+
 ### Measures
+
+```{r}
+#| label: study1-cronbach
+#| include: false
+
+# remove variables from previous block
+rm(sample_size)
+
+# Calculate cronbach's alpha for all scales
+alpha_ec <- cronbach.alpha(study1_3long[, c("anna_ec1", "anna_ec2", "anna_ec3", "anna_ec4", "anna_ec5", "anna_ec6")], na.rm = TRUE)
+alpha_pd <- cronbach.alpha(study1_3long[, c("anna_pd1", "anna_pd2", "anna_pd3", "anna_pd4", "anna_pd5", "anna_pd6", "anna_pd7", "anna_pd8")], na.rm = TRUE)
+alpha_pa <- cronbach.alpha(study1_3long[, c("nam1", "nam2", "nam3", "nam4")], na.rm = TRUE)
+alpha_ar <- cronbach.alpha(study1_3long[, c("nam5", "nam6", "nam7", "nam8")], na.rm = TRUE)
+alpha_pn <- cronbach.alpha(study1_3long[, c("nam9", "nam10", "nam11", "nam12")], na.rm = TRUE)
+alpha_at <- cronbach.alpha(study1_3long[, c("tpb1", "tpb2", "tpb3", "tpb4")], na.rm = TRUE)
+alpha_sn <- cronbach.alpha(study1_3long[, c("tpb5", "tpb6", "tpb7", "tpb8")], na.rm = TRUE)
+alpha_pbc <- cronbach.alpha(study1_3long[, c("tpb9", "tpb10", "tpb11", "tpb12")], na.rm = TRUE)
+alpha_intention <- cronbach.alpha(study1_3long[, c("intent_mailing", "intent_flyer", "intent_donation")], na.rm = TRUE)
+```
 
 #### Interpersonal closeness
 
+We measured interpersonal closeness with the Inclusion of the Other in the Self scale [@aron1992], a 7-point scale with pictorial anchors that show increasingly overlapping Venn diagrams with two circles labelled "self" and "other". Participants were instructed to rate which of the paired circles best described their relationship with the "other". Closeness was assessed separately for the musicians Allen Otte and John Lane, the wrongfully imprisoned Anna Vasquez, the in-person and the livestream audience.
+
 #### State empathy
 
+To measure state empathy, participants read a vignette about the story of Anna Vasquez's wrongful imprisonment and exoneration. We then administered the Empathic Concern Index [@batson1987] for which participants rate the intensity of 14 emotional reactions on a 7-point scale ranging from 1 ("not at all") to 7 ("extremely"). The items are averaged to obtain two indices, empathic concern ($\alpha = `r printnum(alpha_ec$alpha)`$) and personal distress ($\alpha =`r printnum(alpha_pd$alpha)`$).
+
 #### Problem awareness
+
+We created an instrument to measure the variables of the NAM and TPB with regards to fighting wrongful imprisonment. The item wordings were based on previous studies using the NAM and TPB to explain social justice engagement [@torres-harding2012], charitable giving [@smith2007], and pro-environmental behaviour [@degroot2009; @savari2023; @steg2010].
 
 #### Supportive behaviour
 
