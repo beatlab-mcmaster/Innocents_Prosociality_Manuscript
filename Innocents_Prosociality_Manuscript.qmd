@@ -104,7 +104,7 @@ conflicts_prefer(dplyr::filter, .quiet = TRUE)
 conflicts_prefer(flextable::separate_header, .quiet = TRUE)
 
 # update R references
-r_refs("r-references.bib") 
+# r_refs("r-references.bib") 
 
 # load custom functions
 source(here("src/LMMfunctions.R"), local = knitr::knit_global()) 
@@ -236,12 +236,15 @@ rm(instrument, items, scale, unique_column, cutoff, total, novariance, study1_df
 
 study1_df_recoded <- study1_df_variance %>%
   rowwise() %>%
-  mutate(across(.cols = c(age, caffeine, liking, income, education, politics, mailing),
+  mutate(across(.cols = c(age, caffeine, liking, income, education, politics),
                 .fns = ~ case_match(.x, -1 ~ NA, -9 ~ NA, .default = .x)), # recode "prefer not to answer" as NA
          across(.cols = c(base_nam3, base_tpb11, perfo_nam3, docu_nam3, post_tpb11),
                 .fns = ~ 8 - .x),
          across(.cols = c(open1, open6, open11, iri4, iri13, iri14, iri18, iri19),
                 .fns = ~ 6 - .x),
+         mailing_presubsribed = ifelse(mailing == -9, 1, 0),
+         mailing = replace(mailing, mailing == -9, NA_real_), 
+         mailing = replace(mailing, mailing == -1, 0), # coding error between inperson and online surveys
          flyer = replace(flyer, is.na(flyer), 0)) %>% # for online participants, those who did not click the resource had NA here; set to 0
   ungroup() 
 
@@ -665,13 +668,11 @@ combined_long <- study1_3long %>%
   mutate(facet = paste(study, attendance, sep = ":"))
 ```
 
-Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were implemented to ensure a just society, but across governments, systemic issues lead to the wrongful imprisonment of innocent individuals. How do we mobilize support to fight social injustice such as wrongful imprisonment? Arts and media are a way of reaching and engaging broad audiences. Theatre, soap operas, and film, using the power of storytelling, can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it, few studies have investigated how music influences our views of people and issues that are the subject of music. Given that music typically has less narration than the previously studied media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. In addition, theories of prosocial behaviour and social engagement put forward various predictors that could explain how arts and media can advocate for social justice issues. This plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
+Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were implemented to ensure a just society, but across governments, systemic issues lead to the wrongful imprisonment of innocent individuals. How do we mobilize support to fight social injustice such as wrongful imprisonment? Arts and media are a way of reaching and engaging broad audiences. Film, TV, and theatre, using the power of storytelling, can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. Given that music typically has less narration than the previously studied media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it, few studies have investigated how music influences our views of people and issues that are the subject of music. In addition, theories of prosocial behaviour and social engagement put forward various predictors that could explain how arts and media can advocate for social justice issues. This plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
 
-Here, we evaluate how a music performance engages audiences with the issue of wrongful imprisonment, compared to a more narrative documentary film. We assess changes in three affective and cognitive variables, empathic concern, relationship closeness, and problem awareness, and compare their influence on audiences' supportive behaviour. This study provides empirical support for the mobilizing potential of music as a medium with less narration, and highlights which facet of audiences' attitudes artists should appeal to in order to gain support for their cause.
+In two studies, we evaluate how an abstract music performance engages audiences with the issue of wrongful imprisonment, compared to a narrative documentary film. We assess changes in three affective and cognitive variables, empathic concern, relationship closeness, and problem awareness, and compare their influence on supportive behaviour of audiences in the concert hall and at home. This study provides empirical support for the mobilizing potential of music as a medium with less narration, and highlights which facet of audiences' attitudes artists should appeal to in order to gain support for their cause.
 
 ## Mobilizing support for social justice causes
-
-<!-- Psychological models: what does advocacy try to achieve? How? Introduce potential mediators -->
 
 The aim of social justice advocacy is to foster engagement with a social justice issue and mobilize supportive behaviour for that cause. Various psychological theories attempt to explain behaviour and could be applicable in the context of social justice advocacy. This plurality hinders theory integration across studies of socially responsible behaviour. It is therefore necessary to empirically compare the relevance of different theories and constructs for predicting the behaviour of interest [TODO CITE THAT DUTCH REVIEW]. In this study, we compare normative, empathic, and relational predictors. The following paragraphs will review the respective theoretical backgrounds, explaining support for social justice causes within the framework of the norm activation model [NAM; @schwartz1977], the empathy-altruism hypothesis [@batson1987], and the theory of bounded generalized reciprocity [@yamagishi1999].
 
@@ -681,29 +682,19 @@ Many studies [e.g., @savari2023; @degroot2009; @steg2010] integrate the NAM with
 
 Alternatively to the normative framing, supporting social justice causes can be understood as altruistically motivated behaviour. According to the empathy-altruism hypothesis, empathically adopting the perspective of a person in need creates an altruistic motivation to reduce their suffering. For example, by empathizing with the experience of an innocent prisoner, an actor becomes concerned about their well-being, and thus feels motivated to help to improve the well-being of the innocent prisoner [@batson1987; @batson2011]. There has been a long debate on whether helping behaviour is motivated by altruistic concern in the interest of the other person, or by the actor's self-interest to reduce their own distress arising from witnessing the other person's suffering [@batson2011; @cialdini1997]. Both empathic concern and personal distress, however, arise from empathic perspective-taking. *TODO add that empathizing is effortful, therefore motivate audiences to empathize (rather than improve their ability to empathize; Weisz & Zaki, 2017).* Hence, social justice advocacy can mobilize supportive behaviour by conveying the experiences and point of view of those affected by the social justice issue, thereby facilitating empathic responses from the audience.
 
-Finally, supporting social justice causes might be motivated by group cohesion. If we perceive victims of social injustice as part of our ingroup, we are more likely to fight social injustice to help those group members.
+Finally, supporting social justice causes might be motivated by group cohesion/social bonds. If we perceive victims of social injustice as part of our ingroup, we are more likely to fight social injustice to help those group members.
 
 <!-- Finally, supporting social justice causes might be motivated by expectations of reciprocity. Through the lens of interpersonal relations, we are more likely to help those closer to us because xyz [@yamagishi1999]. Therefore, social justice advocacy can mobilize supportive behaviour by increasing the perceived relationship closeness between audiences and those affected by the social justice issue, which the audience to help in return for reciprocity xyz. -->
 
 ## Advocacy through art
 
-Social injustices often become the subject of art. Beyond a mere inspiration or description of society, art is used to criticize social injustices and advocate for social justice. Empirical evaluations of such advocacy through art have proven effects of media like documentary films, theatre, and songs on the aforementioned normative, empathic, and relational dimensions, and on behaviour in support of social justice causes. For example, @reddan2024 compared audience responses to a documentary about wrongful imprisonment and two documentaries about injustices in sports, and found that the former enhanced audiences' empathic responses towards prisoners, attitudes towards prison reform, and intentions to support a petition to restore voting rights for people with felony convictions. Documentaries about personal life stories also increase social bonding with other audience members [@dunbar2016]. These studies are comparable to the somewhat larger body of literature attesting that documentaries about climate change increase audiences' concern and pro-environmental intentions [@howell2011; @nolan2010; @sakellari2015]. Turning to live media, audiences of theatre performances about disadvantaged groups have been shown to be more empathetic with the represented groups and more willing to donate to charity after the performance, compared to before. Effects on theatre audiences' attitudes remained ambiguous [@rathje2021]. Moreover, songs with prosocial lyrics like "Love Generation" by Bob Sinclair have been shown to prompt prosocial thoughts and empathic responses in listeners, with empathy mediating the effect of the lyrical content on charitable donations [@greitemeyer2009; @greitemeyer2009a].
+Social injustices often become the subject of art. Beyond a mere inspiration or description of society, art is used to criticize social injustices and advocate for social justice. Empirical evaluations of such advocacy through art have proven effects of media like documentary films, theatre, and songs on the aforementioned normative, empathic, and relational dimensions, and on behaviour in support of social justice causes. For example, @reddan2024 compared audience responses to a documentary about wrongful imprisonment and two documentaries about injustices in sports, and found that the former enhanced audiences' empathic responses towards prisoners, attitudes towards prison reform, and intentions to support a petition to restore voting rights for people with felony convictions. Documentaries about personal life stories also increase social bonding with other audience members [@dunbar2016]. These studies are comparable to the somewhat larger body of literature attesting that documentaries about climate change increase audiences' concern and pro-environmental intentions [@howell2011; @nolan2010; @sakellari2015]. Turning to theatre, audiences of theatre performances about disadvantaged groups have been shown to be more empathetic with the represented groups and more willing to donate to charity after the performance, compared to before. Effects on theatre audiences' attitudes remained ambiguous [@rathje2021]. Moreover, songs with prosocial lyrics like "Love Generation" by Bob Sinclair have been shown to prompt prosocial thoughts and empathic responses in listeners, with empathy mediating the effect of the lyrical content on charitable donations [@greitemeyer2009; @greitemeyer2009a].
 
 <!-- Theatre: see alse Troxler et al., 2022 & Greene et al., 2018 -->
 
-What unites previous studies on advocacy through art is that the artistic stimuli under investigation use explicit and naturalistic imagery and narration to convey their advocacy messages. However, this leaves out art that conveys social critique in an implicit, symbolic, or abstract manner.
+Most of the research cited above theorizes that art, be it film, theatre, or song, achieves its advocacy effect through powerful narratives influencing audiences' emotions and cognition regarding the advocacy topic. However, not all art makes use of explicit narration. Visual art, for example, often conveys social critique in an implicit, symbolic, or abstract manner [e.g., @pelowski2024]. Similarly, much music beyond the song form is carried more by sounds and less by lyrics, and therefore has less tools for explicit narration. Still, there are many examples of classical and jazz music intended to advocate for concrete issues: The West-Eastern Divan Orchestra, a classical symphony orchestra with Israeli and Palestinian musicians, promotes a peaceful solution to the Arab-Israeli conflict by playing for concert audiences and politicians alike (<https://west-eastern-divan.org/>). Jazz icons sonified the struggle for racial justice with works such as Duke Ellington's *Black and Tan Fantasy*, Oscar Peterson's *Hymn to Freedom*, and John Coltrane's *Alabama* (<https://naacpsfnm.org/jazz-and-civil-rights/>). And *The Innocents,* a percussion performance about wrongful imprisonment in the United States, tours schools and universities to educate and engage its audience with this often overlooked social injustice (<https://www.the-innocents.com/>). How does such music mobilize support for social justice causes, if not through explicit narrative lyrics?
 
-Music beyond the song form, such as (contemporary) classical or folk music, is carried more by instruments and sounds and less by lyrics. Therefore, this kind of music has less tools for concrete narrative or imagery. Still, it is often intended to advocate for specific issues, such as TODO find more examples, maybe among Klezmer or Jazz?:
-
--   East-Western Divan orchestra: classical symphony orchestra to promote peace and understanding between Israel and Palestine
-
--   Innocents: contemporary percussion piece about wrongful incarceration
-
-film vs. music: narrative portrayal vs. experiential immersion approach to advocate for social justice issues –\> film could increase reasoned awareness, music could increase perspective-taking/empathy
-
-How does this kind of abstract, experiential music mobilize supportive behaviour?
-
-music has been related to closeness
+Music excels at arousing emotions in the listener. Thinking back to the theoretical frameworks of social justice advocacy, it could therefore be expected that music advocates by eliciting empathic responses and strengthening social bonds among listeners, whereas narrative media like documentary films might be more effective in raising problem awareness. Indeed, making music together can promote empathy [@clarke2015; @rabinowitch2013; @tzanaki2025], though it remains unclear to which extent listening to music advocacy, rather than making music, can promote empathy. Moreover, both making and listening to music can strengthen social bonds with other musicians and listeners [@savage2021; @mogan2017; @swarbrick2023]. However, there is an ongoing debate as to who those social bonds extend to, beyond the musicians and listeners who are part of the music experience [@rabinowitch2023; @cirelli2016; @reddish2014; @reddish2016; @cross2020; @cross2019]. If music advocacy raises awareness about social injustices, promotes empathy with victims of injustices, or strengthens social bonds with them, any of these effects could explain why audiences would support the advocacy cause.
 
 ## Collective aspects
 
@@ -738,7 +729,7 @@ sample_size <- study1_df %>%
   summarise(N = n())
 ```
 
-Leading up to the event, all ticket holders were invited to sign up for participation in the research study via email. In addition, we asked in-person ticket holders as they arrived at the venue whether they would like to participate, and recruited additional livestream participants through Prolific. Participants had to be 16 years or older, have healthy hearing and vision, and have not seen the performance or the film before. We initially restricted the upper age limit to 60 years to avoid age effects on eye movements, which were collected for a different research question and not analysed here. However, we made an exception for one participant over 60 who expressed interest in participating. By buying a ticket for in-person or livestream attendance at one of the events, participants self-assigned to an attendance mode and an order of stimli. However, participants were blind to the order in which film and performance would be presented on each of the days, since we did not advertise this information. A total of `r printnum(sum(subset(sample_size, completed == 1)$N))` participants completed the study (day 1 in-person: `r printnum(subset(sample_size, day == 0 & attendance == "In-person" & completed == 1)$N`; livestream: ``` r printnum(``subset(sample_size, day == 0 & attendance == "Livestream" & completed == 1)$N ```; day 2 in-person: `r printnum(subset(sample_size, day == 1 & attendance == "In-person" & completed == 1)$N`; livestream: `r printnum(subset(sample_size, day == 1 & attendance == "Livestream" & completed == 1)$N`). In addition, one in-person participant and `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 0)$N` livestream participants left the event at intermission on day 1, and one livestream participant left at intermission on day 2. They are included in all analyses for which their data are available. Livestream participants were watching from Africa, Europe, North America, Asia, and New Zealand, with most participants watching from South Africa ($n = `r printnum(length(which(innocents_df$country == "South Africa")))\`\$). Upon completion of the study, ticket holders received \$10 CAD compensation and Prolific participants were compensated £18 GBP.
+Leading up to the event, all ticket holders were invited to sign up for participation in the research study via email. In addition, we asked in-person ticket holders as they arrived at the venue whether they would like to participate, and recruited additional livestream participants through Prolific. Participants had to be 16 years or older, have healthy hearing and vision, and have not seen the performance or the film before. We initially restricted the upper age limit to 60 years to avoid age effects on eye movements, which were collected for a different research question and not analysed here. However, we made an exception for one participant over 60 who expressed interest in participating. By buying a ticket for in-person or livestream attendance at one of the events, participants self-assigned to an attendance mode and an order of stimli. However, participants were blind to the order in which film and performance would be presented on each of the days, since we did not advertise this information. A total of `r printnum(sum(subset(sample_size, completed == 1)$N))` participants completed the study (day 1 in-person: `r printnum(subset(sample_size, day == 0 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 1)$N)`; day 2 in-person: `r printnum(subset(sample_size, day == 1 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 1 & attendance == "Livestream" & completed == 1)$N)`). In addition, one in-person participant and `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 0)$N)` livestream participants left the event at intermission on day 1, and one livestream participant left at intermission on day 2. They are included in all analyses for which their data are available. Livestream participants were watching from Africa, Europe, North America, Asia, and New Zealand, with most participants watching from South Africa ($n = `r printnum(length(which(study1_df$country == "South Africa")))\`\$). Upon completion of the study, ticket holders received \$10 CAD compensation and Prolific participants were compensated £18 GBP.
 
 <!-- TODO describe pertinent sample characteristics; refer to detailed table in supplementary -->
 
@@ -746,7 +737,7 @@ Leading up to the event, all ticket holders were invited to sign up for particip
 
 Study 1 consisted of three surveys: A pre-survey before the event, a survey at intermission evaluating the stimulus presented in the first half of the event, and a survey at the end, evaluating the second half of the event. In addition, person-level covariates were assessed either in the pre-survey or in the survey at the end. After obtaining informed consent, the pre-survey assessed a baseline of the behavioural predictors interpersonal closeness with a wrongfully imprisoned person, state empathy for their story, problem awareness of wrongful imprisonment, and intentions to support organizations fighting wrongful imprisonment. Moreover, the pre-survey included the other NAM-TPB variables and an affect measure. Participants filled out the pre-survey either in the days leading up to the event, or in the hour right before the event. Closeness with the other audience members and affect were always assessed immediately before the event, because they are specific to the time and context of the event. Participants then saw the film or the performance in the first half of the event, and, after a 30-minute intermission, the other stimulus. After both the film and the performance, we assessed participants' affect, experience of the event, and again measured their closeness, empathy, awareness, and intentions. The end survey additionally included the remaining NAM-TPB variables, and some questions that were used to answer other research questions not analysed here. At the end of the event, we observed actual behaviour in support of *Innocence Canada*, an organization that advocates for innocent prisoners in Canada. Study 1 was approved by the McMaster Research Ethics Board (MREB#1975).
 
-The events took place in McMaster University's Large Interactive Virtual Environment laboratory (LIVELab, <https://livelab.mcmaster.ca/>), a concert venue equipped for psychological research, and were livestreamed via YouTube. Livestream participants opened a custom website on their personal computers which presented the surveys and the event stream. To create a controlled experience, the website prohibited access to stream controls (like pausing the stream) and only displayed the video stream, not any additional YouTube features like the chat. Livestream participants were instructed to sit in a quiet environment and use headphones for the best experience, but `r printnum(nrow(subset(innocents_df, speaker == 3)))` participants self-reported that they still used the built-in speakers of their machine. Nonetheless, the sound quality was rated as very good ($M = `r printnum(mean(innocents_df$sound_quality, na.rm = TRUE), digits = 2)`$ on a 7-point scale), as was the video quality ($M =`r printnum(mean(innocents_df$video_quality, na.rm = TRUE), digits = 2)`$), the video fluency ($M = `r printnum(mean(innocents_df$video_fluency, na.rm = TRUE), digits = 2)`$), and the camera framing ($M =`r printnum(mean(innocents_df$camera_frame, na.rm = TRUE), digits = 2)`$). In-person participants filled out the surveys on LIVELab's tablets or on paper. Participants who signed up in advance were given a link to fill out the pre-survey on their own machines. All surveys, and the presentation of the stream for livestream participants, were coded in jsPsych [@leeuw2023] and hosted through JATOS [@lange2015] on our lab server. Print versions and codebooks of the survey are available at <https://doi.org/10.5281/zenodo.15282949>. Note that in-person participants were equipped with mobile eye-tracking glasses and smartwatches for physiological measurements that were analysed for other research questions. For the same reason, livestream participants were recorded via their webcam. Both in-person and livestream participants had to undergo brief calibrations before and after the event and at intermission. For the full technical details of the event, see @apx-implementation.
+The events took place in McMaster University's Large Interactive Virtual Environment laboratory (LIVELab, <https://livelab.mcmaster.ca/>), a concert venue equipped for psychological research, and were livestreamed via YouTube. Livestream participants opened a custom website on their personal computers which presented the surveys and the event stream. To create a controlled experience, the website prohibited access to stream controls (like pausing the stream) and only displayed the video stream, not any additional YouTube features like the chat. Livestream participants were instructed to sit in a quiet environment and use headphones for the best experience, but `r printnum(nrow(subset(study1_df, speaker == 3)))` participants self-reported that they still used the built-in speakers of their machine. Nonetheless, the sound quality was rated as very good ($M = `r printnum(mean(study1_df$sound_quality, na.rm = TRUE), digits = 2)`$ on a 7-point scale), as was the video quality ($M =`r printnum(mean(study1_df$video_quality, na.rm = TRUE), digits = 2)`$), the video fluency ($M = `r printnum(mean(study1_df$video_fluency, na.rm = TRUE), digits = 2)`$), and the camera framing ($M =`r printnum(mean(study1_df$camera_frame, na.rm = TRUE), digits = 2)`$). In-person participants filled out the surveys on LIVELab's tablets or on paper. Participants who signed up in advance were given a link to fill out the pre-survey on their own machines. All surveys, and the presentation of the stream for livestream participants, were coded in jsPsych [@leeuw2023] and hosted through JATOS [@lange2015] on our lab server. Print versions and codebooks of the survey are available at <https://doi.org/10.5281/zenodo.15282949>. Note that in-person participants were equipped with mobile eye-tracking glasses and smartwatches for physiological measurements that were analysed for other research questions. For the same reason, livestream participants were recorded via their webcam. Both in-person and livestream participants had to undergo brief calibrations before and after the event and at intermission. For the full technical details of the event, see @apx-implementation.
 
 ### Stimuli
 
@@ -807,7 +798,7 @@ We assessed participants' age, income, education, and political orientation. Fur
 
 All analyses were performed in R 4.5.0 [@R-base]. First, we screened for rushing within each survey component, but no participant was faster than our cutoff criterion of 1.5 times the interquartile range of the completion times. We further screened for insufficient variance in the response patterns of each participant, which can indicate inattentiveness or dishonesty. For each participant and each multi-item instrument, we calculated the number of unique response values. Responses were excluded if they consisted of only a single repeated value (for instruments with up to 10 items) or only two unique values (for instruments with more items), which was the case for `r printnum(study1_novariance_observations)` out of `r printnum(study1_total_instrument_observations)` (``` r printnum(``study1_novariance_observations/study1_total_instrument_observations``, digits = 2) ```%) responses. Finally, multi-item indices were only computed if a participant had replied to at least 80% of the items making up that index. The resulting sample size for each analysis is reported alongside the results.
 
-To test the effect of the event on each of the potential drivers of prosociality (closeness, emphatic concern, and problem awareness), we used linear mixed models (LMMs). Sum-to-Zero contrasts tested whether the outcomes were higher for in-person compared to livestream attendance, after watching the performance compared to after the film, and at the end of the event compared to at intermission. We added the baseline rating of the respective outcome as a covariate, estimating a fixed effect for the entire sample to account for measured variances in the outcome prior to the event. We also added random intercepts for each participant to account for unmeasured variances and capture intra-participant correlations due to the repeated measures design. The outcomes and baseline covariates were z-scored. Missing values for the baseline covariate were imputed with zero (the mean value after z-scoring). Control variables that had a sizable correlation with the outcome variables ($r \geq .30$) were included as additional covariates in the models. All models met the assumptions of normally distributed residuals and random intercepts, homogeneity of variances, and did not have multicollinearity issues, unless reported otherwise. The model fit was evaluated against a covariate model predicting the outcome from only the baseline and the random intercept using a Likelihood Ratio Test of the maximum likelihood (ML)-generated models. Main and interaction effects were evaluated using the t-statistic of the parameter estimates and Satterthwaite approximations for degrees of freedom of the restricted maximum likelihood (REML)-generated models, as recommended by @meteyard2020. Cohen's $d$ as effect size measure for the fixed effects was calculated using the equation by @westfall2014 [see @brysbaert2018], and interpreted according to the norms by @cohen1992. Significant interactions were decomposed using one-sided paired t-tests.
+To test the effect of the event on each of the potential drivers of prosociality (closeness, emphatic concern, and problem awareness), we used linear mixed models (LMMs). Sum-to-Zero contrasts tested whether the outcomes were higher for in-person compared to livestream attendance, after watching the performance compared to after the film, and at the end of the event compared to at intermission. We added the baseline rating of the respective outcome as a covariate, estimating a fixed effect for the entire sample to account for measured variances in the outcome prior to the event. We also added random intercepts for each participant to account for unmeasured variances and capture intra-participant correlations due to the repeated measures design. The outcomes and baseline covariates were z-scored. Missing values for the baseline covariate were imputed with zero (the mean value after z-scoring). Control variables that had a sizable correlation with the outcome variables ($r \geq .30$) were included as additional covariates in the models. All models met the assumptions of normally distributed residuals and random intercepts, homogeneity of variances, and did not have multicollinearity issues, unless reported otherwise. The model fit was evaluated against a covariate model predicting the outcome from only the baseline and the random intercept using a Likelihood Ratio Test of the maximum likelihood (ML)-generated models. Main and interaction effects were evaluated using the t-statistic of the parameter estimates and Satterthwaite approximations for degrees of freedom of the restricted maximum likelihood (REML)-generated models, as recommended by @meteyard2020. Cohen's $d$ as effect size measure for the fixed effects was calculated using the equation by [@westfall2014; see @brysbaert2018], and interpreted according to the norms by @cohen1992. Significant interactions were decomposed using one-sided paired t-tests.
 
 To test the influence of closeness, empathic concern, and problem awareness on behavioural intention, we used multiple linear regression. Again, covariates that were sizably correlated with intention were included in the model. All predictors and the outcome were z-scored. Predictors were evaluated with t-test of their regression weights against zero.
 
@@ -817,18 +808,22 @@ Figures were created with *ggplot2* [@R-ggplot2], *ggpubr* [@R-ggpubr], *ggridge
 
 ## Results
 
+Opening paragraph: takeaways from the subjective experience paragraph? + details & figures in supplemental
+
 ```{r}
 #| label: fig-closeness-plot
-#| fig-cap: "Mean and CI of closeness with Anna Vasquez across the event by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant."
+#| fig-cap: Changes in Closeness with Anna Vasquez Throughout the Event 
+#| apa-note: Mean and CI of closeness by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
 #| echo: false
 
-closeness_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B")) +
-  theme(legend.position = c(.163, .94), # move legend inside plot
-        legend.direction = "horizontal") + 
-  annotation_custom2(rasterGrob(icon_close, interpolate = TRUE), # add icon
-                    xmin = 0.6, 1.5, 6.4, 7.2,
-                    data = subset(combined_long, facet == "1:Livestream"))
+anna_ios_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B"))
+
+  # annotation_custom2(rasterGrob(icon_close, interpolate = TRUE), # add icon
+  #                   xmin = 0.6, 1.5, 6.4, 7.2,
+  #                   data = subset(combined_long, facet == "1:Livestream"))
+  
   # TODO add pairwise significance tests
+  # TODO dodge by group: add filmfirst and perffirst as separate geoms
   # geom_signif(y_position = c(4.3, 4.3, 1.3, 1.3),
   #                     xmin = c(0.9, 1.95, 1.1, 2.15),
   #                     xmax = c(1.85, 2.9, 2.05, 3.2),
@@ -849,6 +844,9 @@ closeness_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var
 #     geom_line(aes(group = p_id),
 #                alpha = 0.6,
 #                position = position_jitter(width = 0, height = 0.2)) +
+#   geom_point(alpha = 0.5,
+#              shape = 19,
+#              position = position_jitter(width = 0, height = 0.2)) +
 #     scale_colour_manual(values = c("darkgrey", "lightgrey"), guide = "none") +
 #     new_scale_color() +
 #     stat_summary(aes(color = order),
@@ -887,27 +885,144 @@ closeness_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var
 #           legend.background = element_rect(fill = "white", color = "black"),
 #           # axis.title = element_text(size=9.5),
 #           axis.text.x = element_text(angle=20, hjust=0.8))
-# 
-# closeness_lineplot <- closeness_lineplot +
-#   facet_wrap(vars(facet), scales = "free_x")
+
+anna_ios_lineplot <- anna_ios_lineplot +
+  facet_wrap(vars(facet), scales = "free_x")
  
-print(closeness_lineplot)
+# print(closeness_lineplot)
+
+target_ios_lineplot <- plot_meanSE(df = combined_long, dv = "ios_target", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B")) +
+  theme(legend.position="none")
+
+ggpubr::ggarrange(
+        anna_ios_lineplot,
+        target_ios_lineplot, 
+        nrow = 1, 
+        ncol = 2,
+        widths = c(4,1)
+        )
 ```
 
 ```{r}
-#| label: fig-closeness-plot
-#| fig-cap: "Mean and CI of empathy with Anna Vasquez across the event by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Empathy was rated on a scale ranging from 1 (not at all) to 7 (extremely). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant."
+#| label: fig-empathy-plot
+#| fig-cap: Changes in Empathic concern with Anna Vasquez Throughout the Event 
+#| apa-note: Mean and CI of empathy by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Empathy was rated on a scale ranging from 1 (not at all) to 7 (extremely). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
 #| echo: false
 
 empathy_lineplot <- plot_meanSE(df = combined_long, dv = "anna_empathic_concern", facet_var = "facet", ylab = "Rating", my_colours = c("#DC267F", "#D4ABB7")) +
-  theme(legend.position = "top", # move legend inside plot
+  theme(legend.position = "top", # move legend below plot
+        legend.justification.top = "right",
         legend.direction = "horizontal")
 
 annotate_figure(empathy_lineplot, top = rasterGrob(icon_empath, x = 0.1, y = -0.5, width = 0.07, interpolate = TRUE))
 
+# TODO 2:Livestream panel: add a third x-axis point so that lines are same length as in other panels?
+# TODO arrange hyothetical target into the same pane
+```
+
+```{r}
+#| label: fig-target-plot
+#| fig-cap: Changes in Empathic Concern with a Hypothetical Prisoner
+#| fig-height: 4.6
+#| fig-width: 2.9
+
+plot_meanSE(df = combined_long, dv = "target_empathic_concern", facet_var = "facet", ylab = "Rating", my_colours = c("#DC267F", "#D4ABB7")) +
+  theme(legend.position = "top", # move legend below plot
+        legend.justification.top = "right",
+        legend.direction = "horizontal")
+```
+
+```{r}
+#| label: fig-awareness-plot
+#| fig-cap: Changes in Problem Awareness Throughout the Event 
+#| apa-note: Mean and CI of awareness by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Awareness was rated on a scale ranging from 1 (strongly disagree) to 7 (strongly agree). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
+#| echo: false
+
+awareness_lineplot <- plot_meanSE(df = combined_long, dv = "problem_awareness", facet_var = "facet", ylab = "Rating", my_colours = c("#88ccee", "#B9CEE4")) +
+  theme(legend.position = "bottom", 
+        legend.direction = "horizontal")
+
+print(awareness_lineplot)
 ```
 
 The only correlation reaching that threshold was between problem awareness and openness to experience, `r apa_print(cor.test(study1_2long$problem_awareness_z, study1_2long$trait_openness, method = "spearman"))$full_result`. Therefore, the problem awareness model includes openness as an additional covariate.
+
+```{r}
+#| label: fig-behaviour-count
+#| fig-cap: Proportion of Supportive Behaviours Observed in Each Sample
+#| apa-note: TODO
+#| echo: false
+
+# TODO explore waffle
+
+# count behaviours to print numbers in the text
+n_behaviour <- combined_long %>%
+  rowwise() %>%
+  mutate(completed = ifelse(study == 2, 1, completed)) %>% # for study 2, set completed to TRUE
+  filter(completed == 1) %>% # only use full datasets of study 1
+  filter(timepoint == "End") %>% # only use End data
+  dplyr::select(flyer, mailing, donation) %>%
+  pivot_longer(cols = c(flyer, mailing, donation), names_to = "behaviour", values_to = "response") %>%
+  group_by(behaviour, response) %>%
+  summarize(count = n(), .groups = "drop") %>%
+  group_by(behaviour) %>%
+  mutate(perc = count / sum(count) *100) %>%
+  mutate(response = replace(response, is.na(response), -9),
+         response = factor(response, levels = c(0, 1, -9), labels = c("No", "Yes", "Not applicable"))) %>%
+  pivot_wider(names_from = response, values_from = c(count, perc), names_sep = "_", values_fill = 0) %>%
+  column_to_rownames("behaviour")
+
+# TODO change to ordinal significance test rather than chisq
+# count how many participants performed at least one behaviour by attendance mode and test for significance
+# behaviour_by_attendance <- table(study1_df$attendance, study1_df$behaviour_dich)
+# behaviour_by_attendance_test <- chisq.test(behaviour_by_attendance)
+
+# count how many participants performed at least one behaviour by order
+# behaviour_by_order <- table(study1_df$order, study1_df$behaviour_dich)
+# behaviour_by_order_test <- chisq.test(behaviour_by_order)
+
+# stacked barplot of behaviour counts split by attendance mode, with percentage labels
+behaviour_plot_df <- combined_long %>%
+  filter(is.na(completed) | completed == 1) %>%
+  dplyr::select(p_id, facet, flyer, mailing, donation) %>%
+  distinct(.keep_all = TRUE) %>%
+  pivot_longer(cols = c(flyer, mailing, donation), names_to = "behaviour", values_to = "response") %>%
+  group_by(behaviour, facet, response) %>%
+  summarize(count = n(), .groups = "drop") %>%
+  group_by(behaviour, facet) %>%
+  mutate(perc = round(count / sum(count) *100), digits = 1) %>%
+  mutate(response = replace(response, is.na(response), -9),
+         response = factor(response, levels = c(-9, 0, 1), labels = c("Not applicable", "No", "Yes")),
+         behaviour = factor(behaviour, levels = c("flyer", "mailing", "donation"), labels = c("Flyer", "Mailing", "Donation")))
+
+# behaviour_plot <- ggplot(data = behaviour_plot_df,
+#                          aes(y = count, x = behaviour, fill = response)) +
+#   geom_bar(position = "stack",
+#            stat = "identity",
+#            colour = "black") +
+#   facet_grid(~facet) +
+#   coord_cartesian(clip = "off") +
+#   geom_text(aes(label = paste0(perc,"%")), 
+#             position = position_stack(vjust = 0.8), 
+#             colour = rep(c("black", "white", rep(c("black", "white", "black"), 2)), 2),
+#             size = 3) +
+#   scale_fill_manual(name = "Response", values = c("white", "#BEBEBE", "#002060")) +
+#   theme_bw(base_size = 11) +
+#   labs(x = "",
+#        y = "Count",
+#        title = "Behaviour") +
+#     theme(legend.position = c(0.893, 0.85), 
+#           # legend.text=element_text(size=4.9),
+#         legend.title=element_text(margin = margin(b = 1)),
+#         legend.background = element_rect(fill = "white", color = "black"),
+#         plot.title = element_text(face="bold", hjust=0.5)) 
+# 
+# behaviour_annotation <-  annotation_custom2(rasterGrob(icon_behav, interpolate = TRUE), xmin = 2.2, 2.9, 69, 75, data = subset(behaviour_plot_df, facet == "1:In-person"))
+# 
+# behaviour_plot + behaviour_annotation
+
+rm(behaviour_plot_df, behaviour_plot, behaviour_annotation)
+```
 
 ## Discussion
 
@@ -964,6 +1079,8 @@ Because all participants were recruited through Prolific, rather than self-initi
 TODO
 
 ## Results
+
+TODO row 21, 29, 35, 36, 38, 47, 50, 54 guessed Hypothesis 1, exclude from that analysis.
 
 ## Discussion
 
