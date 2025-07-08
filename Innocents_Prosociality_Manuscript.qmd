@@ -820,10 +820,10 @@ Opening paragraph: takeaways from the subjective experience paragraph? + details
 #| label: fig-closeness-plot
 #| fig-cap: Changes in Closeness with Anna Vasquez Throughout the Event 
 #| apa-note: Mean and CI of closeness by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
-#| fig-height: 2.5
+#| # fig-height: 2.5
 #| echo: false
 
-anna_ios_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B"))
+# anna_ios_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B"))
 
   # annotation_custom2(rasterGrob(icon_close, interpolate = TRUE), # add icon
   #                   xmin = 0.6, 1.5, 6.4, 7.2,
@@ -841,61 +841,62 @@ anna_ios_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var 
   #                     color = rep(c("#41AB5D", "#41AB5D", "#A1D99B", "#A1D99B"), 3)
   #                     )
 
-# closeness_lineplot <- combined_long %>%
-#     ggplot(aes(x = timepoint,
-#                y = ios_anna,
-#                group = order,
-#                color = order,
-#                linetype = order,
-#                shape = medium)) +
-#     geom_line(aes(group = p_id),
-#                alpha = 0.6,
-#                position = position_jitter(width = 0, height = 0.2)) +
-#   geom_point(alpha = 0.5,
-#              shape = 19,
-#              position = position_jitter(width = 0, height = 0.2)) +
-#     scale_colour_manual(values = c("darkgrey", "lightgrey"), guide = "none") +
-#     new_scale_color() +
-#     stat_summary(aes(color = order),
-#                  fun = "mean", # connect means
-#                  geom = "line",
-#                  linewidth = 0.9,
-#                  position = position_dodge(0.5)) +
-#     stat_summary(aes(color = order),
-#                  fun = "mean", # add mean
-#                  geom = "point",
-#                  size = 3,
-#                  position = position_dodge(0.5)) +
-#     stat_summary(aes(color = order),
-#                  fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
-#                  geom = "errorbar",
-#                  width = 0.35,
-#                  linewidth = 0.9,
-#                  linetype = "solid",
-#                  position = position_dodge(0.5),
-#                  show.legend = FALSE) +
-#     scale_colour_manual(values = c("#41AB5D", "#A1D99B")) +
-#     guides(
-#       colour = guide_legend("Order", override.aes = list(shape = NA)),
-#       linetype = guide_legend("Order"),
-#       shape = "none"
-#     ) +
-#     # coord_fixed(ratio = 0.6, ylim = c(1,7) ) +
-#     # scale_x_discrete(label = sample_size[["myaxis"]]) +
-#     scale_y_continuous(limits = c(1,7)) +
-#     theme_bw(base_size = 11) +
-#     labs(x = "Time point",
-#          y = "Closeness (Anna)") +
-#     theme(panel.grid.major.x = element_blank(), # remove vertical grid line
-#           # legend.text=element_text(size=6),
-#           legend.title=element_text(margin = margin(b = 0)),
-#           legend.background = element_rect(fill = "white", color = "black"),
-#           # axis.title = element_text(size=9.5),
-#           axis.text.x = element_text(angle=20, hjust=0.8))
+study1_3long %>%
+  # manually dodge x-axis by group: https://stackoverflow.com/a/44657850
+  mutate(dodge_timepoint = ifelse(order == "Film first", 
+                                  as.numeric(timepoint) - .1,
+                                  as.numeric(timepoint) + .1)) %>%
+  ggplot(aes(x = timepoint,
+             y = ios_anna,
+             group = order,
+             color = order,
+             linetype = order,
+             shape = medium)) +
+  geom_blank() +
+    geom_point(aes(x = dodge_timepoint),
+               alpha = 1) +
+    geom_line(aes(x = dodge_timepoint, group = p_id),
+              alpha = 1) +
+    scale_colour_manual(values = c("#41AB5D", "#A1D99B"), guide = "none") +
+    # new_scale_color() +
+    stat_summary(color = "black",
+                 fun = "mean", # connect means
+                 geom = "line",
+                 linewidth = 0.9,
+                 position = position_dodge(0.4)) +
+    stat_summary(color = "black",
+                 fun = "mean", # add mean
+                 geom = "point",
+                 size = 3,
+                 position = position_dodge(0.4)) +
+    stat_summary(color = "black",
+                 fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
+                 geom = "errorbar",
+                 width = 0.35,
+                 linewidth = 0.9,
+                 linetype = "solid",
+                 position = position_dodge(0.4),
+                 show.legend = FALSE) +
+    # scale_colour_manual(values = c("black", "black")) +
+    guides(
+      colour = guide_legend("Order", override.aes = list(shape = NA)),
+      linetype = guide_legend("Order"),
+      shape = "none"
+    ) +
+    # coord_fixed(ratio = 0.6, ylim = c(1,7) ) +
+    # scale_x_discrete(label = sample_size[["myaxis"]]) +
+  facet_wrap(vars(attendance), scales = "free_x") +
+    scale_y_continuous(limits = c(1,7)) +
+    theme_bw(base_size = 11) +
+    labs(x = "Time point",
+         y = "Closeness (Anna)") +
+    theme(panel.grid.major.x = element_blank(), # remove vertical grid line
+          # legend.text=element_text(size=6),
+          legend.title=element_text(margin = margin(b = 0)),
+          legend.background = element_rect(fill = "white", color = "black"),
+          # axis.title = element_text(size=9.5),
+          axis.text.x = element_text(angle=20, hjust=0.8))
 
-anna_ios_lineplot <- anna_ios_lineplot +
-  facet_wrap(vars(facet), scales = "free_x")
- 
 # print(closeness_lineplot)
 
 target_ios_lineplot <- plot_meanSE(df = combined_long, dv = "ios_target", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B")) +
@@ -911,6 +912,243 @@ ggpubr::ggarrange(
 ```
 
 ```{r}
+#| label: fig-manualdodge
+
+# TODO change mean+CI to boxplots
+
+study1_3long %>%
+  # manually dodge x-axis by group: https://stackoverflow.com/a/44657850
+  mutate(dodge_timepoint = ifelse(order == "Film first", 
+                                  as.numeric(timepoint) - .1,
+                                  as.numeric(timepoint) + .1)) %>%
+  ggplot(aes(x = timepoint,
+             y = anna_empathic_concern,
+             group = order,
+             color = order,
+             fill = order,
+             linetype = order,
+             shape = medium)) +
+  geom_blank() +
+    geom_boxplot(aes(x = dodge_timepoint, group = dodge_timepoint),
+                 outlier.shape = NA,
+                 color = "black",
+                 linetype = "solid",
+                 alpha = .5) +
+    geom_point(aes(x = dodge_timepoint),
+               alpha = 1) +
+    geom_line(aes(x = dodge_timepoint, group = p_id),
+              alpha = 1) +
+    scale_colour_manual(values = c("dodgerblue", "darkorange"), guide = "none") +
+    scale_fill_manual(values = c("dodgerblue", "darkorange"), guide = "none") +
+    # new_scale_color() +
+    # stat_summary(color = "black",
+    #              fun = "mean", # connect means
+    #              geom = "line",
+    #              linewidth = 0.9,
+    #              position = position_dodge(0.4)) +
+    # stat_summary(color = "black",
+    #              fun = "mean", # add mean
+    #              geom = "point",
+    #              size = 3,
+    #              position = position_dodge(0.4)) +
+    # stat_summary(color = "black",
+    #              fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
+    #              geom = "errorbar",
+    #              width = 0.35,
+    #              linewidth = 0.9,
+    #              linetype = "solid",
+    #              position = position_dodge(0.4),
+    #              show.legend = FALSE) +
+    # scale_colour_manual(values = c("black", "black")) +
+    guides(
+      colour = guide_legend("Order", override.aes = list(shape = NA)),
+      linetype = guide_legend("Order"),
+      shape = "none"
+    ) +
+    # coord_fixed(ratio = 0.6, ylim = c(1,7) ) +
+    # scale_x_discrete(label = sample_size[["myaxis"]]) +
+  facet_wrap(vars(attendance), scales = "free_x") +
+    scale_y_continuous(limits = c(1,7)) +
+    theme_bw(base_size = 11) +
+    labs(x = "Time point",
+         y = "Closeness (Anna)") +
+    theme(panel.grid.major.x = element_blank(), # remove vertical grid line
+          # legend.text=element_text(size=6),
+          legend.title=element_text(margin = margin(b = 0)),
+          legend.background = element_rect(fill = "white", color = "black"),
+          # axis.title = element_text(size=9.5),
+          axis.text.x = element_text(angle=20, hjust=0.8))
+```
+
+```{r}
+#| label: fig-raincloud
+
+# visual overload
+
+# install.packages("ggrain")
+# library(ggrain)
+
+study1_3long %>%
+  ggplot(aes(x = timepoint,
+             y = anna_empathic_concern,
+             fill = order,
+             color = order,
+             shape = medium)) +
+  geom_rain(alpha = .8,
+            rain.side = "f",
+            id.long.var = "p_id",
+            boxplot.args = list(color = "black", alpha = .5, outlier.shape = NA),
+            violin.args = list(color = NA, alpha = .5),
+            boxplot.args.pos = list(width = .1,
+             position = ggpp::position_dodgenudge(width = .1,
+                                                  x = rep(c(-.13, -.13, # Baseline F-P, Baseline P-F
+                                                        -.13, .13, 
+                                                         .13, .13), 2))),
+            violin.args.pos = list(width = .7,
+             position = position_nudge(x = (c(rep(-.2, 256*2), rep(-.2, 256*2),# Baseline F-P
+                                             rep(-.2, 256*2), rep(-.2, 256*2), # Baseline P-F
+                                             rep(-.2, 256*2), rep(-.2, 256*2), # Intermission F-P
+                                             rep(.2, 256*2), rep(.2, 256*2), # Intermission P-F
+                                             rep(.2, 256*2), rep(.2, 256*2), # End F-P
+                                             rep(.2, 256*2), rep(.2, 256*2)))))) +
+  theme_classic() +
+  stat_summary(fun = mean, 
+               geom = "line", 
+               color = "black",
+               linewidth = 0.9,
+               aes(group = order, linetype = order)) +
+  stat_summary(fun = mean, 
+               geom = "point", 
+               color = "black",
+               size = 2.5,
+               aes(group = order, shape = medium)) +
+  scale_fill_manual(values = c("dodgerblue", "darkorange")) +
+  scale_color_manual(values = c("dodgerblue", "darkorange")) +
+    labs(x = "Time point",
+         y = "Empathy (Anna)") +
+  guides(
+      linetype = guide_legend("Order"),
+      colour = guide_legend("Order"),
+      shape = "none",
+      fill = "none"
+    ) +
+  facet_wrap(vars(attendance))
+
+# try without violin
+
+combined_long %>%
+  mutate(timepoint = case_when(
+    (study == 2 & !medium == "Baseline") ~ "Intermission",
+    .default = timepoint
+  ),
+  timepoint = factor(timepoint, levels = c("Baseline", "Intermission", "End"))) %>%
+  ggplot(aes(x = timepoint,
+             y = anna_empathic_concern,
+             fill = order,
+             color = order,
+             shape = medium)) +
+  geom_rain(alpha = .8,
+            # rain.side = "f2x2",
+            id.long.var = "p_id",
+            boxplot.args = list(alpha = .5, outlier.shape = NA),
+            violin.args = list(color = NA, alpha = 0),
+            boxplot.args.pos = list(width = .3,
+             position = ggpp::position_dodgenudge(width = .1,
+                                                  x = c(-.13, .13, -.13, .13, -.13, .13, # Baseline
+                                                        -.13, .13, -.13, .13, -.13, .13, 
+                                                         -.13, .13, -.13, .13)))
+            ) +
+  theme_bw() +
+  stat_summary(fun = mean, 
+               geom = "line", 
+               color = "black",
+               linewidth = 0.9,
+               aes(group = order, linetype = order)) +
+  stat_summary(fun = mean, 
+               geom = "point", 
+               color = "black",
+               size = 2.5,
+               aes(group = order, shape = medium)) +
+  scale_fill_manual(values = c("dodgerblue", "darkorange")) +
+  scale_color_manual(values = c("dodgerblue", "darkorange")) +
+    labs(x = "Time point",
+         y = "Empathy (Anna)") +
+  guides(
+      linetype = guide_legend("Order"),
+      colour = guide_legend("Order"),
+      shape = "none",
+      fill = "none"
+    ) +
+  facet_wrap(vars(facet)) +
+  theme(panel.grid.major.x = element_blank(), # remove vertical grid line
+          legend.position = "top")
+```
+
+```{r}
+#| label: fig-twofacet
+
+combined_long %>%
+  rowwise() %>%
+  # manually dodge x-axis by group: https://stackoverflow.com/a/44657850
+  mutate(
+    order = factor(order),
+    dodge_order = case_when(
+    timepoint == "Baseline" ~ as.numeric(order) - .3,
+    timepoint == "Intermission" ~ as.numeric(order),
+    (study == 1 & timepoint == "End") ~ as.numeric(order) + .3,
+    (study == 2 & timepoint == "End") ~ as.numeric(order)
+  )) %>%
+  ungroup() %>%
+  ggplot(aes(x = order,
+             y = anna_empathic_concern,
+             group = timepoint,
+             color = medium,
+             shape = medium)) +
+    geom_blank() +
+    geom_point(aes(x = dodge_order),
+               alpha = .7) +
+    geom_line(aes(x = dodge_order, group = p_id),
+              color = "darkgrey",
+              alpha = .7) +
+    stat_summary(aes(x = dodge_order, group = order),
+                 color = "black",
+                 alpha = .7,
+                 fun = "mean", # connect means
+                 geom = "line",
+                 linewidth = 0.9,
+                 show.legend = FALSE) +
+    stat_summary(aes(x = dodge_order),
+                 color = "black",
+                 alpha = .7,
+                 fun = "mean", # add mean
+                 geom = "point",
+                 size = 3,
+                 show.legend = FALSE) +
+    stat_summary(aes(x = dodge_order),
+                 color = "black",
+                 alpha = .7,
+                 fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
+                 geom = "errorbar",
+                 width = 0.1,
+                 linewidth = 0.9,
+                 show.legend = FALSE) +
+    guides(
+      shape = guide_legend("Measurement"),
+      color = guide_legend("Measurement")
+    ) +
+    facet_wrap(vars(facet), scales = "free_x") +
+    scale_y_continuous(limits = c(1,7)) +
+    theme_bw() +
+    labs(x = "Order",
+         y = "Empathy (Anna)") +
+    theme(panel.grid.major.x = element_blank(), # remove vertical grid line
+          legend.position = "top",
+          # legend.title=element_text(margin = margin(b = 0)),
+          # legend.background = element_rect(fill = "white", color = "black")
+          )
+```
+
+```{r}
 #| label: fig-empathy-plot
 #| fig-cap: Changes in Empathic concern with Anna Vasquez Throughout the Event 
 #| apa-note: Mean and CI of empathy by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Empathy was rated on a scale ranging from 1 (not at all) to 7 (extremely). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
@@ -920,6 +1158,8 @@ empathy_lineplot <- plot_meanSE(df = combined_long, dv = "anna_empathic_concern"
   theme(legend.position = "top", # move legend below plot
         legend.justification.top = "right",
         legend.direction = "horizontal")
+
+print(empathy_lineplot)
 
 annotate_figure(empathy_lineplot, top = rasterGrob(icon_empath, x = 0.1, y = -0.5, width = 0.07, interpolate = TRUE))
 
