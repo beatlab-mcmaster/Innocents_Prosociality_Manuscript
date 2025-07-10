@@ -132,7 +132,7 @@ icon_behav <- readPNG(here("images/Innocents_Icon_Behaviour.png"))
 
 # load study 1 data
 here::i_am("Innocents_Prosociality_Manuscript.qmd") # find project root
-study1_df_deident <- read_csv(here("data/innocents_df_deident.csv")) # TODO load deident df, then calculate indices in here
+study1_df_deident <- read_csv(here("data/innocents_df_deident.csv")) # load deident df, then calculate indices in here
 
 #### Exclude responses that lack variance ###
 # TODO discuss with Lauren whether to check variance per instrument or per survey page
@@ -332,8 +332,8 @@ study1_df <- study1_df %>%
     .fns = ~ ifelse(!is.na(.), 1, 0)
   ))
 
-# set dummy variable indicating whether participant completed both halves of the event (copied from Schlichting_MSc_Thesis.Rmd)
-study1_df$completed <- ifelse(study1_df$NA_count.event <= 59, 1, 0) # cutoff determined upon inspection of the data, see 003_event_preprocessing.Rmd
+# set dummy variable indicating whether participant completed both halves of the event 
+study1_df$completed <- !grepl("aborted", study1_df$notes, fixed = TRUE)
 
 # if only interested in participants who stayed until the end, filter participants who left at intermission:
 # study1_df <- study1_df %>%
@@ -544,7 +544,8 @@ rm(instrument, items, scale, unique_column, cutoff, total, novariance, study2_df
 
 study2_df_recoded <- study2_df_variance %>%
   rowwise() %>%
-  mutate(across(.cols = c(age, caffeine, liking, income, education, politics, mailing),
+  mutate(mailing_presubsribed = ifelse(mailing == -9, 1, 0),
+         across(.cols = c(age, caffeine, liking, income, education, politics, mailing),
                 .fns = ~ case_match(.x, -9 ~ NA, .default = .x)),
          resource_click = case_match(resource_noclick, 0 ~ FALSE, .default = resource_click),
          donation_click = case_match(donation_noclick, 0 ~ FALSE, .default = donation_click),
@@ -820,7 +821,7 @@ Opening paragraph: takeaways from the subjective experience paragraph? + details
 #| label: fig-closeness-plot
 #| fig-cap: Changes in Closeness with Anna Vasquez Throughout the Event 
 #| apa-note: Mean and CI of closeness by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
-#| # fig-height: 2.5
+#| fig-height: 2.5
 #| echo: false
 
 # anna_ios_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B"))
@@ -830,7 +831,6 @@ Opening paragraph: takeaways from the subjective experience paragraph? + details
   #                   data = subset(combined_long, facet == "1:Livestream"))
   
   # TODO add pairwise significance tests
-  # TODO dodge by group: add filmfirst and perffirst as separate geoms
   # geom_signif(y_position = c(4.3, 4.3, 1.3, 1.3),
   #                     xmin = c(0.9, 1.95, 1.1, 2.15),
   #                     xmax = c(1.85, 2.9, 2.05, 3.2),
