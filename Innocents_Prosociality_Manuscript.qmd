@@ -335,10 +335,6 @@ study1_df <- study1_df %>%
 # set dummy variable indicating whether participant completed both halves of the event 
 study1_df$completed <- !grepl("aborted", study1_df$notes, fixed = TRUE)
 
-# if only interested in participants who stayed until the end, filter participants who left at intermission:
-# study1_df <- study1_df %>%
-#   filter(NA_count.event <= 59) 
-
 # factorize order and attendance (copied from Schlichting_MSc_Thesis.Rmd)
 study1_df <- study1_df %>%
   mutate(order = factor(order, levels=c("film-perfo", "perfo-film"), labels=c("Film first", "Perf first")),
@@ -347,11 +343,13 @@ study1_df <- study1_df %>%
          cell = factor(interaction(order, attendance), levels = c("Film first.In-person", "Film first.Livestream", "Perf first.In-person", "Perf first.Livestream"), labels = c("F-P: In-person", "F-P: Livestream", "P-F: In-person", "P-F: Livestream"))) %>%
   rowwise() %>%
   # compute behaviour indices
-  mutate(sum_behaviour = ifelse(completed == 0, NA, sum(mailing, flyer, post_donation)),
+  mutate(sum_behaviour = ifelse(completed == FALSE, NA, sum(mailing, flyer, post_donation)),
          sum_behaviour_fact = factor(sum_behaviour, levels = c("0", "1", "2", "3"), ordered = TRUE),
-         sum_behaviour_inclNA = ifelse(completed == 0, NA, sum(mailing, flyer, post_donation, na.rm = TRUE)),
-         behaviour_dich = ifelse(completed == 0, NA, 
-                                 ifelse(sum_behaviour_inclNA %in% c(1:3), 1, 0)))
+         sum_behaviour_inclNA = ifelse(completed == FALSE, NA, sum(mailing, flyer, post_donation, na.rm = TRUE)),
+         sum_behaviour_inclNA_fact = factor(sum_behaviour_inclNA, levels = c("0", "1", "2", "3"), ordered = TRUE),
+         behaviour_dich = ifelse(completed == FALSE, NA, 
+                                 ifelse(sum_behaviour_inclNA %in% c(1:3), 1, 0))) %>%
+  ungroup()
 
 
 #### DF over 2 timepoints (intermission, end) for baseline-corrected analyses (copied from Schlichting_MSc_Thesis.Rmd) ###
@@ -368,11 +366,6 @@ study1_2long <- study1_df %>%
          ordermedium = factor(interaction(day, medium), levels = c("0.Film", "0.Performance", "1.Performance", "1.Film"), labels = c("F-P: Film", "F-P: Performance", "P-F: Performance", "P-F: Film")), # concatenate order and medium
          cell = factor(paste(attendance, order, medium, sep="."))) %>% # concatenate attendance, order, & medium
   mutate(across(.cols = all_of(c("base_ios_anna", "base_anna_empathic_concern", "base_problem_awareness", "base_behavioural_intention", "base_anna_personal_distress", "ios_anna", "anna_empathic_concern", "problem_awareness", "behavioural_intention", "anna_personal_distress")), .fns = my_z_score, .names = "{.col}_z")) %>% # z-score variables
-  rowwise() %>%
-  mutate(sum_behaviour = sum(mailing, flyer, post_donation),
-         sum_behaviour_fact = factor(sum_behaviour, levels = c("0", "1", "2", "3"), ordered = TRUE),
-         sum_behaviour_inclNA = sum(mailing, flyer, post_donation, na.rm = TRUE)) %>%
-  ungroup()
 
 # set contrasts
 contrasts(study1_2long$order) <- cbind(FPvsPF = c(1, -1))
@@ -632,6 +625,17 @@ study2_df <- study2_df %>%
          p_id = paste0("sub-on2", p_nr)
   )
 
+# factorize order and attendance (copied from Schlichting_MSc_Thesis.Rmd)
+study2_df <- study2_df %>%
+  mutate(base_behavioural_intention_z = my_z_score(base_behavioural_intention)) %>%
+  rowwise() %>%
+  # compute behaviour indices
+  mutate(sum_behaviour = sum(mailing, flyer, post_donation),
+         sum_behaviour_fact = factor(sum_behaviour, levels = c("0", "1", "2", "3"), ordered = TRUE),
+         sum_behaviour_inclNA = sum(mailing, flyer, post_donation, na.rm = TRUE),
+         sum_behaviour_inclNA_fact = factor(sum_behaviour_inclNA, levels = c("0", "1", "2", "3"), ordered = TRUE),
+         behaviour_dich = ifelse(sum_behaviour_inclNA %in% c(1:3), 1, 0)) %>%
+  ungroup()
 
 
 #### DF over two timepoints (base, end) for plotting & analysis ###
@@ -666,7 +670,8 @@ rm(base_vars, post_vars)
 # Combine study 1 & 2 for plotting
 combined_long <- study1_3long %>%
   bind_rows(study2_long, .id = "study") %>%
-  mutate(facet = paste(study, attendance, sep = ":"))
+  mutate(study = factor(study, labels = c("Study 1", "Study 2")),
+         facet = paste(study, attendance))
 ```
 
 Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were implemented to enforce justice, but across societies, systemic issues lead to the wrongful imprisonment of innocent individuals. How do we mobilize support to fight social injustice such as wrongful imprisonment? Arts and media are a way of reaching and engaging broad audiences. Film, TV, and theatre, using the power of storytelling, can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. Given that music typically has less narration than the previously studied media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it, few studies have investigated how music influences our views of people and issues that are the subject of music. In addition, theories of prosocial behaviour and social engagement put forward various predictors that could explain how arts and media can advocate for social justice issues. This plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
@@ -803,7 +808,7 @@ We assessed participants' age, income, education, and political orientation. Fur
 
 ### Analysis
 
-All analyses were performed in R 4.5.0 [@R-base]. First, we screened for rushing within each survey component, but no participant was faster than our cutoff criterion of 1.5 times the interquartile range of the completion times. We further screened for insufficient variance in the response patterns of each participant, which can indicate inattentiveness or dishonesty. For each participant and each multi-item instrument, we calculated the number of unique response values. Responses were excluded if they consisted of only a single repeated value (for instruments with up to 10 items) or only two unique values (for instruments with more items), which was the case for `r printnum(study1_novariance_observations)` out of `r printnum(study1_total_instrument_observations)` (`r printnum(study1_novariance_observations/study1_total_instrument_observations, digits = 2)`%) responses. Finally, multi-item indices were only computed if a participant had replied to at least 80% of the items making up that index. The resulting sample size for each analysis is reported alongside the results.
+All analyses were performed in R 4.5.0 [@R-base]. First, we screened for rushing within each survey component, but no participant was faster than our cutoff criterion of the first quartile minus 1.5 times the interquartile range of the completion times. We further screened for insufficient variance in the response patterns of each participant, which can indicate inattentiveness or dishonesty. For each participant and each multi-item instrument, we calculated the number of unique response values. Responses were excluded if they consisted of only a single repeated value (for instruments with up to 10 items) or only two unique values (for instruments with more items), which was the case for `r printnum(study1_novariance_observations)` out of `r printnum(study1_total_instrument_observations)` (`r printnum(study1_novariance_observations/study1_total_instrument_observations, digits = 2)`%) responses. Finally, multi-item indices were only computed if a participant had replied to at least 80% of the items making up that index. The resulting sample size for each analysis is reported alongside the results.
 
 To test the effect of the event on each of the potential drivers of prosociality (closeness, emphatic concern, and problem awareness), we used linear mixed models (LMMs). Sum-to-Zero contrasts tested whether the outcomes were higher for in-person compared to livestream attendance, after watching the performance compared to after the film, and at the end of the event compared to at intermission. We added the baseline rating of the respective outcome as a covariate, estimating a fixed effect for the entire sample to account for measured variances in the outcome prior to the event. We also added random intercepts for each participant to account for unmeasured variances and capture intra-participant correlations due to the repeated measures design. The outcomes and baseline covariates were z-scored. Missing values for the baseline covariate were imputed with zero (the mean value after z-scoring). Control variables that had a sizable correlation with the outcome variables ($r \geq .30$) were included as additional covariates in the models. All models met the assumptions of normally distributed residuals and random intercepts, homogeneity of variances, and did not have multicollinearity issues, unless reported otherwise. The model fit was evaluated against a covariate model predicting the outcome from only the baseline and the random intercept using a Likelihood Ratio Test of the maximum likelihood (ML)-generated models. Main and interaction effects were evaluated using the t-statistic of the parameter estimates and Satterthwaite approximations for degrees of freedom of the restricted maximum likelihood (REML)-generated models, as recommended by @meteyard2020. Cohen's $d$ as effect size measure for the fixed effects was calculated using the equation by [@westfall2014; see @brysbaert2018], and interpreted according to the norms by @cohen1992. Significant interactions were decomposed using one-sided paired t-tests.
 
@@ -828,7 +833,7 @@ Opening paragraph: takeaways from the subjective experience paragraph? + details
 
   # annotation_custom2(rasterGrob(icon_close, interpolate = TRUE), # add icon
   #                   xmin = 0.6, 1.5, 6.4, 7.2,
-  #                   data = subset(combined_long, facet == "1:Livestream"))
+  #                   data = subset(combined_long, facet == "Study 1 Livestream"))
   
   # TODO add pairwise significance tests
   # geom_signif(y_position = c(4.3, 4.3, 1.3, 1.3),
@@ -1038,7 +1043,7 @@ study1_3long %>%
 
 combined_long %>%
   mutate(timepoint = case_when(
-    (study == 2 & !medium == "Baseline") ~ "Intermission",
+    (study == "Study 2" & !medium == "Baseline") ~ "Intermission",
     .default = timepoint
   ),
   timepoint = factor(timepoint, levels = c("Baseline", "Intermission", "End"))) %>%
@@ -1095,8 +1100,8 @@ combined_long %>%
     dodge_order = case_when(
     timepoint == "Baseline" ~ as.numeric(order) - .3,
     timepoint == "Intermission" ~ as.numeric(order),
-    (study == 1 & timepoint == "End") ~ as.numeric(order) + .3,
-    (study == 2 & timepoint == "End") ~ as.numeric(order)
+    (study == "Study 1" & timepoint == "End") ~ as.numeric(order) + .3,
+    (study == "Study 2" & timepoint == "End") ~ as.numeric(order)
   )) %>%
   ungroup() %>%
   ggplot(aes(x = order,
@@ -1205,7 +1210,7 @@ The only correlation reaching that threshold was between problem awareness and o
 # count behaviours to print numbers in the text
 n_behaviour <- combined_long %>%
   rowwise() %>%
-  mutate(completed = ifelse(study == 2, 1, completed)) %>% # for study 2, set completed to TRUE
+  mutate(completed = ifelse(study == "Study 2", 1, completed)) %>% # for study 2, set completed to TRUE
   filter(completed == 1) %>% # only use full datasets of study 1
   filter(timepoint == "End") %>% # only use End data
   dplyr::select(flyer, mailing, donation) %>%
@@ -1264,11 +1269,77 @@ behaviour_plot_df <- combined_long %>%
 #         legend.background = element_rect(fill = "white", color = "black"),
 #         plot.title = element_text(face="bold", hjust=0.5)) 
 # 
-# behaviour_annotation <-  annotation_custom2(rasterGrob(icon_behav, interpolate = TRUE), xmin = 2.2, 2.9, 69, 75, data = subset(behaviour_plot_df, facet == "1:In-person"))
+# behaviour_annotation <-  annotation_custom2(rasterGrob(icon_behav, interpolate = TRUE), xmin = 2.2, 2.9, 69, 75, data = subset(behaviour_plot_df, facet == "Study 1 In-person"))
 # 
 # behaviour_plot + behaviour_annotation
 
 rm(behaviour_plot_df, behaviour_plot, behaviour_annotation)
+```
+
+```{r}
+#| label: regression-behaviour-intention
+#| echo: false
+
+# filter dataframe (assigning the df object is required for computing the model r2)
+study1_behav <- study1_2long %>%
+  filter(timepoint == "End") %>% # only use variables at the end of the event
+  filter(completed == TRUE) %>% # only use participants who completed the event
+  filter(!is.na(sum_behaviour_inclNA_fact)) # remove NAs
+# if comparing nested models with anova(), also exclude NAs in other predictors:  & !is.na(ios_anna_z) & !is.na(empathic_concern_z) & !is.na(problem_awareness_z)
+
+# Step 1: behaviour ~ closeness + empathy + awareness
+sumbehav_step1 <- MASS::polr(sum_behaviour_fact ~ ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study1_behav, Hess = TRUE)
+
+# Step 2: behaviour ~ closeness + empathy + awareness + intention
+sumbehav_step2 <- MASS::polr(sum_behaviour_fact ~ ios_anna_z + anna_empathic_concern_z + problem_awareness_z + behavioural_intention_z, data = study1_behav, Hess = TRUE)
+
+# model comparison
+# anova(sumbehav_step1, sumbehav_step2) # data is more likely under model including intention
+
+# store values in an object 
+sumbehav_step1_OR <- get_OR_CI(sumbehav_step1)
+sumbehav_step2_OR <- get_OR_CI(sumbehav_step2)
+
+r2_nagelkerke(sumbehav_step1)
+r2_nagelkerke(sumbehav_step2)
+```
+
+```{r}
+#| label: regression-intention-predictors
+#| echo: false
+
+study1_intent <- study1_2long %>%
+  filter(timepoint == "End" & !is.na(ios_anna_z) & !is.na(anna_empathic_concern_z) & !is.na(problem_awareness_z)) # only use end data
+
+# intention_outcomes <- lm(behavioural_intention_z ~ trait_empathic_concern_z + motivation_socialjustice_dich + ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study1_intent)
+# 
+# check_assumptions(intention_outcomes, "behavioural_intention_z", study1_intent) # residuals are not normal
+# 
+# # try log-scaling
+# study1_intent$behavioural_intention_log <- log(study1_intent$behavioural_intention)
+# intention_outcomes <- lm(behavioural_intention_log ~ trait_empathic_concern_z + motivation_socialjustice_dich + ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study1_intent)
+# check_assumptions(intention_outcomes, "behavioural_intention_log", study1_intent) # much worse
+# 
+# # try reciprocal
+# study1_intent$behavioural_intention_recpr <- 1/(study1_intent$behavioural_intention)
+# intention_outcomes <- lm(behavioural_intention_recpr ~ trait_empathic_concern_z + motivation_socialjustice_dich + ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study1_intent)
+# check_assumptions(intention_outcomes, "behavioural_intention_recpr", study1_intent) # also terrible
+# 
+# # extract residuals
+# intention_residuals <- resid(intention_outcomes, type = "pearson")
+# # Find the indices of the most extreme residuals
+# order(abs(intention_residuals), decreasing = TRUE)[1:3] # indices are c(69, 71, 3), but trial & error shows that rows c(74, 76, 4) are the problematic ones
+
+# build model after exclusions
+intention_outcomes <- lm(behavioural_intention_z ~ trait_empathic_concern_z + motivation_socialjustice_dich + ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study1_intent[-c(74, 76), ])
+check_assumptions(intention_outcomes, "behavioural_intention_z", study1_intent[-c(74, 76), ]) # shapiro-wilk is still significant, but Q-Q plot looks much better
+  
+# summary(intention_outcomes)
+
+# calculate the effect size of empathy, requires a model excluding empathy https://www.researchgate.net/post/Which-effect-size-estimate-should-I-use-for-a-linear-regression-with-a-continuous-dep-variable-dichotomous-indep-variable-and-covariates
+intention_outcomes_dropempathy <- lm(behavioural_intention_z ~ trait_empathic_concern_z + motivation_socialjustice_dich + ios_anna_z + problem_awareness_z, data = innocents_intention[-c(71, 73), ])
+
+empathy_f2 <- (summary(intention_outcomes)$r.squared - summary(intention_outcomes_dropempathy)$r.squared) / (1 - summary(intention_outcomes)$r.squared)
 ```
 
 ## Discussion
