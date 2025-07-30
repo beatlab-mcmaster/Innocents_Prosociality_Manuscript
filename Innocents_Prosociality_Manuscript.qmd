@@ -772,7 +772,7 @@ sample_size <- study1_df %>%
   summarise(N = n())
 ```
 
-Leading up to the event, all ticket holders were invited to sign up for participation in the research study via email. In addition, we asked in-person ticket holders as they arrived at the venue whether they would like to participate, and recruited additional livestream participants through Prolific. Participants had to be 16 years or older, have healthy hearing and vision, and have not seen the performance or the film before. We initially restricted the upper age limit to 60 years to avoid age effects on eye movements, which were collected for a different research question and not analysed here. However, we made an exception for one participant over 60 who expressed interest in participating. By buying a ticket for in-person or livestream attendance at one of the events, participants self-assigned to an attendance mode and an order of stimli. However, participants were blind to the order in which film and performance would be presented on each of the days, since we did not advertise this information. A total of `r printnum(sum(subset(sample_size, completed == 1)$N))` participants completed the study (day 1 in-person: `r printnum(subset(sample_size, day == 0 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 1)$N)`; day 2 in-person: `r printnum(subset(sample_size, day == 1 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 1 & attendance == "Livestream" & completed == 1)$N)`). In addition, one in-person participant and `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 0)$N)` livestream participants left the event at intermission on day 1, and one livestream participant left at intermission on day 2. They are included in all analyses for which their data are available. Livestream participants were watching from Africa, Europe, North America, Asia, and New Zealand, with most participants watching from South Africa ($n = `r printnum(length(which(study1_df$country == "South Africa")))\`\$). Upon completion of the study, ticket holders received \$10 CAD compensation and Prolific participants were compensated £18 GBP. For a detailed description of the sample, see @apx-sampledescription.
+Leading up to the event, all ticket holders were invited to sign up for participation in the research study via email. In addition, we asked in-person ticket holders as they arrived at the venue whether they would like to participate, and recruited additional livestream participants through Prolific. Participants had to be 16 years or older, have healthy hearing and vision, and have not seen the performance or the film before. We initially restricted the upper age limit to 60 years to avoid age effects on eye movements, which were collected for a different research question and not analysed here. However, we made an exception for one participant over 60 who expressed interest in participating. By buying a ticket for in-person or livestream attendance at one of the events, participants self-assigned to an attendance mode and an order of stimli. However, participants were blind to the order in which film and performance would be presented on each of the days, since we did not advertise this information. A total of `r printnum(sum(subset(sample_size, completed == 1)$N))` participants completed the study (day 1 in-person: `r printnum(subset(sample_size, day == 0 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 1)$N)`; day 2 in-person: `r printnum(subset(sample_size, day == 1 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 1 & attendance == "Livestream" & completed == 1)$N)`). In addition, one in-person participant and `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 0)$N)` livestream participants left the event at intermission on day 1, and one livestream participant left at intermission on day 2. They are included in all analyses for which their data are available. Livestream participants were watching from Africa, Europe, North America, Asia, and New Zealand, with most participants watching from South Africa ($n = `r printnum(length(which(study1_df$country == "South Africa")))`$). Upon completion of the study, ticket holders received \$10 CAD compensation and Prolific participants were compensated £18 GBP. For a detailed description of the sample, see @apx-sampledescription.
 
 <!-- TODO describe pertinent sample characteristics; refer to detailed table in supplementary -->
 
@@ -819,7 +819,7 @@ To measure state empathy, participants read a vignette about the story of Anna V
 
 #### Problem awareness
 
-We created an instrument to measure the variables of the NAM and TPB with regards to fighting wrongful imprisonment. The item wordings were based on previous studies using the NAM and TPB to explain social justice engagement [@torres-harding2012], charitable giving [@smith2007], and pro-environmental behaviour [@degroot2009; @savari2023; @steg2010]. The instrument consists of four items for each of the NAM variables problem awareness (e.g., "Wrongful incarcerations are an urgent problem in our society"; $\alpha = `r printnum(alpha_pa$alpha)`$), ascription of responsibility (e.g., "Everyone must do something against social injustices in the legal system"; $\alpha =`r printnum(alpha_ar$alpha)`$), and personal norm (e.g., "I would feel guilty if I didn’t do something to make the criminal justice system more fair"; $\alpha = `r printnum(alpha_pn$alpha)`$), and the TPB variables attitude (e.g., "I believe that it is essential to make sure that defendants and convicts receive adequate legal support"; $\alpha =`r printnum(alpha_at$alpha)`$), subjective norm (e.g., "Other people around me support organizations and groups that fight injustices in the legal system"; $\alpha = `r printnum(alpha_sn$alpha)`$), and perceived behavioural control (e.g., "I believe that I have the power to advocate for social justice in the legal system, if I choose to do so"; $\alpha =`r printnum(alpha_pbc$alpha)`$). Behavioural intentions to support the fight against wrongful imprisonment was measured with three items relating to *Innocence Canada*, a local charity: "I intend to join the mailing list of an organization like *Innocence Canada*", "I intend to read up on wrongful incarceration", and "I intend to donate to an organization like *Innocence Canada*" ($\alpha = `r printnum(alpha_intention$alpha)\`\$). All NAM-TPB items were rated on a 7-point scale ranging from 1 ("strongly disagree") to 7 ("strongly agree") and were averaged within each construct.
+We created an instrument to measure the variables of the NAM and TPB with regards to fighting wrongful imprisonment. The item wordings were based on previous studies using the NAM and TPB to explain social justice engagement [@torres-harding2012], charitable giving [@smith2007], and pro-environmental behaviour [@degroot2009; @savari2023; @steg2010]. The instrument consists of four items for each of the NAM variables problem awareness (e.g., "Wrongful incarcerations are an urgent problem in our society"; $\alpha = `r printnum(alpha_pa$alpha)`$), ascription of responsibility (e.g., "Everyone must do something against social injustices in the legal system"; $\alpha =`r printnum(alpha_ar$alpha)`$), and personal norm (e.g., "I would feel guilty if I didn’t do something to make the criminal justice system more fair"; $\alpha = `r printnum(alpha_pn$alpha)`$), and the TPB variables attitude (e.g., "I believe that it is essential to make sure that defendants and convicts receive adequate legal support"; $\alpha =`r printnum(alpha_at$alpha)`$), subjective norm (e.g., "Other people around me support organizations and groups that fight injustices in the legal system"; $\alpha = `r printnum(alpha_sn$alpha)`$), and perceived behavioural control (e.g., "I believe that I have the power to advocate for social justice in the legal system, if I choose to do so"; $\alpha =`r printnum(alpha_pbc$alpha)`$). Behavioural intentions to support the fight against wrongful imprisonment was measured with three items relating to *Innocence Canada*, a local charity: "I intend to join the mailing list of an organization like *Innocence Canada*", "I intend to read up on wrongful incarceration", and "I intend to donate to an organization like *Innocence Canada*" ($\alpha = `r printnum(alpha_intention$alpha)`$). All NAM-TPB items were rated on a 7-point scale ranging from 1 ("strongly disagree") to 7 ("strongly agree") and were averaged within each construct.
 
 #### Supportive behaviour
 
@@ -1049,15 +1049,15 @@ innocents_posthoctest <- study1_3long %>%
 #| label: fig-awareness
 #| fig-cap: Problem Awareness Throughout the Event
 #| apa-note: Mean and CI of awareness by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Awareness was rated on a scale ranging from 1 (strongly disagree) to 7 (strongly agree). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
-#| fig-height: 2.5
+#| fig-height: 3.5
 #| echo: false
 
 # TODO add sample size on x-axis
 # TODO add significance stars for post-hoc tests
 
-fig_awareness_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "problem_awareness", ylab = "Problem Awareness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
+fig_awareness_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "jitter_awareness", ylab = "Problem Awareness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
 
-fig_awareness_study2 <- plot_meanSE(df = subset(combined_long, study == "Study 2"), dv = "problem_awareness", ylab = "Problem Awareness", xlab = "") + facet_wrap(vars(facet), scales = "free") 
+fig_awareness_study2 <- plot_meanSE(df = subset(combined_long, study == "Study 2"), dv = "jitter_awareness", ylab = "Problem Awareness", xlab = "") + facet_wrap(vars(facet), scales = "free") 
 
 ggpubr::ggarrange(
         fig_awareness_study1,
@@ -1088,9 +1088,9 @@ Empathic concern for Anna Vasquez did not have any correlations with the control
 # TODO add sample size on x-axis
 # TODO add significance stars for post-hoc tests
 
-fig_empathy_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "anna_empathic_concern", ylab = "Empathic Concern", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
+fig_empathy_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "jitter_anna_empathy", ylab = "Empathic Concern", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
 
-fig_empathy_study2 <- plot_meanSE(df = subset(combined_long, study == "Study 2"), dv = "anna_empathic_concern", ylab = "Empathic Concern", xlab = "") + facet_wrap(vars(facet), scales = "free") 
+fig_empathy_study2 <- plot_meanSE(df = subset(combined_long, study == "Study 2"), dv = "jitter_anna_empathy", ylab = "Empathic Concern", xlab = "") + facet_wrap(vars(facet), scales = "free") 
 
 ggpubr::ggarrange(
         fig_empathy_study1,
@@ -1103,459 +1103,34 @@ ggpubr::ggarrange(
         )
 ```
 
+#### Closeness
+
+Relationship closeness with Anna Vasquez did not have any sizable correlations with the control variables. Similarly to the empathy model, the closeness LMM with the formula $Closeness \sim Baseline + Attendance * Stimulus * Time + (1|Participant)$ did not feature any significant main or interaction effects involving attendance. The lack of a difference in relationship closeness between in-person and livestream audiences did not support Hypothesis 3a. The stimulus had a small but significant effect on closeness, `r eval_fixed(closeness_lmm, "mediumPerfvsFilm")`, with participants reporting lower closeness after seeing the performance `r print_descr(study1_df$perfo_ios_anna)` than after the film `r print_descr(study1_df$docu_ios_anna)`. Time also had a small effect, `r eval_fixed(closeness_lmm, "timepointEndvsInter")`, with higher closeness at the end of the event `r print_descr(outcomes[outcomes$study=="Study 1", ]$ios_anna_End)` than at intermission `r print_descr(outcomes[outcomes$study=="Study 1", ]$ios_anna_Intermission)`. Importantly, stimulus and time interacted moderately, `r eval_fixed(closeness_lmm, "mediumPerfvsFilm:timepointEndvsInter")`. Decomposing the interaction revealed that in the first half of the event, seeing the film by itself afforded a large increase in closeness `r print_descr(subset(outcomes, study=="Study 1" & order == "Film-Perf")$ios_anna_Intermission)`, `r apa_print(ios_1sthalf_film)$full_result`, $d = `r printnum(ios_1sthalf_film_d$estimate)`$, compared to closeness at baseline `r print_descr(subset(outcomes, study=="Study 1")$ios_anna_Baseline)`. In contrast, seeing the performance by itself only afforded a small increase `r print_descr(subset(outcomes, study=="Study 1" & order == "Perf-Film")$ios_anna_Intermission)`, `r apa_print(ios_1sthalf_perf)$full_result`, $d = `r printnum(ios_1sthalf_perf_d$estimate)`$. In the second half, seeing the performance after the film resulted in no significant changes in closeness `r print_descr(subset(outcomes, study=="Study 1" & order == "Film-Perf")$ios_anna_End)`, `r apa_print(ios_2ndhalf_perf)$full_result`, $d = `r printnum(ios_2ndhalf_perf_d$estimate)`$, but the film after the performance led to a moderate increase `r print_descr(subset(outcomes, study=="Study 1" & order == "Perf-Film")$ios_anna_End)`, `r apa_print(ios_2ndhalf_film)$full_result`, $d = `r printnum(ios_2ndhalf_film_d$estimate)`$ (see @fig-closeness). 
+
 ```{r}
-#| label: fig-closeness-plot
-#| fig-cap: Changes in Closeness with Anna Vasquez Throughout the Event 
-#| apa-note: Mean and CI of closeness by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
+#| label: fig-closeness
+#| fig-cap: Relationship closeness Throughout the Event
+#| apa-note: Mean and CI of closeness by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
 #| fig-height: 2.5
 #| echo: false
 
-# anna_ios_lineplot <- plot_meanSE(df = combined_long, dv = "ios_anna", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B"))
+# TODO add sample size on x-axis
+# TODO add significance stars for post-hoc tests
 
-  # annotation_custom2(rasterGrob(icon_close, interpolate = TRUE), # add icon
-  #                   xmin = 0.6, 1.5, 6.4, 7.2,
-  #                   data = subset(combined_long, facet == "Study 1 Livestream"))
-  
-  # TODO add pairwise significance tests
-  # geom_signif(y_position = c(4.3, 4.3, 1.3, 1.3),
-  #                     xmin = c(0.9, 1.95, 1.1, 2.15),
-  #                     xmax = c(1.85, 2.9, 2.05, 3.2),
-  #                     annotation = c("***", "n.s.", "*", "***"),
-  #                     tip_length = 0,
-  #                     # textsize = ,
-  #                     # vjust = ,
-  #                     color = rep(c("#41AB5D", "#41AB5D", "#A1D99B", "#A1D99B"), 3)
-  #                     )
+fig_closeness_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "jitter_ios_anna", ylab = "Relationship Closeness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
 
-study1_3long %>%
-  # manually dodge x-axis by group: https://stackoverflow.com/a/44657850
-  mutate(dodge_timepoint = ifelse(order == "Film first", 
-                                  as.numeric(timepoint) - .1,
-                                  as.numeric(timepoint) + .1)) %>%
-  ggplot(aes(x = timepoint,
-             y = ios_anna,
-             group = order,
-             color = order,
-             linetype = order,
-             shape = medium)) +
-  geom_blank() +
-    geom_point(aes(x = dodge_timepoint),
-               alpha = 1) +
-    geom_line(aes(x = dodge_timepoint, group = p_id),
-              alpha = 1) +
-    scale_colour_manual(values = c("#41AB5D", "#A1D99B"), guide = "none") +
-    # new_scale_color() +
-    stat_summary(color = "black",
-                 fun = "mean", # connect means
-                 geom = "line",
-                 linewidth = 0.9,
-                 position = position_dodge(0.4)) +
-    stat_summary(color = "black",
-                 fun = "mean", # add mean
-                 geom = "point",
-                 size = 3,
-                 position = position_dodge(0.4)) +
-    stat_summary(color = "black",
-                 fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
-                 geom = "errorbar",
-                 width = 0.35,
-                 linewidth = 0.9,
-                 linetype = "solid",
-                 position = position_dodge(0.4),
-                 show.legend = FALSE) +
-    # scale_colour_manual(values = c("black", "black")) +
-    guides(
-      colour = guide_legend("Order", override.aes = list(shape = NA)),
-      linetype = guide_legend("Order"),
-      shape = "none"
-    ) +
-    # coord_fixed(ratio = 0.6, ylim = c(1,7) ) +
-    # scale_x_discrete(label = sample_size[["myaxis"]]) +
-  facet_wrap(vars(attendance), scales = "free_x") +
-    scale_y_continuous(limits = c(1,7)) +
-    theme_bw(base_size = 11) +
-    labs(x = "Time point",
-         y = "Closeness (Anna)") +
-    theme(panel.grid.major.x = element_blank(), # remove vertical grid line
-          # legend.text=element_text(size=6),
-          legend.title=element_text(margin = margin(b = 0)),
-          legend.background = element_rect(fill = "white", color = "black"),
-          # axis.title = element_text(size=9.5),
-          axis.text.x = element_text(angle=20, hjust=0.8))
-
-# print(closeness_lineplot)
-
-target_ios_lineplot <- plot_meanSE(df = combined_long, dv = "ios_target", facet_var = "facet", ylab = "Rating", my_colours = c("#41AB5D", "#A1D99B")) +
-  theme(legend.position="none")
-
+fig_closeness_study2 <- plot_meanSE(df = subset(combined_long, study == "Study 2"), dv = "jitter_ios_anna", ylab = "Relationship Closeness", xlab = "") + facet_wrap(vars(facet), scales = "free") 
 ggpubr::ggarrange(
-        anna_ios_lineplot,
-        target_ios_lineplot, 
+        fig_closeness_study1,
+        fig_closeness_study2 + theme(axis.title.y = element_blank()),
         nrow = 1, 
         ncol = 2,
-        widths = c(4,1)
+        widths = c(2.2, 1),
+        legend = "bottom",
+        common.legend = TRUE
         )
 ```
 
-```{r}
-#| label: fig-manualdodge
-
-# TODO change mean+CI to boxplots
-
-study1_3long %>%
-  # manually dodge x-axis by group: https://stackoverflow.com/a/44657850
-  mutate(dodge_timepoint = ifelse(order == "Film first", 
-                                  as.numeric(timepoint) - .1,
-                                  as.numeric(timepoint) + .1)) %>%
-  ggplot(aes(x = timepoint,
-             y = anna_empathic_concern,
-             group = order,
-             color = order,
-             fill = order,
-             linetype = order,
-             shape = medium)) +
-  geom_blank() +
-    geom_boxplot(aes(x = dodge_timepoint, group = dodge_timepoint),
-                 outlier.shape = NA,
-                 color = "black",
-                 linetype = "solid",
-                 alpha = .5) +
-    geom_point(aes(x = dodge_timepoint),
-               alpha = 1) +
-    geom_line(aes(x = dodge_timepoint, group = p_id),
-              alpha = 1) +
-    scale_colour_manual(values = c("dodgerblue", "darkorange"), guide = "none") +
-    scale_fill_manual(values = c("dodgerblue", "darkorange"), guide = "none") +
-    # new_scale_color() +
-    # stat_summary(color = "black",
-    #              fun = "mean", # connect means
-    #              geom = "line",
-    #              linewidth = 0.9,
-    #              position = position_dodge(0.4)) +
-    # stat_summary(color = "black",
-    #              fun = "mean", # add mean
-    #              geom = "point",
-    #              size = 3,
-    #              position = position_dodge(0.4)) +
-    # stat_summary(color = "black",
-    #              fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
-    #              geom = "errorbar",
-    #              width = 0.35,
-    #              linewidth = 0.9,
-    #              linetype = "solid",
-    #              position = position_dodge(0.4),
-    #              show.legend = FALSE) +
-    # scale_colour_manual(values = c("black", "black")) +
-    guides(
-      colour = guide_legend("Order", override.aes = list(shape = NA)),
-      linetype = guide_legend("Order"),
-      shape = "none"
-    ) +
-    # coord_fixed(ratio = 0.6, ylim = c(1,7) ) +
-    # scale_x_discrete(label = sample_size[["myaxis"]]) +
-  facet_wrap(vars(attendance), scales = "free_x") +
-    scale_y_continuous(limits = c(1,7)) +
-    theme_bw(base_size = 11) +
-    labs(x = "Time point",
-         y = "Closeness (Anna)") +
-    theme(panel.grid.major.x = element_blank(), # remove vertical grid line
-          # legend.text=element_text(size=6),
-          legend.title=element_text(margin = margin(b = 0)),
-          legend.background = element_rect(fill = "white", color = "black"),
-          # axis.title = element_text(size=9.5),
-          axis.text.x = element_text(angle=20, hjust=0.8))
-```
-
-```{r}
-#| label: fig-raincloud
-
-# visual overload
-
-# install.packages("ggrain")
-# library(ggrain)
-
-study1_3long %>%
-  ggplot(aes(x = timepoint,
-             y = anna_empathic_concern,
-             fill = order,
-             color = order,
-             shape = medium)) +
-  geom_rain(alpha = .8,
-            rain.side = "f",
-            id.long.var = "p_id",
-            boxplot.args = list(color = "black", alpha = .5, outlier.shape = NA),
-            violin.args = list(color = NA, alpha = .5),
-            boxplot.args.pos = list(width = .1,
-             position = ggpp::position_dodgenudge(width = .1,
-                                                  x = rep(c(-.13, -.13, # Baseline F-P, Baseline P-F
-                                                        -.13, .13, 
-                                                         .13, .13), 2))),
-            violin.args.pos = list(width = .7,
-             position = position_nudge(x = (c(rep(-.2, 256*2), rep(-.2, 256*2),# Baseline F-P
-                                             rep(-.2, 256*2), rep(-.2, 256*2), # Baseline P-F
-                                             rep(-.2, 256*2), rep(-.2, 256*2), # Intermission F-P
-                                             rep(.2, 256*2), rep(.2, 256*2), # Intermission P-F
-                                             rep(.2, 256*2), rep(.2, 256*2), # End F-P
-                                             rep(.2, 256*2), rep(.2, 256*2)))))) +
-  theme_classic() +
-  stat_summary(fun = mean, 
-               geom = "line", 
-               color = "black",
-               linewidth = 0.9,
-               aes(group = order, linetype = order)) +
-  stat_summary(fun = mean, 
-               geom = "point", 
-               color = "black",
-               size = 2.5,
-               aes(group = order, shape = medium)) +
-  scale_fill_manual(values = c("dodgerblue", "darkorange")) +
-  scale_color_manual(values = c("dodgerblue", "darkorange")) +
-    labs(x = "Time point",
-         y = "Empathy (Anna)") +
-  guides(
-      linetype = guide_legend("Order"),
-      colour = guide_legend("Order"),
-      shape = "none",
-      fill = "none"
-    ) +
-  facet_wrap(vars(attendance))
-
-# try without violin
-
-combined_long %>%
-  mutate(timepoint = case_when(
-    (study == "Study 2" & !medium == "Baseline") ~ "Intermission",
-    .default = timepoint
-  ),
-  timepoint = factor(timepoint, levels = c("Baseline", "Intermission", "End"))) %>%
-  ggplot(aes(x = timepoint,
-             y = anna_empathic_concern,
-             fill = order,
-             color = order,
-             shape = medium)) +
-  geom_rain(alpha = .8,
-            # rain.side = "f2x2",
-            id.long.var = "p_id",
-            boxplot.args = list(alpha = .5, outlier.shape = NA),
-            violin.args = list(color = NA, alpha = 0),
-            boxplot.args.pos = list(width = .3,
-             position = ggpp::position_dodgenudge(width = .1,
-                                                  x = c(-.13, .13, -.13, .13, -.13, .13, # Baseline
-                                                        -.13, .13, -.13, .13, -.13, .13, 
-                                                         -.13, .13, -.13, .13)))
-            ) +
-  theme_bw() +
-  stat_summary(fun = mean, 
-               geom = "line", 
-               color = "black",
-               linewidth = 0.9,
-               aes(group = order, linetype = order)) +
-  stat_summary(fun = mean, 
-               geom = "point", 
-               color = "black",
-               size = 2.5,
-               aes(group = order, shape = medium)) +
-  scale_fill_manual(values = c("dodgerblue", "darkorange")) +
-  scale_color_manual(values = c("dodgerblue", "darkorange")) +
-    labs(x = "Time point",
-         y = "Empathy (Anna)") +
-  guides(
-      linetype = guide_legend("Order"),
-      colour = guide_legend("Order"),
-      shape = "none",
-      fill = "none"
-    ) +
-  facet_wrap(vars(facet)) +
-  theme(panel.grid.major.x = element_blank(), # remove vertical grid line
-          legend.position = "top")
-```
-
-```{r}
-#| label: fig-twofacet
-
-combined_long %>%
-  rowwise() %>%
-  # manually dodge x-axis by group: https://stackoverflow.com/a/44657850
-  mutate(
-    order = factor(order),
-    dodge_order = case_when(
-    timepoint == "Baseline" ~ as.numeric(order) - .3,
-    timepoint == "Intermission" ~ as.numeric(order),
-    (study == "Study 1" & timepoint == "End") ~ as.numeric(order) + .3,
-    (study == "Study 2" & timepoint == "End") ~ as.numeric(order)
-  )) %>%
-  ungroup() %>%
-  ggplot(aes(x = order,
-             y = anna_empathic_concern,
-             group = timepoint,
-             color = medium,
-             shape = medium)) +
-    geom_blank() +
-    geom_point(aes(x = dodge_order),
-               alpha = .7) +
-    geom_line(aes(x = dodge_order, group = p_id),
-              color = "darkgrey",
-              alpha = .7) +
-    stat_summary(aes(x = dodge_order, group = order),
-                 color = "black",
-                 alpha = .7,
-                 fun = "mean", # connect means
-                 geom = "line",
-                 linewidth = 0.9,
-                 show.legend = FALSE) +
-    stat_summary(aes(x = dodge_order),
-                 color = "black",
-                 alpha = .7,
-                 fun = "mean", # add mean
-                 geom = "point",
-                 size = 3,
-                 show.legend = FALSE) +
-    stat_summary(aes(x = dodge_order),
-                 color = "black",
-                 alpha = .7,
-                 fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
-                 geom = "errorbar",
-                 width = 0.1,
-                 linewidth = 0.9,
-                 show.legend = FALSE) +
-    guides(
-      shape = guide_legend("Measurement"),
-      color = guide_legend("Measurement")
-    ) +
-    facet_wrap(vars(facet), scales = "free_x") +
-    scale_y_continuous(limits = c(1,7)) +
-    theme_bw() +
-    labs(x = "Order",
-         y = "Empathy (Anna)") +
-    theme(panel.grid.major.x = element_blank(), # remove vertical grid line
-          legend.position = "top",
-          # legend.title=element_text(margin = margin(b = 0)),
-          # legend.background = element_rect(fill = "white", color = "black")
-          )
-```
-
-```{r}
-#| label: fig-empathy-plot
-#| fig-cap: Changes in Empathic concern with Anna Vasquez Throughout the Event 
-#| apa-note: Mean and CI of empathy by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Empathy was rated on a scale ranging from 1 (not at all) to 7 (extremely). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
-#| echo: false
-
-empathy_lineplot <- plot_meanSE(df = combined_long, dv = "anna_empathic_concern", facet_var = "facet", ylab = "Rating", my_colours = c("#DC267F", "#D4ABB7")) +
-  theme(legend.position = "top", # move legend below plot
-        legend.justification.top = "right",
-        legend.direction = "horizontal")
-
-print(empathy_lineplot)
-
-annotate_figure(empathy_lineplot, top = rasterGrob(icon_empath, x = 0.1, y = -0.5, width = 0.07, interpolate = TRUE))
-
-# TODO 2:Livestream panel: add a third x-axis point so that lines are same length as in other panels?
-# TODO arrange hyothetical target into the same pane
-```
-
-```{r}
-#| label: fig-target-plot
-#| fig-cap: Changes in Empathic Concern with a Hypothetical Prisoner
-#| fig-height: 4.6
-#| fig-width: 2.9
-
-plot_meanSE(df = combined_long, dv = "target_empathic_concern", facet_var = "facet", ylab = "Rating", my_colours = c("#DC267F", "#D4ABB7")) +
-  theme(legend.position = "top", # move legend below plot
-        legend.justification.top = "right",
-        legend.direction = "horizontal")
-```
-
-```{r}
-#| label: fig-awareness-plot
-#| fig-cap: Changes in Problem Awareness Throughout the Event 
-#| apa-note: Mean and CI of awareness by time point (x-axis) and order of the media (line style), split for the in-person (left) and livestream (middle) audience of study 1, and study 2 (right). Awareness was rated on a scale ranging from 1 (strongly disagree) to 7 (strongly agree). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
-#| echo: false
-
-awareness_lineplot <- plot_meanSE(df = combined_long, dv = "problem_awareness", facet_var = "facet", ylab = "Rating", my_colours = c("#88ccee", "#B9CEE4")) +
-  theme(legend.position = "bottom", 
-        legend.direction = "horizontal")
-
-print(awareness_lineplot)
-```
-
-The only correlation reaching that threshold was between problem awareness and openness to experience, `r apa_print(cor.test(study1_2long$problem_awareness_z, study1_2long$demo_openness, method = "spearman"))$full_result`. Therefore, the problem awareness model includes openness as an additional covariate.
-
-```{r}
-#| label: fig-behaviour-count
-#| fig-cap: Proportion of Supportive Behaviours Observed in Each Sample
-#| apa-note: TODO
-#| echo: false
-
-# TODO explore waffle
-
-# count behaviours to print numbers in the text
-n_behaviour <- combined_long %>%
-  rowwise() %>%
-  mutate(completed = ifelse(study == "Study 2", 1, completed)) %>% # for study 2, set completed to TRUE
-  filter(completed == 1) %>% # only use full datasets of study 1
-  filter(timepoint == "End") %>% # only use End data
-  dplyr::select(flyer, mailing, donation) %>%
-  pivot_longer(cols = c(flyer, mailing, donation), names_to = "behaviour", values_to = "response") %>%
-  group_by(behaviour, response) %>%
-  summarize(count = n(), .groups = "drop") %>%
-  group_by(behaviour) %>%
-  mutate(perc = count / sum(count) *100) %>%
-  mutate(response = replace(response, is.na(response), -9),
-         response = factor(response, levels = c(0, 1, -9), labels = c("No", "Yes", "Not applicable"))) %>%
-  pivot_wider(names_from = response, values_from = c(count, perc), names_sep = "_", values_fill = 0) %>%
-  column_to_rownames("behaviour")
-
-# TODO change to ordinal significance test rather than chisq
-# count how many participants performed at least one behaviour by attendance mode and test for significance
-# behaviour_by_attendance <- table(study1_df$attendance, study1_df$behaviour_dich)
-# behaviour_by_attendance_test <- chisq.test(behaviour_by_attendance)
-
-# count how many participants performed at least one behaviour by order
-# behaviour_by_order <- table(study1_df$order, study1_df$behaviour_dich)
-# behaviour_by_order_test <- chisq.test(behaviour_by_order)
-
-# stacked barplot of behaviour counts split by attendance mode, with percentage labels
-behaviour_plot_df <- combined_long %>%
-  filter(is.na(completed) | completed == 1) %>%
-  dplyr::select(p_id, facet, flyer, mailing, donation) %>%
-  distinct(.keep_all = TRUE) %>%
-  pivot_longer(cols = c(flyer, mailing, donation), names_to = "behaviour", values_to = "response") %>%
-  group_by(behaviour, facet, response) %>%
-  summarize(count = n(), .groups = "drop") %>%
-  group_by(behaviour, facet) %>%
-  mutate(perc = round(count / sum(count) *100), digits = 1) %>%
-  mutate(response = replace(response, is.na(response), -9),
-         response = factor(response, levels = c(-9, 0, 1), labels = c("Not applicable", "No", "Yes")),
-         behaviour = factor(behaviour, levels = c("flyer", "mailing", "donation"), labels = c("Flyer", "Mailing", "Donation")))
-
-# behaviour_plot <- ggplot(data = behaviour_plot_df,
-#                          aes(y = count, x = behaviour, fill = response)) +
-#   geom_bar(position = "stack",
-#            stat = "identity",
-#            colour = "black") +
-#   facet_grid(~facet) +
-#   coord_cartesian(clip = "off") +
-#   geom_text(aes(label = paste0(perc,"%")), 
-#             position = position_stack(vjust = 0.8), 
-#             colour = rep(c("black", "white", rep(c("black", "white", "black"), 2)), 2),
-#             size = 3) +
-#   scale_fill_manual(name = "Response", values = c("white", "#BEBEBE", "#002060")) +
-#   theme_bw(base_size = 11) +
-#   labs(x = "",
-#        y = "Count",
-#        title = "Behaviour") +
-#     theme(legend.position = c(0.893, 0.85), 
-#           # legend.text=element_text(size=4.9),
-#         legend.title=element_text(margin = margin(b = 1)),
-#         legend.background = element_rect(fill = "white", color = "black"),
-#         plot.title = element_text(face="bold", hjust=0.5)) 
-# 
-# behaviour_annotation <-  annotation_custom2(rasterGrob(icon_behav, interpolate = TRUE), xmin = 2.2, 2.9, 69, 75, data = subset(behaviour_plot_df, facet == "Study 1 In-person"))
-# 
-# behaviour_plot + behaviour_annotation
-
-rm(behaviour_plot_df, behaviour_plot, behaviour_annotation)
-```
 
 ```{r}
 #| label: regression-behaviour-intention
@@ -1618,7 +1193,7 @@ check_assumptions(intention_outcomes, "behavioural_intention_z", study1_intent[-
 # summary(intention_outcomes)
 
 # calculate the effect size of empathy, requires a model excluding empathy https://www.researchgate.net/post/Which-effect-size-estimate-should-I-use-for-a-linear-regression-with-a-continuous-dep-variable-dichotomous-indep-variable-and-covariates
-intention_outcomes_dropempathy <- lm(behavioural_intention_z ~ trait_empathic_concern_z + motivation_socialjustice_dich + ios_anna_z + problem_awareness_z, data = innocents_intention[-c(71, 73), ])
+intention_outcomes_dropempathy <- lm(behavioural_intention_z ~ trait_empathic_concern_z + motivation_socialjustice_dich + ios_anna_z + problem_awareness_z, data = study1_intent[-c(71, 73), ])
 
 empathy_f2 <- (summary(intention_outcomes)$r.squared - summary(intention_outcomes_dropempathy)$r.squared) / (1 - summary(intention_outcomes)$r.squared)
 ```
