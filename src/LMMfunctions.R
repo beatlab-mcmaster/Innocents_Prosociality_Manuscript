@@ -163,115 +163,74 @@ plot_dotbars <- function(df, dv, by_v, ylab, xlab, my_colour) {
 }
 
 # Plot means and CI by order across timepoint function
-plot_meanSE <- function(df, dv, facet_var=NULL, ylab, my_colours, show_labels=F) {
-  
-  if(endsWith(dv, "_z")) {
-    my_yaxis <- c(-2, 2) # y axis limits
-    my_ratio <- 1.05
-    }
-  else if(startsWith(dv, "log_")) {
-    my_yaxis <- c(0, 2)
-    my_ratio <- 2.1
-    my_nudge <- data.frame("nudge" = c(0.1, 0.1, -0.1, -0.1))
-  } else {
-    my_yaxis <- c(1, 7)
-    my_ratio <- 0.6
-    my_nudge <- data.frame("nudge" = c(0.3, 0.3, -0.3, -0.3))
-  }
-  
-  # remove missings
-  data <- df %>%
-    filter(!is.na(!!sym(dv))) # drop rows where no rating was made
-  
-  # if dv has less than 10 unique values, jitter the individual participants' lines to avoid overlapping
-  if (nrow(unique(data[dv])) < 10) {
-    my_linejitter <- 0.2
-  } else {
-    my_linejitter <- 0
-  }
-  
-  dv = sym(dv)
-  
-  splot <- data %>%
-    ggplot(aes(x = timepoint, 
-               y = !!dv, 
-               group = order,
-               color = order,
-               linetype = order,
-               shape = medium)) + 
-    geom_line(aes(group = p_id),
-              alpha = 0.5,
-              position = position_jitter(width = 0, height = my_linejitter)) +
-    scale_colour_manual(values = c("darkgrey", "lightgrey"), guide = "none") +
-    new_scale_color() +
-    stat_summary(aes(color = order),
+plot_meanSE <- function(df, dv, ylab, xlab, facet_var = NULL) {
+
+dv <- sym(dv)
+
+    splot <- 
+      ggplot(data = df,
+             aes(x = xticks,
+               y = !!dv,
+               group = timepoint,
+               color = medium,
+               shape = medium)) +
+    geom_blank() +
+    geom_line(aes(x = dodge_order, group = p_id),
+              color = "darkgray",
+              alpha = .7) +
+    geom_point(aes(x = dodge_order),
+               alpha = .7) +
+    scale_color_manual(values = c("gray30", "#FFEB00", "#661BFF"), guide = "none") +
+    scale_shape_manual(values = c(1, 2, 0), guide = "none") +
+    new_scale("shape") +
+    new_scale("color") +
+    stat_summary(aes(x = dodge_order),
+                 color = "black",
+                 fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
+                 geom = "errorbar",
+                 width = 0.1,
+                 linewidth = 0.5,
+                 show.legend = FALSE, 
+                 position = position_nudge(.08)) +
+    stat_summary(aes(x = dodge_order, 
+                     group = order,
+                     color = nextmedium),
                  fun = "mean", # connect means
                  geom = "line",
-                 linewidth = 0.9, 
-                 position = position_dodge(0.5)) + 
-    stat_summary(aes(color = order),
+                 linewidth = 1.2,
+                 show.legend = FALSE, 
+                 position = position_nudge(.08)) +
+    scale_color_manual(values = c("gray30", "#FFEB00", "#661BFF"), guide = "none") +
+    stat_summary(aes(x = dodge_order,
+                     shape = medium,
+                     fill = medium),
+                 color = "black",
                  fun = "mean", # add mean
                  geom = "point",
                  size = 3, 
-                 position = position_dodge(0.5)) + 
-    stat_summary(aes(color = order),
-                 fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
-                 geom = "errorbar", 
-                 width = 0.35,
-                 linewidth = 0.9,
-                 linetype = "solid", 
-                 position = position_dodge(0.5),
-                 show.legend = FALSE) + 
-    scale_colour_manual(values = my_colours) +
-    guides(
-      colour = guide_legend("Order", override.aes = list(shape = NA)),
-      linetype = guide_legend("Order"),
-      shape = "none"
-    ) +
-    scale_y_continuous(limits = my_yaxis) +
-    theme_bw(base_size = 11) +
-    labs(x = "Time point",
+                 position = position_nudge(.08)) +
+    scale_fill_manual(values = c("gray30", "#FFEB00", "#661BFF"), name = "Measurement") +
+    scale_shape_manual(values = c(21, 24, 22), name = "Measurement") +
+    scale_y_continuous(limits = c(0.8,7.2)) +
+    theme_bw() +
+    labs(x = xlab,
          y = ylab) +
-    theme(panel.grid.major.x = element_blank(), # remove vertical grid line,
-          # legend.text=element_text(size=6),
-          # legend.title=element_text(margin = margin(b = 0)),
-          legend.background = element_rect(fill = "white", color = "black"),
-          # axis.title = element_text(size=9.5)
-          )
+    theme(panel.grid.major.x = element_blank(), # remove vertical grid line
+          legend.position = "bottom",
+          legend.justification.top = "left"
+    )
   
   if (!is.null(facet_var)) {
-    facet_var = sym(facet_var)
-    
-    splot <- splot +
-      facet_wrap(vars(!!facet_var), scales = "free_x")
-  } else {
-    # only add sample size if not faceting x-axis
+    # add sample size depending on faceting
     sample_size = data %>% 
-      group_by(timepoint) %>% 
+      group_by(facet_var) %>% 
       summarise(num=n()) %>%
-      mutate(myaxis = paste0(timepoint, "\n", "n=", num))
+      mutate(myaxis = paste0(xticks, "\n", "n=", num))
     
     splot <- splot +
       scale_x_discrete(label = sample_size[["myaxis"]]) +
       theme(axis.text.x = element_text(angle=20, hjust=0.8)) # tilt x-axis labels
-  }
-  
-  if (show_labels==T) {
-    label_position <- data %>%
-      filter(!timepoint == "Baseline") %>%
-      group_by(order, timepoint, medium) %>%
-      summarise(mean = mean(!!dv, na.rm = TRUE), 
-                .groups = "keep") %>% 
-      bind_cols(my_nudge) %>%
-      mutate(nudged_mean = mean + nudge) # calculate label positions as nudged group mean
-    
-    splot <- splot +
-      geom_label(data = label_position, # add labels for film and performance
-                 aes(x = timepoint, y = nudged_mean, label = medium),
-                 position = position_dodge(1.7),
-                 size = 5
-      )
-  }
+  } 
   
   return(splot)
 }
@@ -519,3 +478,10 @@ annotation_custom2 <-
                                             xmin = xmin, xmax = xmax, 
                                             ymin = ymin, ymax = ymax))
   }
+
+# print mean and sd in text
+print_descr <- function (var, suffix = NULL) {
+  my_mean <- round(mean(var, na.rm = TRUE), digits = 2)
+  my_sd <- round(sd(var, na.rm = TRUE), digits = 2)
+  my_string <- cat("($M = ", my_mean, "$, $SD = ", my_sd, "$", suffix, ")", sep = "")
+}
