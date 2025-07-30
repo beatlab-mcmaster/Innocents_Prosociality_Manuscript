@@ -102,6 +102,7 @@ p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'ggnewscale', '
 conflicts_prefer(dplyr::select, .quiet = TRUE)
 conflicts_prefer(dplyr::filter, .quiet = TRUE)
 conflicts_prefer(flextable::separate_header, .quiet = TRUE)
+conflicts_prefer(lmerTest::lmer, .quiet = TRUE)
 
 # update R references
 # r_refs("r-references.bib") 
@@ -365,7 +366,7 @@ study1_2long <- study1_df %>%
          timepoint = factor(interaction(day, medium), levels = c("0.Film", "1.Film", "0.Performance", "1.Performance"), labels = c("Intermission", "End", "End", "Intermission")), # determine timepoint
          ordermedium = factor(interaction(day, medium), levels = c("0.Film", "0.Performance", "1.Performance", "1.Film"), labels = c("F-P: Film", "F-P: Performance", "P-F: Performance", "P-F: Film")), # concatenate order and medium
          cell = factor(paste(attendance, order, medium, sep="."))) %>% # concatenate attendance, order, & medium
-  mutate(across(.cols = all_of(c("base_ios_anna", "base_anna_empathic_concern", "base_problem_awareness", "base_behavioural_intention", "base_anna_personal_distress", "ios_anna", "anna_empathic_concern", "problem_awareness", "behavioural_intention", "anna_personal_distress")), .fns = my_z_score, .names = "{.col}_z")) # z-score variables
+  mutate(across(.cols = all_of(c("demo_openness", "base_ios_anna", "base_anna_empathic_concern", "base_problem_awareness", "base_behavioural_intention", "base_anna_personal_distress", "ios_anna", "anna_empathic_concern", "problem_awareness", "behavioural_intention", "anna_personal_distress")), .fns = my_z_score, .names = "{.col}_z")) # z-score variables
 
 # set contrasts
 contrasts(study1_2long$order) <- cbind(FPvsPF = c(1, -1))
@@ -771,7 +772,7 @@ sample_size <- study1_df %>%
   summarise(N = n())
 ```
 
-Leading up to the event, all ticket holders were invited to sign up for participation in the research study via email. In addition, we asked in-person ticket holders as they arrived at the venue whether they would like to participate, and recruited additional livestream participants through Prolific. Participants had to be 16 years or older, have healthy hearing and vision, and have not seen the performance or the film before. We initially restricted the upper age limit to 60 years to avoid age effects on eye movements, which were collected for a different research question and not analysed here. However, we made an exception for one participant over 60 who expressed interest in participating. By buying a ticket for in-person or livestream attendance at one of the events, participants self-assigned to an attendance mode and an order of stimli. However, participants were blind to the order in which film and performance would be presented on each of the days, since we did not advertise this information. A total of `r printnum(sum(subset(sample_size, completed == 1)$N))` participants completed the study (day 1 in-person: `r printnum(subset(sample_size, day == 0 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 1)$N)`; day 2 in-person: `r printnum(subset(sample_size, day == 1 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 1 & attendance == "Livestream" & completed == 1)$N)`). In addition, one in-person participant and `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 0)$N)` livestream participants left the event at intermission on day 1, and one livestream participant left at intermission on day 2. They are included in all analyses for which their data are available. Livestream participants were watching from Africa, Europe, North America, Asia, and New Zealand, with most participants watching from South Africa ($n = `r printnum(length(which(study1_df$country == "South Africa")))\`\$). Upon completion of the study, ticket holders received \$10 CAD compensation and Prolific participants were compensated £18 GBP.
+Leading up to the event, all ticket holders were invited to sign up for participation in the research study via email. In addition, we asked in-person ticket holders as they arrived at the venue whether they would like to participate, and recruited additional livestream participants through Prolific. Participants had to be 16 years or older, have healthy hearing and vision, and have not seen the performance or the film before. We initially restricted the upper age limit to 60 years to avoid age effects on eye movements, which were collected for a different research question and not analysed here. However, we made an exception for one participant over 60 who expressed interest in participating. By buying a ticket for in-person or livestream attendance at one of the events, participants self-assigned to an attendance mode and an order of stimli. However, participants were blind to the order in which film and performance would be presented on each of the days, since we did not advertise this information. A total of `r printnum(sum(subset(sample_size, completed == 1)$N))` participants completed the study (day 1 in-person: `r printnum(subset(sample_size, day == 0 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 1)$N)`; day 2 in-person: `r printnum(subset(sample_size, day == 1 & attendance == "In-person" & completed == 1)$N)`; livestream: `r printnum(subset(sample_size, day == 1 & attendance == "Livestream" & completed == 1)$N)`). In addition, one in-person participant and `r printnum(subset(sample_size, day == 0 & attendance == "Livestream" & completed == 0)$N)` livestream participants left the event at intermission on day 1, and one livestream participant left at intermission on day 2. They are included in all analyses for which their data are available. Livestream participants were watching from Africa, Europe, North America, Asia, and New Zealand, with most participants watching from South Africa ($n = `r printnum(length(which(study1_df$country == "South Africa")))\`\$). Upon completion of the study, ticket holders received \$10 CAD compensation and Prolific participants were compensated £18 GBP. For a detailed description of the sample, see @apx-sampledescription.
 
 <!-- TODO describe pertinent sample characteristics; refer to detailed table in supplementary -->
 
@@ -850,9 +851,188 @@ Figures were created with *ggplot2* [@R-ggplot2], *ggpubr* [@R-ggpubr], *ggridge
 
 ## Results
 
+Opening paragraph: takeaways from the subjective experience paragraph? + details & figures in supplemental
+
 ### Effect of Event Conditions
 
 We evaluated the effects of the event conditions on *awareness* of wrongful imprisonment, *empathy* with the wrongfully imprisoned Anna Vasquez, and *closeness* with Anna Vasquez (Hypotheses 1a, 2a, and 3a). 
+
+```{r} 
+#| label: outcome-lmms
+#| include: FALSE
+
+#### Impute means for baseline covariates ###
+study1_2long <- study1_2long %>%
+  mutate(across(.cols = c(base_ios_anna_z, base_anna_empathic_concern_z, base_problem_awareness_z), 
+                .fns = ~ ifelse(is.na(.x), 0, .x)))
+
+#### Closeness LMM ###
+
+# build full model
+closeness_lmm <- lmer(ios_anna_z ~ base_ios_anna_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# check_assumptions(closeness_lmm, "ios_anna_z", study1_2long) # three outliers violate normality of random intercepts
+summary(closeness_lmm)
+my_effectsize(closeness_lmm)
+
+# # log-transform does not help:
+# study1_2long <- study1_2long %>%
+#   mutate(ios_anna_log = log(ios_anna))
+# 
+# closeness_log <- lmer(ios_anna_log ~ base_ios_anna_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# check_assumptions(closeness_log, "ios_anna_log", study1_2long)
+# 
+# rm(closeness_log)
+
+# # reciprocal transform makes matters worse: 
+# study1_2long <- study1_2long %>%
+#   mutate(ios_anna_recpr = 1/(ios_anna))
+# 
+# closeness_recpr <- lmer(ios_anna_recpr ~ base_ios_anna_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# check_assumptions(closeness_recpr, "ios_anna_recpr", study1_2long)
+# 
+# rm(closeness_recpr)
+# 
+# # Extract random intercepts
+# closeness_intercepts <- ranef(closeness_lmm)$p_id
+# # Find the indices of the most extreme residuals
+# order(closeness_intercepts$`(Intercept)`, decreasing = FALSE)[1:3] # indices: c(47 19 42)
+# rownames(closeness_intercepts)[c(47, 19, 42)] # p_id = c("sub-in116", "sub-in019", "sub-in111")
+# 
+# rm(closeness_intercepts)
+# 
+# # Excluding the three outlier intercepts did not fix the assumptions
+# closeness_lmm <- lmer(ios_anna_z ~ base_ios_anna_z + attendance * medium_2 * timepoint_2 + (1|p_id), data = subset(study1_2long, !(p_id %in% c("sub-in116", "sub-in019", "sub-in111"))))
+# check_assumptions(closeness_lmm, "ios_anna_z", subset(study1_2long, !(p_id %in% c("sub-in116", "sub-in019", "sub-in111"))))
+
+# build covariate model
+closeness_cov <- lmer(ios_anna_z ~ base_ios_anna_z + (1|p_id), data = study1_2long)
+
+
+
+#### Empathy LMM ###
+
+# # build full model
+# empathy_lmm <- lmer(anna_empathic_concern_z ~ base_anna_empathic_concern_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# check_assumptions(empathy_lmm, "anna_empathic_concern_z", study1_2long) # two outliers violate normality of residuals
+# 
+# # Extract and standardize residuals
+# empathy_residuals <- resid(empathy_lmm, type = "pearson")
+# # Find the indices of the most extreme residuals
+# order(abs(empathy_residuals), decreasing = TRUE)[1:2] # indices are c(112, 111), but trial & error shows that rows c(113, 114) of study1_2long are the problematic ones
+# # Alternatively, plot outlier rows
+# lattice::qqmath(empathy_lmm, id=0.1, idLabels=~.obs)
+# 
+# rm(empathy_residuals)
+
+# build full model (after exclusions)
+empathy_lmm <- lmer(anna_empathic_concern_z ~ base_anna_empathic_concern_z + attendance * medium * timepoint + (1|p_id), data = study1_2long[-c(113, 114), ])
+# check_assumptions(empathy_lmm, "anna_empathic_concern_z", study1_2long[-c(113, 114), ]) # there are two new outliers
+summary(empathy_lmm)
+my_effectsize(empathy_lmm)
+
+# build covariate model (after exclusions)
+empathy_cov <- lmer(anna_empathic_concern_z ~ base_anna_empathic_concern_z + (1|p_id), data = study1_2long[-c(113, 114), ])
+
+
+
+#### Awareness LMM ###
+
+# awareness_lmm <- lmer(problem_awareness_z ~ demo_openness_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# check_assumptions(awareness_lmm, "problem_awareness_z", study1_2long) # residuals & random intercepts violate normality assumption
+
+# log-transform makes matters worse:
+# study1_2long <- study1_2long %>%
+#   mutate(problem_awareness_log = log(problem_awareness))
+# 
+# awareness_log <- lmer(problem_awareness_log ~ demo_openness_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# check_assumptions(awareness_log, "problem_awareness_log", study1_2long)
+# 
+# rm(awareness_log)
+# 
+# reciprocal transform makes matters worse: 
+# study1_2long <- study1_2long %>%
+#   mutate(problem_awareness_recpr = 1/(problem_awareness))
+# 
+# awareness_recpr <- lmer(problem_awareness_recpr ~ demo_openness_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# check_assumptions(awareness_recpr, "problem_awareness_recpr", study1_2long)
+# 
+# rm(awareness_recpr)
+
+# Extract random intercepts
+# awareness_intercepts <- ranef(awareness_lmm)$p_id
+# # Find the indices of the most extreme residuals
+# order(abs(awareness_intercepts$`(Intercept)`), decreasing = TRUE)[1:2] # indices: c(81, 24)
+# rownames(awareness_intercepts)[c(81, 24)] # p_id = c("sub-on107", "sub-in028")
+# 
+# rm(awareness_intercepts)
+
+# Excluding the two outlier intercepts fixed the assumptions
+awareness_lmm <- lmer(problem_awareness_z ~ demo_openness_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = subset(study1_2long, !(p_id %in% c("sub-on107", "sub-in028")) & !is.na(problem_awareness_z)))
+# check_assumptions(awareness_lmm, "problem_awareness_z", subset(study1_2long, !(p_id %in% c("sub-on107", "sub-in028")) & !is.na(problem_awareness_z) ))
+summary(awareness_lmm)
+my_effectsize(awareness_lmm)
+
+awareness_cov <- lmer(problem_awareness_z ~ demo_openness_z + base_problem_awareness_z + (1|p_id), data = subset(study1_2long, !(p_id %in% c("sub-on107", "sub-in028")) & !is.na(problem_awareness_z)))
+```
+
+```{r} 
+#| label: decompose-interaction
+#| include: FALSE
+
+# For closeness and empathy, order (= medium*time) was significant, indicating a carryover effect. 
+# to decompose the interaction, test increases from baseline to intermission and intermission to end separated by the two orders, to asses individual effects of the two media:
+innocents_posthoctest <- study1_3long %>%
+  dplyr::select(c(p_id, attendance, order, timepoint, ios_anna, anna_empathic_concern, problem_awareness)) %>%
+  pivot_wider(names_from = timepoint, values_from = c(ios_anna, anna_empathic_concern, problem_awareness))
+
+# Closeness
+# increase of film in 1st half
+(( ios_1sthalf_film <- t.test(subset(innocents_posthoctest, order == "Film first")$ios_anna_Intermission, subset(innocents_posthoctest, order == "Film first")$ios_anna_Baseline, paired = TRUE, alternative = "greater") ))
+
+(( ios_1sthalf_film_d <- effsize::cohen.d(subset(innocents_posthoctest, order == "Film first")$ios_anna_Intermission, subset(innocents_posthoctest, order == "Film first")$ios_anna_Baseline, paired = TRUE, na.rm = TRUE) )) # rather than just d = t / sqrt(n), this function corrects for the correlation of the two samples
+
+# increase of performance in 1st half
+(( ios_1sthalf_perf <- t.test(subset(innocents_posthoctest, order == "Perf first")$ios_anna_Intermission, subset(innocents_posthoctest, order == "Perf first")$ios_anna_Baseline, paired = TRUE, alternative = "greater") ))
+
+(( ios_1sthalf_perf_d <- effsize::cohen.d(subset(innocents_posthoctest, order == "Perf first")$ios_anna_Intermission, subset(innocents_posthoctest, order == "Perf first")$ios_anna_Baseline, paired = TRUE, na.rm = TRUE) ))
+
+# increase of performance in 2nd half
+(( ios_2ndhalf_perf <- t.test(subset(innocents_posthoctest, order == "Film first")$ios_anna_End, subset(innocents_posthoctest, order == "Film first")$ios_anna_Intermission, paired = TRUE, alternative = "greater") ))
+
+(( ios_2ndhalf_perf_d <- effsize::cohen.d(subset(innocents_posthoctest, order == "Film first")$ios_anna_End, subset(innocents_posthoctest, order == "Film first")$ios_anna_Intermission, paired = TRUE, na.rm = TRUE) ))
+
+# increase of film in 2nd half
+(( ios_2ndhalf_film <- t.test(subset(innocents_posthoctest, order == "Perf first")$ios_anna_End, subset(innocents_posthoctest, order == "Perf first")$ios_anna_Intermission, paired = TRUE, alternative = "greater") ))
+
+(( ios_2ndhalf_film_d <- effsize::cohen.d(subset(innocents_posthoctest, order == "Perf first")$ios_anna_End, subset(innocents_posthoctest, order == "Perf first")$ios_anna_Intermission, paired = TRUE, na.rm = TRUE) ))
+
+
+# Empathy
+# increase of film in 1st half
+(( ec_1sthalf_film <- t.test(subset(innocents_posthoctest, order == "Film first")$anna_empathic_concern_Intermission, subset(innocents_posthoctest, order == "Film first")$anna_empathic_concern_Baseline, paired = TRUE, alternative = "greater") ))
+
+(( ec_1sthalf_film_d <- effsize::cohen.d(subset(innocents_posthoctest, order == "Film first")$anna_empathic_concern_Intermission, subset(innocents_posthoctest, order == "Film first")$anna_empathic_concern_Baseline, paired = TRUE, na.rm = TRUE) ))
+
+# increase of performance in 1st half
+(( ec_1sthalf_perf <- t.test(subset(innocents_posthoctest, order == "Perf first")$anna_empathic_concern_Intermission, subset(innocents_posthoctest, order == "Perf first")$anna_empathic_concern_Baseline, paired = TRUE, alternative = "greater") ))
+
+(( ec_1sthalf_perf_d <- effsize::cohen.d(subset(innocents_posthoctest, order == "Perf first")$anna_empathic_concern_Intermission, subset(innocents_posthoctest, order == "Perf first")$anna_empathic_concern_Baseline, paired = TRUE, na.rm = TRUE) ))
+
+# increase of performance in 2nd half
+(( ec_2ndhalf_perf <- t.test(subset(innocents_posthoctest, order == "Film first")$anna_empathic_concern_End, subset(innocents_posthoctest, order == "Film first")$anna_empathic_concern_Intermission, paired = TRUE, alternative = "greater") ))
+
+(( ec_2ndhalf_perf_d <- effsize::cohen.d(subset(innocents_posthoctest, order == "Film first")$anna_empathic_concern_End, subset(innocents_posthoctest, order == "Film first")$anna_empathic_concern_Intermission, paired = TRUE, na.rm = TRUE) ))
+
+# increase of film in 2nd half
+(( ec_2ndhalf_film <- t.test(subset(innocents_posthoctest, order == "Perf first")$anna_empathic_concern_End, subset(innocents_posthoctest, order == "Perf first")$anna_empathic_concern_Intermission, paired = TRUE, alternative = "greater") ))
+
+(( ec_2ndhalf_film_d <- effsize::cohen.d(subset(innocents_posthoctest, order == "Perf first")$anna_empathic_concern_End, subset(innocents_posthoctest, order == "Perf first")$anna_empathic_concern_Intermission, paired = TRUE, na.rm = TRUE) ))
+
+# For problem awareness, the interaction of time and medium was not significant. Hence, only one posthoc test is required to test the increase from baseline to intermission:
+(( pa_1sthalf <- t.test(innocents_posthoctest$problem_awareness_Intermission, innocents_posthoctest$problem_awareness_Baseline, paired = TRUE, alternative = "greater") ))
+
+(( pa_1sthalf_d <- effsize::cohen.d(innocents_posthoctest$problem_awareness_Intermission, innocents_posthoctest$problem_awareness_Baseline, paired = TRUE, na.rm = TRUE) ))
+```
 
 #### Awareness
 
@@ -880,9 +1060,12 @@ ggpubr::ggarrange(
         )
 ```
 
-Audiences already had a high problem awareness before the event `r print_descr(outcomes$problem_awareness_Baseline)`, which increased slightly at intermission `r print_descr(outcomes$problem_awareness_Intermission)`, and slightly further at the end of the event `r print_descr(outcomes$problem_awareness_End)` (see @fig-awareness). 
+Audiences already had a high problem awareness before the event `r print_descr(outcomes$problem_awareness_Baseline)`, which increased slightly at intermission `r print_descr(outcomes$problem_awareness_Intermission)`, and slightly further at the end of the event `r print_descr(outcomes$problem_awareness_End)` (see @fig-awareness). Openness to experience was moderately associated with higher problem awareness, `r apa_print(cor.test(study1_3long$problem_awareness, study1_3long$demo_openness, method = "spearman"))$full_result` and was therefore included as a covariate in the LMM, resulting in the formula $Awareness \sim Openness + Baseline + Attendance * Stimulus * Time + (1|Participant)$. For all three outcomes (awareness, empathy, and closeness), the baseline significantly predicted the outcome, but the data were significantly more likely under the full model including the event conditions, compared to a model with just the covariates and the random intercept (see @apx-modelcomps). 
 
-Opening paragraph: takeaways from the subjective experience paragraph? + details & figures in supplemental
+The main effect and interactions involving the stimulus were not significant, indicating no difference between performance and film. Thus, the data did not support Hypothesis 3. The only significant fixed effect was a small main effect of time, `r eval_fixed(awareness_lmm, "timepointEndvsInter")`, with higher problem awareness at the end of the event compared to intermission, regardless of stimulus and attendance mode. An additional post-hoc test revealed that the increase from baseline to intermission was also small but significant, `r apa_print(pa_1sthalf)$full_result`, $d = `r printnum(pa_1sthalf_d$estimate)`$.
+
+#### Empathy 
+
 
 ```{r}
 #| label: fig-closeness-plot
@@ -1573,3 +1756,43 @@ Both in-person and online participants consented to eye-tracking and cardiac mon
 ## Environment
 
 The LIVELab is equipped with technology that meets the demands of concert halls as well as psychological laboratories. It has a capacity of 106 seats. For this study, in-person participants were seated in the second, third and fourth front rows. Including participants, the event was attended by 55 in-person audience members on April 2nd and 60 audience members on April 4th. The performance took place on the stage, where the sound was recorded by eight microphones for the different instruments and two microphones for the audience (e.g., to capture applause), and presented over a PA system consisting of two Meyer 500HP subwoofers and 5 Meyer UPJ-1P speakers. For the livestream, the performance was filmed from a static PTZOptics pt30x-sdi-g2 camera positioned behind and above the audience seating to capture an unobstructed view of the stage. The livestream audio was the same mix presented in the concert hall. The film was screened for the in-person audience on a 384.5 cm x 216 cm Samsung LH015IER LED video wall, using the same PA sound system. The film video and audio were streamed directly to YouTube. For livestream participants, the stream was presented in the jsPsych environment using the AVOKE plugin \[TODO cite\].
+
+# Model Comparisons {#apx-modelcomps}
+
+TODO expand this appendix to include the full output for each model.
+
+```{r} 
+#| label: model-comp
+#| tbl-cap: Model comparison results for the three outcomes
+#| apa-note: Base Model - Baseline covariate Model. LRT Test - Likelihood Ratio Test. $^a$The model violated the assumption of normally distributed random intercepts, but neither log-transformation nor exclusions could restore normality. $^b$Two observations with extreme residuals were excluded to preserve the assumptions of normally distributed residuals and/or random intercepts.
+#| output: asis
+
+# create table object
+model_comp_table <- matrix(ncol = 2, nrow = 0) %>% # initiate table structure
+  rbind(c("Closeness$^a$", paste0("$N_{observations} = ", nobs(closeness_lmm), "$; $N_{participants} = ", closeness_lmm@Gp[2], "$"))) %>% 
+  rbind(c("  Base Model", "Closeness \\textasciitilde Baseline + (1|Participant)")) %>%
+  rbind(c("  Full Model", "Closeness \\textasciitilde Baseline + Attendance * Stimulus * Time + (1|Participant)")) %>%
+  rbind(c("  LRT Test", model_comp(closeness_cov, closeness_lmm))) %>%
+  rbind(c("", "")) %>%
+  rbind(c("Empathy$^b$", paste0("$N_{observations} = ", nobs(empathy_lmm), "$; $N_{participants} = ", empathy_lmm@Gp[2], "$"))) %>%
+  rbind(c("  Base Model", "Empathy \\textasciitilde Baseline + (1|Participant)")) %>%
+  rbind(c("  Full Model", "Empathy \\textasciitilde Baseline + Attendance * Stimulus * Time + (1|Participant)")) %>%
+  rbind(c("  LRT Test", model_comp(empathy_cov, empathy_lmm))) %>%
+  rbind(c("", "")) %>%
+  rbind(c("Awareness$^b$", paste0("$N_{observations} = ", nobs(awareness_lmm), "$; $N_{participants} = ", awareness_lmm@Gp[2], "$"))) %>%
+  rbind(c("  Base Model", "Awareness \\textasciitilde Openness + Baseline + (1|Participant)")) %>%
+  rbind(c("  Full Model", "Awareness \\textasciitilde Openness + Baseline + Attendance * Stimulus * Time + (1|Participant)")) %>%
+  rbind(c("  LRT Test", model_comp(awareness_cov, awareness_lmm)))
+  
+# set colnames
+colnames(model_comp_table) <- c("Model/Test", "Formula/Statistic")
+  
+# print as apa-formatted table
+apa_table(
+  model_comp_table,
+  # caption = "Model comparison results for the three outcomes.",
+  align = c("l", "l"),
+  # note = 'Base Model - Baseline covariate Model. LRT Test - Likelihood Ratio Test. $^a$The model violated the assumption of normally distributed random intercepts, but neither log-transformation nor exclusions could restore normality. $^b$Two observations with extreme residuals were excluded to preserve the assumptions of normally distributed residuals and/or random intercepts.',
+  escape = FALSE
+)
+```
