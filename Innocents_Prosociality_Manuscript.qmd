@@ -857,9 +857,18 @@ Opening paragraph: takeaways from the subjective experience paragraph? + details
 
 We evaluated the effects of the event conditions on *awareness* of wrongful imprisonment, *empathy* with the wrongfully imprisoned Anna Vasquez, and *closeness* with Anna Vasquez (Hypotheses 1a, 2a, and 3a). 
 
+```{r}
+#| label: outcome-descriptives
+#| include: false
+
+outcomes <- combined_long %>%
+  select(p_id, study, attendance, order, timepoint, ios_anna, ios_target, anna_empathic_concern, target_empathic_concern, problem_awareness) %>%
+  pivot_wider(id_cols = c(p_id, study, attendance, order), names_from = timepoint, values_from = c(ios_anna, ios_target, anna_empathic_concern, target_empathic_concern, problem_awareness))
+```
+
 ```{r} 
 #| label: outcome-lmms
-#| include: FALSE
+#| include: false
 
 #### Impute means for baseline covariates ###
 study1_2long <- study1_2long %>%
@@ -977,7 +986,7 @@ awareness_cov <- lmer(problem_awareness_z ~ demo_openness_z + base_problem_aware
 
 ```{r} 
 #| label: decompose-interaction
-#| include: FALSE
+#| include: false
 
 # For closeness and empathy, order (= medium*time) was significant, indicating a carryover effect. 
 # to decompose the interaction, test increases from baseline to intermission and intermission to end separated by the two orders, to asses individual effects of the two media:
@@ -1043,7 +1052,8 @@ innocents_posthoctest <- study1_3long %>%
 #| fig-height: 2.5
 #| echo: false
 
-# TODO Figure out how to add sample size.
+# TODO add sample size on x-axis
+# TODO add significance stars for post-hoc tests
 
 fig_awareness_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "problem_awareness", ylab = "Problem Awareness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
 
@@ -1060,12 +1070,38 @@ ggpubr::ggarrange(
         )
 ```
 
-Audiences already had a high problem awareness before the event `r print_descr(outcomes$problem_awareness_Baseline)`, which increased slightly at intermission `r print_descr(outcomes$problem_awareness_Intermission)`, and slightly further at the end of the event `r print_descr(outcomes$problem_awareness_End)` (see @fig-awareness). Openness to experience was moderately associated with higher problem awareness, `r apa_print(cor.test(study1_3long$problem_awareness, study1_3long$demo_openness, method = "spearman"))$full_result` and was therefore included as a covariate in the LMM, resulting in the formula $Awareness \sim Openness + Baseline + Attendance * Stimulus * Time + (1|Participant)$. For all three outcomes (awareness, empathy, and closeness), the baseline significantly predicted the outcome, but the data were significantly more likely under the full model including the event conditions, compared to a model with just the covariates and the random intercept (see @apx-modelcomps). 
+Openness to experience was moderately associated with higher awareness, `r apa_print(cor.test(study1_3long$problem_awareness, study1_3long$demo_openness, method = "spearman"))$full_result` and was therefore included as a covariate in the LMM, resulting in the formula $Awareness \sim Openness + Baseline + Attendance * Stimulus * Time + (1|Participant)$. For all three outcomes (awareness, empathy, and closeness), the baseline significantly predicted the outcome, but the data were significantly more likely under the full model including the event conditions, compared to a model with just the covariates and the random intercept (for the full model details and model comparisons see @apx-modelcomps). 
 
-The main effect and interactions involving the stimulus were not significant, indicating no difference between performance and film. Thus, the data did not support Hypothesis 3. The only significant fixed effect was a small main effect of time, `r eval_fixed(awareness_lmm, "timepointEndvsInter")`, with higher problem awareness at the end of the event compared to intermission, regardless of stimulus and attendance mode. An additional post-hoc test revealed that the increase from baseline to intermission was also small but significant, `r apa_print(pa_1sthalf)$full_result`, $d = `r printnum(pa_1sthalf_d$estimate)`$.
+The main effect and interactions involving the stimulus were not significant, indicating no difference in problem awareness between participants who had seen the performance compared to the film. Thus, the data did not support Hypothesis 1a. The only significant fixed effect was a small main effect of time, `r eval_fixed(awareness_lmm, "timepointEndvsInter")`, with participants reporting higher problem awareness at the end of the event `r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_End)` compared to intermission `r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_Intermission)`, regardless of stimulus and attendance mode. An additional post-hoc test revealed that the increase from baseline `r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_Baseline)` to intermission was also small but significant, `r apa_print(pa_1sthalf)$full_result`, $d = `r printnum(pa_1sthalf_d$estimate)`$ (see @fig-awareness). 
 
 #### Empathy 
 
+Empathic concern for Anna Vasquez did not have any correlations with the control variables that were at least moderately sized. Therefore, no further covariates were included in the LMM $Empathy \sim Baseline + Attendance * Stimulus * Time + (1|Participant)$. The main effect and interactions involving attendance were not significant, indicating no difference in empathy between in-person and livestream audiences. Thus, the data did not support Hypothesis 2a. Time had a moderate effect on empathy, `r eval_fixed(empathy_lmm, "timepointEndvsInter")`, with higher empathy ratings at the end of the event `r print_descr(outcomes[outcomes$study=="Study 1", ]$anna_empathic_concern_End)` compared to intermission `r print_descr(outcomes[outcomes$study=="Study 1", ]$anna_empathic_concern_Intermission)`. The main effect of time interacted moderately with medium, `r eval_fixed(empathy_lmm, "mediumPerfvsFilm:timepointEndvsInter")`. Decomposing the interaction revealed that compared to the empathy ratings at baseline `r print_descr(outcomes[outcomes$study=="Study 1", ]$anna_empathic_concern_Baseline)`, seeing the film in the first half of the event afforded a small increase in empathy `r print_descr(subset(outcomes, study=="Study 1" & order == "Film-Perf")$anna_empathic_concern_Intermission)`, `r apa_print(ec_1sthalf_film)$full_result`, $d = `r printnum(ec_1sthalf_film_d$estimate)`$. In contrast, seeing the performance in the first half did not lead to a significant change in empathy `r print_descr(subset(outcomes, study=="Study 1" & order == "Perf-Film")$anna_empathic_concern_Intermission)`, `r apa_print(ec_1sthalf_perf)$full_result`, $d = `r printnum(ec_1sthalf_perf_d$estimate)`$. In the second half of the event, seeing the performance after the film afforded a small increase in empathy `r print_descr(subset(outcomes, study=="Study 1" & order == "Film-Perf")$anna_empathic_concern_End)`, `r apa_print(ec_2ndhalf_perf)$full_result`, $d = `r printnum(ec_2ndhalf_perf_d$estimate)`$, compared to a moderate increase when the seeing film after the performance `r print_descr(subset(outcomes, study=="Study 1" & order == "Perf-Film")$anna_empathic_concern_End)`, `r apa_print(ec_2ndhalf_film)$full_result`, $d = `r printnum(ec_2ndhalf_film_d$estimate)`$ (see @fig-empathy). 
+
+```{r}
+#| label: fig-empathy
+#| fig-cap: Empathic Concern Throughout the Event
+#| apa-note: Mean and CI of empathy by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Empathy was rated on a scale ranging from 1 (not at all) to 7 (extremely). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
+#| fig-height: 2.5
+#| echo: false
+
+# TODO add sample size on x-axis
+# TODO add significance stars for post-hoc tests
+
+fig_empathy_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "anna_empathic_concern", ylab = "Empathic Concern", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
+
+fig_empathy_study2 <- plot_meanSE(df = subset(combined_long, study == "Study 2"), dv = "anna_empathic_concern", ylab = "Empathic Concern", xlab = "") + facet_wrap(vars(facet), scales = "free") 
+
+ggpubr::ggarrange(
+        fig_empathy_study1,
+        fig_empathy_study2 + theme(axis.title.y = element_blank()),
+        nrow = 1, 
+        ncol = 2,
+        widths = c(2.2, 1),
+        legend = "bottom",
+        common.legend = TRUE
+        )
+```
 
 ```{r}
 #| label: fig-closeness-plot
