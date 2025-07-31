@@ -483,5 +483,7 @@ annotation_custom2 <-
 print_descr <- function (var, suffix = NULL) {
   my_mean <- round(mean(var, na.rm = TRUE), digits = 2)
   my_sd <- round(sd(var, na.rm = TRUE), digits = 2)
-  my_string <- cat("($M = ", my_mean, "$, $SD = ", my_sd, "$", suffix, ")", sep = "")
+  my_string <- paste0("($M = ", my_mean, "$, $SD = ", my_sd, "$", suffix, ")")
+  
+  return(my_string)
 }
