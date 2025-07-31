@@ -96,7 +96,7 @@ rm(list=ls())
 
 # load/install required packages
 require(pacman)
-p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'ggnewscale', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'effsize', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', 'tinytable')
+p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'ggnewscale', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'effsize', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', 'tinytable', 'waffle')
 
 # set preferences in case of command conflicts between loaded packages
 conflicts_prefer(dplyr::select, .quiet = TRUE)
@@ -1072,7 +1072,7 @@ Empathic concern for Anna Vasquez did not have any correlations with the control
 #| label: fig-empathy
 #| fig-cap: Empathic Concern Throughout the Event
 #| apa-note: Mean and CI of empathy by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Empathy was rated on a scale ranging from 1 (not at all) to 7 (extremely). Significance levels refer to one-sided pairwise t-tests. $p* < .05$, $** p < .01$, $*** p < .001$, n.s. = not significant.
-#| fig-height: 3.5
+#| out-width: 100%
 #| echo: false
 #| warning: false
 
@@ -1132,7 +1132,7 @@ study1_intent <- study1_2long %>%
 
 # build model after exclusions
 intention_outcomes <- lm(behavioural_intention_z ~ trait_empathic_concern_z + motivation_socialjustice_dich + ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study1_intent[-c(74, 76), ])
-check_assumptions(intention_outcomes, "behavioural_intention_z", study1_intent[-c(74, 76), ]) # shapiro-wilk is still significant, but Q-Q plot looks much better
+# check_assumptions(intention_outcomes, "behavioural_intention_z", study1_intent[-c(74, 76), ]) # shapiro-wilk is still significant, but Q-Q plot looks much better
   
 # summary(intention_outcomes)
 
@@ -1142,7 +1142,59 @@ intention_outcomes_dropempathy <- lm(behavioural_intention_z ~ trait_empathic_co
 empathy_f2 <- (summary(intention_outcomes)$r.squared - summary(intention_outcomes_dropempathy)$r.squared) / (1 - summary(intention_outcomes)$r.squared)
 ```
 
-After establishing that the event increased audiences' awareness, empathy, and closeness, we evaluated the influence of the three variables on audiences' intentions to support a charity that fights wrongful imprisonment (Hypotheses 1b, 2b, and 3b). Participants with higher trait empathic concern tended to have higher charitable intentions at the end of the event `r apa_print(cor.test(study1_intent$trait_empathic_concern, study1_intent$behavioural_intention, method = "spearman"))$full_result`, as did participants who selected helping the social justice cause among their motivations to get a ticket for the event `r apa_print(cor.test(study1_intent$motivation_socialjustice, study1_intent$behavioural_intention, method = "spearman"))$full_result`. <!-- should prolific participants be excluded from the motivation data, since they didn't buy a ticket? -->
+After establishing that the event increased audiences' awareness, empathy, and closeness, we evaluated the influence of awareness, empathy, and closeness on the intention to support a charity that fights wrongful imprisonment at the end of the event (Hypotheses 1b, 2b, and 3b). Participants with higher trait empathic concern tended to have higher charitable intentions `r apa_print(cor.test(study1_intent$trait_empathic_concern, study1_intent$behavioural_intention, method = "spearman"))$full_result`, as did participants who selected helping the social justice cause among their motivations to get a ticket for the event `r apa_print(cor.test(study1_intent$motivation_socialjustice, study1_intent$behavioural_intention, method = "spearman"))$full_result`. <!-- should prolific participants be excluded from the motivation data, since they didn't buy a ticket? --> The variables were thus controlled for in the multiple linear regression $Intention \sim Trait Empathic Concern + Social Justice Motivation + Closeness + State Empathic Concern + Problem Awareness$ using just the data from the end of the event. State empathic concern was the only significant predictor of intention, with a moderate effect ($\beta = `r printnum(coef(summary(intention_outcomes))["anna_empathic_concern_z", "Estimate"])`$, $t (`r printnum(nobs(intention_outcomes) - summary(intention_outcomes)$fstatistic[2] - 1, digits = 0)`) = `r printnum(coef(summary(intention_outcomes))["anna_empathic_concern_z", "t value"])`$, $p < .001$, $f^2 = `r printnum(empathy_f2)`$) after controlling for differences in the covariates. Participants who felt more empathic concern had a stronger intention to perform charitable behaviour, supporting Hypothesis 2b. In contrast to the predictions of Hypotheses 1b and 3b, problem awareness and relationship closeness did not significantly predict intention (both $b < .1$, $p > .3$). The total explained variance in intention was $R_{adj}^2 = `r printnum(summary(intention_outcomes)$adj.r.squared)`$.
+
+```{r}
+#| label: tab-regression-intention
+#| echo: false
+
+# TODO add study 2 regression
+# TODO create ?markdown? table for study 1 & 2
+# After excluding two data points that violated the normality of the model residuals, the model included $N = `r nrow(intention_outcomes$model)`$ observations. 
+```
+
+At the end of the event, we assessed three charitable behaviours towards the charity *Innocence Canada*. Among the participants who completed the event, `r sum(study1_df$behaviour_dich, na.rm = T)` (`r printnum(sum(study1_df$behaviour_dich, na.rm = T)/sum(!is.na(study1_df$behaviour_dich))*100)`%) performed at least one behaviour: `r sum(study1_df$flyer, na.rm = T)` participants took their flyer, `r sum(study1_df$mailing, na.rm = T)` signed up to their mailing list, and `r sum(study1_df$post_donation, na.rm = T)` made a donation, raising a total of CAD `r sum(study1_df$donation_amount, na.rm = T)` (see @fig-waffle-plot). TODO test difference between attendance modes and days
+
+```{r}
+#| label: fig-waffle-behaviour
+#| fig-cap: Charitable Behaviour Counts
+#| apa-note: Split for in-person and livestream audiences of study 1, and film and performance audiences of study 2 (from left to right). Note that participants in study 1 who did not complete the event were excluded from this analysis. For mailing, 'not applicable' refers to participants who indicated that they were already signed up to the mailing list of the charity. For donation, 'not applicable' refers to participants who did not participate in the follow-up survey asking about donation behaviour.
+#| out-width: 100%
+#| echo: false
+
+behaviour_df <- combined_long %>%
+  filter(study == "Study 2" | completed == TRUE) %>% # for study 1, exclude drop-outs
+  filter(timepoint == "End") %>% # only use data at end
+  select(p_id, study, attendance, medium, flyer, mailing, donation) %>%
+  # new faceting: Study 1 In-person vs Livestream; Study 2 Film vs Performance
+  mutate(facet = ifelse(study == "Study 1", paste(study, attendance),
+                        paste(study, medium)),
+         facet = factor(facet, levels = c("Study 1 In-person", "Study 1 Livestream", "Study 2 Film", "Study 2 Performance"))) %>%
+  pivot_longer(cols = c(flyer, mailing, donation), 
+               names_to = "Behaviour",
+               values_to = "Response") %>%
+  mutate(Behaviour = factor(Behaviour, levels = c("flyer", "mailing", "donation"), labels = c("Flyer", "Mailing", "Donation")),
+         Response = replace(Response, is.na(Response), -9),
+         Response = factor(Response, levels = c(1, 0, -9), labels = c("Yes", "No", "Not applicable"))) %>%
+  group_by(facet, Behaviour, Response) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  ungroup() 
+
+ggplot(data = behaviour_df,
+       aes(fill = Response, values = Count)) +
+  geom_waffle(color = "black",
+              size = 0.5,
+              n_rows = 3) +
+  scale_fill_manual(values = c("#002060", "#BEBEBE", "white")) +
+  facet_grid(vars(Behaviour), vars(facet), scales = "free") +
+  theme_bw() +
+  theme(legend.position = "top",
+        panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank())
+```
+
+Finally, to address Hypothesis 4, we tested the influence of participants' intentions on their actual behaviour in support of a related charity. 
 
 ```{r}
 #| label: regression-behaviour-intention
