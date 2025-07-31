@@ -780,6 +780,8 @@ Leading up to the event, all ticket holders were invited to sign up for particip
 
 Study 1 consisted of three surveys: A pre-survey before the event, a survey at intermission evaluating the stimulus presented in the first half of the event, and a survey at the end, evaluating the second half of the event. In addition, person-level covariates were assessed either in the pre-survey or in the survey at the end. After obtaining informed consent, the pre-survey assessed a baseline of the behavioural predictors interpersonal closeness with a wrongfully imprisoned person, state empathy for their story, problem awareness of wrongful imprisonment, and intentions to support organizations fighting wrongful imprisonment. Moreover, the pre-survey included the other NAM-TPB variables and an affect measure. Participants filled out the pre-survey either in the days leading up to the event, or in the hour right before the event. Closeness with the other audience members and affect were always assessed immediately before the event, because they are specific to the time and context of the event. Participants then saw the film or the performance in the first half of the event, and, after a 30-minute intermission, the other stimulus. After both the film and the performance, we assessed participants' affect, experience of the event, and again measured their closeness, empathy, awareness, and intentions. The end survey additionally included the remaining NAM-TPB variables, and some questions that were used to answer other research questions not analysed here. At the end of the event, we observed actual behaviour in support of *Innocence Canada*, an organization that advocates for innocent prisoners in Canada. Study 1 was approved by the McMaster Research Ethics Board (MREB#1975).
 
+<!-- TODO add design figure --> 
+
 The events took place in McMaster University's Large Interactive Virtual Environment laboratory (LIVELab, <https://livelab.mcmaster.ca/>), a concert venue equipped for psychological research, and were livestreamed via YouTube. Livestream participants opened a custom website on their personal computers which presented the surveys and the event stream. To create a controlled experience, the website prohibited access to stream controls (like pausing the stream) and only displayed the video stream, not any additional YouTube features like the chat. Livestream participants were instructed to sit in a quiet environment and use headphones for the best experience, but `r printnum(nrow(subset(study1_df, speaker == 3)))` participants self-reported that they still used the built-in speakers of their machine. Nonetheless, the sound quality was rated as very good ($M = `r printnum(mean(study1_df$sound_quality, na.rm = TRUE), digits = 2)`$ on a 7-point scale), as was the video quality ($M =`r printnum(mean(study1_df$video_quality, na.rm = TRUE), digits = 2)`$), the video fluency ($M = `r printnum(mean(study1_df$video_fluency, na.rm = TRUE), digits = 2)`$), and the camera framing ($M =`r printnum(mean(study1_df$camera_frame, na.rm = TRUE), digits = 2)`$). In-person participants filled out the surveys on LIVELab's tablets or on paper. Participants who signed up in advance were given a link to fill out the pre-survey on their own machines. All surveys, and the presentation of the stream for livestream participants, were coded in jsPsych [@leeuw2023] and hosted through JATOS [@lange2015] on our lab server. Print versions and codebooks of the survey are available at <https://doi.org/10.5281/zenodo.15282949>. Note that in-person participants were equipped with mobile eye-tracking glasses and smartwatches for physiological measurements that were analysed for other research questions. For the same reason, livestream participants were recorded via their webcam. Both in-person and livestream participants had to undergo brief calibrations before and after the event and at intermission. For the full technical details of the event, see @apx-implementation.
 
 ### Stimuli
@@ -855,7 +857,7 @@ Opening paragraph: takeaways from the subjective experience paragraph? + details
 
 ### Effect of Event Conditions
 
-We evaluated the effects of the event conditions on *awareness* of wrongful imprisonment, *empathy* with the wrongfully imprisoned Anna Vasquez, and *closeness* with Anna Vasquez (Hypotheses 1a, 2a, and 3a). 
+We evaluated the effects of the event conditions on *awareness* of wrongful imprisonment, *empathy* with the wrongfully imprisoned Anna Vasquez, and *closeness* with Anna Vasquez (Hypotheses 1a, 2a, and 3a), using LMMs. 
 
 ```{r}
 #| label: outcome-descriptives
@@ -1045,34 +1047,22 @@ innocents_posthoctest <- study1_3long %>%
 
 #### Awareness
 
+Openness to experience was moderately associated with higher awareness, `r apa_print(cor.test(study1_3long$problem_awareness, study1_3long$demo_openness, method = "spearman"))$full_result` and was therefore included as a covariate in the LMM, resulting in the formula $Awareness \sim Openness + Baseline + Attendance * Stimulus * Time + (1|Participant)$. For all three outcomes (awareness, empathy, and closeness), the baseline significantly predicted the outcome, but the data were significantly more likely under the full model including the event conditions, compared to a model with just the covariates and the random intercept (for the full model details and model comparisons see @apx-modelcomps). 
+
+The main effect and interactions involving the stimulus were not significant, indicating no difference in problem awareness between participants who had seen the performance compared to the film. Thus, the data did not support Hypothesis 1a. The only significant fixed effect was a small main effect of time, `r eval_fixed(awareness_lmm, "timepointEndvsInter")`, with participants reporting higher problem awareness at the end of the event `r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_End)` compared to intermission `r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_Intermission)`, regardless of stimulus and attendance mode. An additional post-hoc test revealed that the increase from baseline `r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_Baseline)` to intermission was also small but significant, `r apa_print(pa_1sthalf)$full_result`, $d = `r printnum(pa_1sthalf_d$estimate)`$ (see @fig-awareness). 
+
 ```{r}
 #| label: fig-awareness
 #| fig-cap: Problem Awareness Throughout the Event
-#| apa-note: Mean and CI of awareness by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Awareness was rated on a scale ranging from 1 (strongly disagree) to 7 (strongly agree). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
-#| fig-height: 3.5
+#| apa-note: Mean and CI of awareness by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Awareness was rated on a scale ranging from 1 (strongly disagree) to 7 (strongly agree). Significance levels refer to one-sided pairwise t-tests. $p* < .05$, $** p < .01$, $*** p < .001$, n.s. = not significant.
 #| echo: false
+#| warning: false
 
 # TODO add sample size on x-axis
 # TODO add significance stars for post-hoc tests
 
-fig_awareness_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "jitter_awareness", ylab = "Problem Awareness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
-
-fig_awareness_study2 <- plot_meanSE(df = subset(combined_long, study == "Study 2"), dv = "jitter_awareness", ylab = "Problem Awareness", xlab = "") + facet_wrap(vars(facet), scales = "free") 
-
-ggpubr::ggarrange(
-        fig_awareness_study1,
-        fig_awareness_study2 + theme(axis.title.y = element_blank()),
-        nrow = 1, 
-        ncol = 2,
-        widths = c(2.2, 1),
-        legend = "bottom",
-        common.legend = TRUE
-        )
+plot_meanSE(df = combined_long, dv = "jitter_awareness", ylab = "Problem Awareness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
 ```
-
-Openness to experience was moderately associated with higher awareness, `r apa_print(cor.test(study1_3long$problem_awareness, study1_3long$demo_openness, method = "spearman"))$full_result` and was therefore included as a covariate in the LMM, resulting in the formula $Awareness \sim Openness + Baseline + Attendance * Stimulus * Time + (1|Participant)$. For all three outcomes (awareness, empathy, and closeness), the baseline significantly predicted the outcome, but the data were significantly more likely under the full model including the event conditions, compared to a model with just the covariates and the random intercept (for the full model details and model comparisons see @apx-modelcomps). 
-
-The main effect and interactions involving the stimulus were not significant, indicating no difference in problem awareness between participants who had seen the performance compared to the film. Thus, the data did not support Hypothesis 1a. The only significant fixed effect was a small main effect of time, `r eval_fixed(awareness_lmm, "timepointEndvsInter")`, with participants reporting higher problem awareness at the end of the event `r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_End)` compared to intermission `r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_Intermission)`, regardless of stimulus and attendance mode. An additional post-hoc test revealed that the increase from baseline `r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_Baseline)` to intermission was also small but significant, `r apa_print(pa_1sthalf)$full_result`, $d = `r printnum(pa_1sthalf_d$estimate)`$ (see @fig-awareness). 
 
 #### Empathy 
 
@@ -1081,26 +1071,15 @@ Empathic concern for Anna Vasquez did not have any correlations with the control
 ```{r}
 #| label: fig-empathy
 #| fig-cap: Empathic Concern Throughout the Event
-#| apa-note: Mean and CI of empathy by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Empathy was rated on a scale ranging from 1 (not at all) to 7 (extremely). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
-#| fig-height: 2.5
+#| apa-note: Mean and CI of empathy by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Empathy was rated on a scale ranging from 1 (not at all) to 7 (extremely). Significance levels refer to one-sided pairwise t-tests. $p* < .05$, $** p < .01$, $*** p < .001$, n.s. = not significant.
+#| fig-height: 3.5
 #| echo: false
+#| warning: false
 
 # TODO add sample size on x-axis
 # TODO add significance stars for post-hoc tests
 
-fig_empathy_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "jitter_anna_empathy", ylab = "Empathic Concern", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
-
-fig_empathy_study2 <- plot_meanSE(df = subset(combined_long, study == "Study 2"), dv = "jitter_anna_empathy", ylab = "Empathic Concern", xlab = "") + facet_wrap(vars(facet), scales = "free") 
-
-ggpubr::ggarrange(
-        fig_empathy_study1,
-        fig_empathy_study2 + theme(axis.title.y = element_blank()),
-        nrow = 1, 
-        ncol = 2,
-        widths = c(2.2, 1),
-        legend = "bottom",
-        common.legend = TRUE
-        )
+plot_meanSE(df = combined_long, dv = "jitter_anna_empathy", ylab = "Empathic Concern", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
 ```
 
 #### Closeness
@@ -1109,26 +1088,16 @@ Relationship closeness with Anna Vasquez did not have any sizable correlations w
 
 ```{r}
 #| label: fig-closeness
-#| fig-cap: Relationship closeness Throughout the Event
-#| apa-note: Mean and CI of closeness by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap). Significance levels refer to one-sided pairwise t-tests. &ast;$p < .05$, &ast;&ast;$p < .01$, &ast;&ast;&ast;$p < .001$, n.s. = not significant.
-#| fig-height: 2.5
+#| fig-cap: Relationship Closeness Throughout the Event
+#| apa-note: Mean and CI of closeness by stimulus (x-axis), split for the in-person (left) and livestream (middle) audience of study 1, and the stream audience of study 2 (right). Closeness was rated on a visual analog scale ranging from 1 (0% overlap) to 7 (90% overlap). Significance levels refer to one-sided pairwise t-tests. $p* < .05$, $** p < .01$, $*** p < .001$, n.s. = not significant.
+#| fig-height: 3.5
 #| echo: false
+#| warning: false
 
 # TODO add sample size on x-axis
 # TODO add significance stars for post-hoc tests
 
-fig_closeness_study1 <- plot_meanSE(df = subset(combined_long, study == "Study 1"), dv = "jitter_ios_anna", ylab = "Relationship Closeness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
-
-fig_closeness_study2 <- plot_meanSE(df = subset(combined_long, study == "Study 2"), dv = "jitter_ios_anna", ylab = "Relationship Closeness", xlab = "") + facet_wrap(vars(facet), scales = "free") 
-ggpubr::ggarrange(
-        fig_closeness_study1,
-        fig_closeness_study2 + theme(axis.title.y = element_blank()),
-        nrow = 1, 
-        ncol = 2,
-        widths = c(2.2, 1),
-        legend = "bottom",
-        common.legend = TRUE
-        )
+plot_meanSE(df = combined_long, dv = "jitter_ios_anna", ylab = "Relationship Closeness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
 ```
 
 
