@@ -716,7 +716,7 @@ Studies on prosocial and pro-environmental behaviour [e.g., @degroot2009; @savar
 
 Beyond the moral motive, altruistic motives can promote the support of social justice causes. According to the empathy-altruism hypothesis, empathically adopting the perspective of a person in need creates an altruistic motivation to reduce their suffering. For example, empathizing with the experience of an innocent prisoner may give rise to a sense of concern about their well-being, which translates into a motivation to help to improve the well-being of the innocent prisoner, regardless of the behavioural consequences for oneself [@batson1987; @batson2011]. There has been a long debate on whether helping can be purely altruistic, in that the actor is only acting in the interest of the person receiving the help, or whether the actor always has an egoistic interest to reduce their own distress arising from witnessing the other person suffering [e.g., @cialdini1997; for a review, see @batson2011]. Both empathic concern and personal distress, however, arise from empathic perspective-taking. <!-- TODO add that empathizing is effortful, therefore motivate audiences to empathize (rather than improve their ability to empathize; Weisz & Zaki, 2017). --> Hence, social justice advocacy can mobilize supportive behaviour by conveying the experiences and point of view of those affected by the social justice issue, thereby facilitating empathic responses from the audience.
 
-Finally, social relationships play an important role in supporting social justice causes. A body of literature reports that perceived similarity and familiarity with another person strengthen the tendency to help them [@burger2004; @batson1981; @batson1995; @sole1975]. One possible explanation is that if one feels closer to a person in need, it is easier to empathize with their need, and one cares more for their well-being, thus facilitating the empathically motivated altruism described above [@batson1981; @batson1995; @sturmer2009]. In another line of argumentation, if one feels closer to a person in need, one values their social approval more and therefore might help them in hopes of getting their approval, or avoiding the risk of social punishment for not helping them. Similarly, a close relationship with those who observe the act of helping may also create a social pressure to help, given that the observers approve of the helping [@bekkers2011]. Therefore, social justice advocacy can mobilize supportive behaviour by tightening the social bonds between audiences and those affected by the social justice issue, which should increase the tendency to help.
+Finally, social relationships play an important role in supporting social justice causes. A body of literature reports that perceived similarity and familiarity with another person strengthen the tendency to help them [@burger2004; @batson1981; @batson1995; @sole1975]. One possible explanation is that if one feels closer to a person in need, it is easier to empathize with their need, and one cares more for their well-being, thus facilitating the empathically motivated altruism described above [@batson1981; @batson1995; @sturmer2009]. In another line of argumentation, if one feels closer to a person in need, one values their social approval more and therefore might help them in hopes of getting their approval, or avoiding the risk of social punishment for not helping them [@bekkers2011]. Similarly, a close relationship with those who observe the act of helping may also create a social pressure to help, given that the observers approve of the helping [@bekkers2011]. Therefore, social justice advocacy can mobilize supportive behaviour by tightening the social bonds between audiences and those affected by the social justice issue, which should increase the tendency to help.
 
 ## Advocacy through art
 
@@ -750,7 +750,7 @@ In two studies, we compare how the abstract percussion performance *The Innocent
 
 1.  Documentary films have been shown to influence audiences' cognitions about a topic by means of their explicit narrative, whereas abstract music has a more ambiguous meaning. Therefore, we expect the film to increase audiences' awareness of wrongful imprisonment more than the performance (1a). Based on the norm activation model, we expect problem awareness to predict charitable intentions (1b).
 2.  Based on previous findings of empathic responses to watching films and making music, we expect both the film and the performance to increase audiences' empathic concern for wrongfully imprisoned individuals. We further expect that the performance will show larger increases for in-person compared to livestream audiences (2a). We make no prediction whether the film or the performance have a stronger effect on empathy; rather, we are interested in showing whether the performance has an effect on empathy at all, and to use the film as a comparison to interpret the size of a potential effect. Based on the empathy-altruism hypothesis, we expect empathic concern to predict charitable intentions (2b).
-3.  Both watching films and listening to music together has been shown to strengthen social bonds among audience members, although it is unclear to which extent these bonds extend to the subjects of the film or music. Against this backdrop, we expect that the film and the performance will increase audiences' closeness with wrongfully imprisoned individuals. Again, we expect the effect of the performance to be larger for in-person compared to online audiences (3a). Based on accounts of social bonding and reciprocity, we expect closeness to predict charitable intentions (3b).
+3.  Both watching films and listening to music together has been shown to strengthen social bonds among audience members, although it is unclear to which extent these bonds extend to the subjects of the film or music. Against this backdrop, we expect that the film and the performance will increase audiences' closeness with wrongfully imprisoned individuals. Again, we expect the effect of the performance to be larger for in-person compared to online audiences (3a). Based on associations between social relationships and helping, we expect closeness to predict charitable intentions (3b).
 4.  Based on the theory of planned behaviour, we expect charitable intentions to predict behaviour in support of a charity that fights wrongful imprisonment.
 
 In Study 1, audiences in the concert hall and at home experienced an event featuring both a live performance of *The Innocents* and a screening of the documentary. Participants answered surveys before and after each presentation and we observed their charitable behaviour at the end of the event, as an initial test of the hypotheses. In Study 2, participants at home watched either the performance or the film, to replicate the findings of Study 1 in a larger sample and clarify ambiguities in the comparison between the two stimuli.
@@ -1100,38 +1100,13 @@ Relationship closeness with Anna Vasquez did not have any sizable correlations w
 plot_meanSE(df = combined_long, dv = "jitter_ios_anna", ylab = "Relationship Closeness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
 ```
 
-
-```{r}
-#| label: regression-behaviour-intention
-#| echo: false
-
-# filter dataframe (assigning the df object is required for computing the model r2)
-study1_behav <- study1_2long %>%
-  filter(timepoint == "End") %>% # only use variables at the end of the event
-  filter(completed == TRUE) %>% # only use participants who completed the event
-  filter(!is.na(sum_behaviour_inclNA_fact)) # remove NAs
-# if comparing nested models with anova(), also exclude NAs in other predictors:  & !is.na(ios_anna_z) & !is.na(empathic_concern_z) & !is.na(problem_awareness_z)
-
-# Step 1: behaviour ~ closeness + empathy + awareness
-sumbehav_step1 <- MASS::polr(sum_behaviour_fact ~ ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study1_behav, Hess = TRUE)
-
-# Step 2: behaviour ~ closeness + empathy + awareness + intention
-sumbehav_step2 <- MASS::polr(sum_behaviour_fact ~ ios_anna_z + anna_empathic_concern_z + problem_awareness_z + behavioural_intention_z, data = study1_behav, Hess = TRUE)
-
-# model comparison
-# anova(sumbehav_step1, sumbehav_step2) # data is more likely under model including intention
-
-# store values in an object 
-sumbehav_step1_OR <- get_OR_CI(sumbehav_step1)
-sumbehav_step2_OR <- get_OR_CI(sumbehav_step2)
-
-r2_nagelkerke(sumbehav_step1)
-r2_nagelkerke(sumbehav_step2)
-```
+### Charitable Behaviour
 
 ```{r}
 #| label: regression-intention-predictors
 #| echo: false
+
+rm(awareness_cov, awareness_lmm, closeness_cov, closeness_lmm, ec_1sthalf_film, ec_1sthalf_film_d, ec_1sthalf_perf, ec_1sthalf_perf_d, ec_2ndhalf_film, ec_2ndhalf_film_d, ec_2ndhalf_perf, ec_2ndhalf_perf_d, empathy_cov, empathy_lmm, innocents_posthoctest, ios_1sthalf_film, ios_1sthalf_film_d, ios_1sthalf_perf, ios_1sthalf_perf_d, ios_2ndhalf_film, ios_2ndhalf_film_d, ios_2ndhalf_perf, ios_2ndhalf_perf_d, outcomes, pa_1sthalf, pa_1sthalf_d)
 
 study1_intent <- study1_2long %>%
   filter(timepoint == "End" & !is.na(ios_anna_z) & !is.na(anna_empathic_concern_z) & !is.na(problem_awareness_z)) # only use end data
@@ -1167,9 +1142,45 @@ intention_outcomes_dropempathy <- lm(behavioural_intention_z ~ trait_empathic_co
 empathy_f2 <- (summary(intention_outcomes)$r.squared - summary(intention_outcomes_dropempathy)$r.squared) / (1 - summary(intention_outcomes)$r.squared)
 ```
 
+After establishing that the event increased audiences' awareness, empathy, and closeness, we evaluated the influence of the three variables on audiences' intentions to support a charity that fights wrongful imprisonment (Hypotheses 1b, 2b, and 3b). Participants with higher trait empathic concern tended to have higher charitable intentions at the end of the event `r apa_print(cor.test(study1_intent$trait_empathic_concern, study1_intent$behavioural_intention, method = "spearman"))$full_result`, as did participants who selected helping the social justice cause among their motivations to get a ticket for the event `r apa_print(cor.test(study1_intent$motivation_socialjustice, study1_intent$behavioural_intention, method = "spearman"))$full_result`. <!-- should prolific participants be excluded from the motivation data, since they didn't buy a ticket? -->
+
+```{r}
+#| label: regression-behaviour-intention
+#| echo: false
+
+# filter dataframe (assigning the df object is required for computing the model r2)
+study1_behav <- study1_2long %>%
+  filter(timepoint == "End") %>% # only use variables at the end of the event
+  filter(completed == TRUE) %>% # only use participants who completed the event
+  filter(!is.na(sum_behaviour_inclNA_fact)) # remove NAs
+# if comparing nested models with anova(), also exclude NAs in other predictors:  & !is.na(ios_anna_z) & !is.na(empathic_concern_z) & !is.na(problem_awareness_z)
+
+# Step 1: behaviour ~ closeness + empathy + awareness
+sumbehav_step1 <- MASS::polr(sum_behaviour_fact ~ ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study1_behav, Hess = TRUE)
+
+# Step 2: behaviour ~ closeness + empathy + awareness + intention
+sumbehav_step2 <- MASS::polr(sum_behaviour_fact ~ ios_anna_z + anna_empathic_concern_z + problem_awareness_z + behavioural_intention_z, data = study1_behav, Hess = TRUE)
+
+# model comparison
+# anova(sumbehav_step1, sumbehav_step2) # data is more likely under model including intention
+
+# store values in an object 
+sumbehav_step1_OR <- get_OR_CI(sumbehav_step1)
+sumbehav_step2_OR <- get_OR_CI(sumbehav_step2)
+
+r2_nagelkerke(sumbehav_step1)
+r2_nagelkerke(sumbehav_step2)
+```
+
+It is important to note that awareness did not significantly increase from baseline (print_descr) to intermission (print_descr) to the end of the event (print_descr). Did the event matter at all for participants' charitable behaviour, or was their behaviour already determined by their intentions prior to attending the event? TODO We compared baseline intention vs. end intention...
+
 ## Discussion
 
 2 paragraphs
+
+Unexpectedly, we found that the film led to stronger increases in empathy and closeness with a wrongfully imprisoned person, compared to the performance. However, this difference between the stimuli might be confounded due to the specific wrongfully imprisoned person towards whom empathy and closeness was assessed: The measures of empathy and closeness used here both require a reference person who is presented to the participants in a vignette, with the following items referring to that vignette (e.g., "How compassionate do you feel when thinking of...?"). In this study, a vignette of Anna Vasquez was presented as reference person, because her case as presented in the film lent itself well to using in the survey. What we did not anticipate was that participants are exposed to Anna Vasquez and become familiar with her during the film, in which she is one of the protagonists, but not during the performance, in which her name is only briefly mentioned once. Since familiarity is associated with empathy (CITE) and closeness (CITE), the higher ratings in these measures after seeing the film might be confounded with familiarity. 
+
+Given that empathy with Anna Vasquez predicted the intention to support a related charity, *Innocence Canada*, the film's advantage in increasing empathy raises the question whether the film is more successful at mobilizing supportive behaviour than the performance. However, the crossover design of study 1 does not allow us to compare the behavioural effects of the film and the performance. Study 2 aims to address the potential familiarity confound and to disambiguate the behavioural effects of the two stimuli, while replicating the findings from the live concert setting in a larger-scale online study.
 
 # Study 2
 
