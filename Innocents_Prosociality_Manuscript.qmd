@@ -845,9 +845,9 @@ All analyses were performed in R 4.5.0 [@R-base]. First, we screened for rushing
 
 To test the effects of the event on each of the potential drivers of prosociality (closeness, emphatic concern, and problem awareness), we fitted linear mixed models (LMMs) with *lmerTest* [@R-lmerTest]. Sum-to-Zero contrasts tested whether the outcomes were higher for in-person compared to livestream attendance, after watching the performance compared to after the film, and at the end of the event compared to at intermission. We added the baseline rating of the respective outcome as a covariate, estimating a fixed effect for the entire sample to account for measured variances in the outcome prior to the event. We also added random intercepts for each participant to account for unmeasured variances and capture intra-participant correlations due to the repeated measures design. The outcomes and baseline covariates were z-scored. Missing values for the baseline covariate were imputed with zero (the mean value after z-scoring). Control variables that had a sizable correlation with the outcome variables ($r \geq .30$) were included as additional covariates in the models. All models met the assumptions of normally distributed residuals and random intercepts, homogeneity of variances, and did not have multicollinearity issues, unless reported otherwise. The model fit was evaluated against a covariate model predicting the outcome from only the baseline and the random intercept using a Likelihood Ratio Test of the maximum likelihood (ML)-generated models. Main and interaction effects were evaluated using the t-statistic of the parameter estimates and Satterthwaite approximations for degrees of freedom of the restricted maximum likelihood (REML)-generated models, as recommended by @meteyard2020. Cohen's $d$ as effect size measure for the fixed effects was calculated using the equation by [@westfall2014; see @brysbaert2018], and interpreted according to the norms by @cohen1992. Significant interactions were decomposed using one-sided paired t-tests.
 
-To test the influence of closeness, empathic concern, and problem awareness on behavioural intention, we used multiple linear regression. Again, covariates that were sizably correlated with intention were included in the model. All predictors and the outcome were z-scored. Predictors were evaluated with t-test of their regression weights against zero.
+To test the influence of closeness, empathic concern, and problem awareness on behavioural intention, we fitted a multiple linear regression with the lm function in the *stats* package. Again, covariates that were sizably correlated with intention were included in the model. All predictors and the outcome were z-scored. Predictors were evaluated with t-test of their regression weights against zero.
 
-To test the influence of intention on observed behaviour, we used ordinal logistic regression to predict the number of behaviours participants performed. No control variables were sizably correlated with the outcome, and hence no further variables were added to the model. All predictors were z-scored. Predictors were interpreted as having a significant effect if the 95% confidence interval of the Odd's Ratio (calculated as $(Coefficient \pm 1.96*Standard Error)^2$) did not cross 1.
+To test the influence of intention on observed behaviour, we used ordinal logistic regression with the polr function in *MASS* [@R-MASS] to predict the number of behaviours participants performed. No control variables were sizably correlated with the outcome, and hence no further variables were added to the model. All predictors were z-scored. Predictors were interpreted as having a significant effect if the 95% confidence interval of the Odd's Ratio (calculated as $(Coefficient \pm 1.96*Standard Error)^2$) did not cross 1.
 
 Figures were created with *ggplot2* [@R-ggplot2], *ggpubr* [@R-ggpubr], *ggridges* [@R-ggridges], *ggsignif* [@R-ggsignif], *ggnewscale* [@R-ggnewscale], and *png* [@R-png]. Error bars represent 95% confidence intervals (CI) based on 1000 bootstrap resamples implemented in *Hmisc* [@R-Hmisc].
 
@@ -1153,9 +1153,35 @@ After establishing that the event increased audiences' awareness, empathy, and c
 # After excluding two data points that violated the normality of the model residuals, the model included $N = `r nrow(intention_outcomes$model)`$ observations. 
 ```
 
-At the end of the event, we assessed three charitable behaviours supporting the charity *Innocence Canada*. Among the participants who completed the event, `r sum(study1_df$behaviour_dich, na.rm = T)` (`r printnum(sum(study1_df$behaviour_dich, na.rm = T)/sum(!is.na(study1_df$behaviour_dich))*100)`%) performed at least one behaviour: `r sum(study1_df$flyer, na.rm = T)` participants took an *Innocence Canada* flyer, `r sum(study1_df$mailing, na.rm = T)` signed up to their mailing list, and `r sum(study1_df$post_donation, na.rm = T)` made a donation, raising a total of CAD `r sum(study1_df$donation_amount, na.rm = T)` (see @fig-waffle-plot). We calculated a sum score of behaviours for participants with applicable values (yes or no) on all three behaviours. On average, in-person participants demonstrated more behaviours (`r print_descr(subset(study1_df, attendance == "In-person")$sum_behaviour)`) than participants watching the livestream (`r print_descr(subset(study1_df, attendance == "Livestream")$sum_behaviour)`, `r apa_print(wilcox.test(sum_behaviour~attendance, data = study1_df))$full_result`)
+```{r}
+#| label: regression-behaviour-intention
+#| echo: false
 
-TODO test difference between attendance modes and days
+# TODO add baseintention regression
+
+# filter dataframe (assigning the df object is required for computing the model r2)
+study1_behav <- study1_2long %>%
+  filter(timepoint == "End") %>% # only use variables at the end of the event
+  filter(completed == TRUE) %>% # only use participants who completed the event
+  filter(!is.na(sum_behaviour)) # remove NAs
+# if comparing nested models with anova(), also exclude NAs in other predictors:  & !is.na(ios_anna_z) & !is.na(empathic_concern_z) & !is.na(problem_awareness_z)
+
+# behaviour ~ intention
+sumbehav_endintention <- MASS::polr(sum_behaviour_fact ~ behavioural_intention_z, data = study1_behav, Hess = TRUE)
+
+
+# model comparison
+# anova(sumbehav_step1, sumbehav_step2) # data is more likely under model including intention
+
+# store values in an object 
+sumbehav_endintention_OR <- get_OR_CI(sumbehav_endintention)
+# sumbehav_step2_OR <- get_OR_CI(sumbehav_step2)
+
+r2_nagelkerke(sumbehav_endintention)
+# r2_nagelkerke(sumbehav_step2)
+```
+
+At the end of the event, we assessed three charitable behaviours supporting the charity *Innocence Canada*. Among the participants who completed the event, `r sum(study1_df$behaviour_dich, na.rm = T)` (`r printnum(sum(study1_df$behaviour_dich, na.rm = T)/sum(!is.na(study1_df$behaviour_dich))*100)`%) performed at least one behaviour: `r sum(study1_df$flyer, na.rm = T)` participants took an *Innocence Canada* flyer, `r sum(study1_df$mailing, na.rm = T)` signed up to their mailing list, and `r sum(study1_df$post_donation, na.rm = T)` made a donation, raising a total of CAD `r sum(study1_df$donation_amount, na.rm = T)` (see @fig-waffle-plot). To test whether participants' charitable intentions were implemented in actual behaviour (Hypothesis 4), we calculated a sum score of behaviours for participants with applicable values (yes or no) on all three behaviours ($n = `r sum(!is.na(study1_df$sum_behaviour))`$). On average, in-person participants demonstrated more behaviours (`r print_descr(subset(study1_df, attendance == "In-person")$sum_behaviour)`) than participants watching the livestream (`r print_descr(subset(study1_df, attendance == "Livestream")$sum_behaviour)`, `r apa_print(wilcox.test(sum_behaviour~attendance, data = study1_df))$full_result`). The sum of behaviours did not differ between participants who saw the film first (`r print_descr(subset(study1_df, order == "Film first")$sum_behaviour)`) compared to those who saw the performance first (`r print_descr(subset(study1_df, order == "Perf first")$sum_behaviour)`, `r apa_print(wilcox.test(sum_behaviour~order, data = study1_df))$full_result`). Participants with higher intentions at the end of the event tended to demonstrate more behaviours (`r paste0("$OR = ", round(sumbehav_endintention_OR["behavioural_intention_z", "OR"], 2), "$, 95% CI [", round(sumbehav_endintention_OR["behavioural_intention_z", "CI_lower"], 2), ", ", round(sumbehav_endintention_OR["behavioural_intention_z", "CI_upper"], 2), "]")`), explaining a behavioural variance of $R_{Nagelkerke}^2 = `r printnum(r2_nagelkerke(sumbehav_endintention))`$. 
 
 ```{r}
 #| label: fig-waffle-behaviour
@@ -1194,36 +1220,6 @@ ggplot(data = behaviour_df,
         panel.grid = element_blank(),
         axis.text = element_blank(),
         axis.ticks = element_blank())
-```
-
-Finally, to address Hypothesis 4, we tested the influence of participants' intentions on their actual behaviour in support of a related charity. 
-
-```{r}
-#| label: regression-behaviour-intention
-#| echo: false
-
-# filter dataframe (assigning the df object is required for computing the model r2)
-study1_behav <- study1_2long %>%
-  filter(timepoint == "End") %>% # only use variables at the end of the event
-  filter(completed == TRUE) %>% # only use participants who completed the event
-  filter(!is.na(sum_behaviour_inclNA_fact)) # remove NAs
-# if comparing nested models with anova(), also exclude NAs in other predictors:  & !is.na(ios_anna_z) & !is.na(empathic_concern_z) & !is.na(problem_awareness_z)
-
-# Step 1: behaviour ~ closeness + empathy + awareness
-sumbehav_step1 <- MASS::polr(sum_behaviour_fact ~ ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study1_behav, Hess = TRUE)
-
-# Step 2: behaviour ~ closeness + empathy + awareness + intention
-sumbehav_step2 <- MASS::polr(sum_behaviour_fact ~ ios_anna_z + anna_empathic_concern_z + problem_awareness_z + behavioural_intention_z, data = study1_behav, Hess = TRUE)
-
-# model comparison
-# anova(sumbehav_step1, sumbehav_step2) # data is more likely under model including intention
-
-# store values in an object 
-sumbehav_step1_OR <- get_OR_CI(sumbehav_step1)
-sumbehav_step2_OR <- get_OR_CI(sumbehav_step2)
-
-r2_nagelkerke(sumbehav_step1)
-r2_nagelkerke(sumbehav_step2)
 ```
 
 It is important to note that awareness did not significantly increase from baseline (print_descr) to intermission (print_descr) to the end of the event (print_descr). Did the event matter at all for participants' charitable behaviour, or was their behaviour already determined by their intentions prior to attending the event? TODO We compared baseline intention vs. end intention...
