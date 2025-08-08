@@ -480,10 +480,10 @@ annotation_custom2 <-
   }
 
 # print mean and sd in text
-print_descr <- function (var, suffix = NULL) {
+print_descr <- function (var) {
   my_mean <- round(mean(var, na.rm = TRUE), digits = 2)
   my_sd <- round(sd(var, na.rm = TRUE), digits = 2)
-  my_string <- paste0("($M = ", my_mean, "$, $SD = ", my_sd, "$", suffix, ")")
+  my_string <- paste0("$M = ", my_mean, "$, $SD = ", my_sd, "$")
   
   return(my_string)
 }
