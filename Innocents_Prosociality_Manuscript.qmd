@@ -48,7 +48,7 @@ author-note:
     conflict-of-interest: The authors have no conflicts of interest to disclose.
     financial-support: "JLS was supported by a scholarship of the German Academic Exchange Service (DAAD)."
     gratitude: "The authors would like to thank Allen Otte, John Lane, and Wojciech Lorenc for their artistic contribution, Innocence Canada for the provision of insights and materials, the LIVELab and BEAT Lab team for their crucial support in facilitating the live event, and Laurel Trainor and John Iversen for thoughtful comments on the project."
-abstract: "TODO"
+abstract: "Fighting systemic social injustices, such as wrongful imprisonment, requires broad public support. A promising means to mobilize support may be artistic media, which have a wide reach. Some media advocacy has been empirically evaluated and has shown tangible effects on audiences’ attitudes and behaviour. However, previous studies differ vastly in the media, reception contexts, and psychological variables that are evaluated. This diversity requires experimental comparison to identify the necessary and facilitating ingredients for media to successfully mobilize support for social justice causes. Across two studies, we evaluated how a narrative documentary film and an abstract percussion performance advocate for wrongfully imprisoned persons. We assessed three self-reported affective and cognitive variables before and after seeing the film and the performance, as well as behaviour in support of a charity fighting wrongful imprisonment, among audience members in the concert hall (Study 1: N = 62) and at home (Study 1: N = 32; Study 2: N = 200). Audiences reported the largest increases in relationship closeness with a wrongfully imprisoned person, followed by empathic concern, with the smallest increases in problem awareness. The film had larger effects on closeness and empathy than the performance, corroborating previous research highlighting the relevance of narration for media advocacy. Empathic concern predicted intentions to support a related charity, and thus seems crucial to mobilizing support for social justice causes. There were no significant differences between audiences in the concert hall and at home, implying that the media’s mobilizing effects generalize across spatial and temporal contexts."
 keywords: [music, film, social justice, prosocial, empathy]
 impact-statement: ~
 floatsintext: true
@@ -82,8 +82,7 @@ format:
   apaquarto-docx: 
     toc: false
   apaquarto-pdf:
-    # Can be jou (journal), man (manuscript), stu (student), or doc (document)
-    documentmode: man
+    documentmode: man # Can be jou (journal), man (manuscript), stu (student), or doc (document)
     keep-tex: true
 ---
 
@@ -96,7 +95,7 @@ rm(list=ls())
 
 # load/install required packages
 require(pacman)
-p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'ggnewscale', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'effsize', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', 'tinytable', 'waffle')
+p_load('tidyverse', 'ggplot2', 'ggpubr', 'ggridges', 'ggsignif', 'ggnewscale', 'here', 'lmerTest', 'car', 'psych', 'performance', 'corrplot', 'sjPlot', 'papaja', 'stringdist', 'wordcloud', 'MASS', 'pwr', 'effsize', 'png', 'grid', 'ltm', 'conflicted', 'flextable', 'ftExtra', 'knitr', 'tinytable', 'waffle', 'webshot2')
 
 # set preferences in case of command conflicts between loaded packages
 conflicts_prefer(dplyr::select, .quiet = TRUE)
@@ -659,7 +658,8 @@ study2_long <- study2_df %>%
            timepoint == "End" & order == "Film first" ~ "Film",
            timepoint == "End" & order == "Perf first" ~ "Performance",
            TRUE ~ NA
-         ))
+         )) %>%
+  mutate(across(.cols = all_of(c("ios_anna", "anna_empathic_concern", "problem_awareness", "behavioural_intention", "anna_personal_distress", "ios_target", "target_empathic_concern")), .fns = my_z_score, .names = "{.col}_z")) # z-score variables
 
 rm(base_vars, post_vars)
 ```
@@ -853,7 +853,7 @@ Figures were created with *ggplot2* [@R-ggplot2], *ggpubr* [@R-ggpubr], *ggridge
 
 ## Results
 
-Opening paragraph: takeaways from the subjective experience paragraph? + details & figures in supplemental
+TODO Opening paragraph: takeaways from the subjective experience paragraph? + details & figures in supplemental
 
 ### Effect of Event Conditions
 
@@ -1060,6 +1060,7 @@ The main effect and interactions involving the stimulus were not significant, in
 
 # TODO add sample size on x-axis
 # TODO add significance stars for post-hoc tests
+# TODO fix the ratio
 
 plot_meanSE(df = combined_long, dv = "jitter_awareness", ylab = "Problem Awareness", xlab = "Stimulus") + facet_wrap(vars(facet), scales = "free")
 ```
@@ -1106,8 +1107,9 @@ plot_meanSE(df = combined_long, dv = "jitter_ios_anna", ylab = "Relationship Clo
 #| label: regression-intention-predictors
 #| echo: false
 
-rm(awareness_cov, awareness_lmm, closeness_cov, closeness_lmm, ec_1sthalf_film, ec_1sthalf_film_d, ec_1sthalf_perf, ec_1sthalf_perf_d, ec_2ndhalf_film, ec_2ndhalf_film_d, ec_2ndhalf_perf, ec_2ndhalf_perf_d, empathy_cov, empathy_lmm, innocents_posthoctest, ios_1sthalf_film, ios_1sthalf_film_d, ios_1sthalf_perf, ios_1sthalf_perf_d, ios_2ndhalf_film, ios_2ndhalf_film_d, ios_2ndhalf_perf, ios_2ndhalf_perf_d, outcomes, pa_1sthalf, pa_1sthalf_d)
+rm(ec_1sthalf_film, ec_1sthalf_film_d, ec_1sthalf_perf, ec_1sthalf_perf_d, ec_2ndhalf_film, ec_2ndhalf_film_d, ec_2ndhalf_perf, ec_2ndhalf_perf_d, innocents_posthoctest, ios_1sthalf_film, ios_1sthalf_film_d, ios_1sthalf_perf, ios_1sthalf_perf_d, ios_2ndhalf_film, ios_2ndhalf_film_d, ios_2ndhalf_perf, ios_2ndhalf_perf_d, outcomes, pa_1sthalf, pa_1sthalf_d)
 
+#### STUDY 1 ###
 study1_intent <- study1_2long %>%
   filter(timepoint == "End" & !is.na(ios_anna_z) & !is.na(anna_empathic_concern_z) & !is.na(problem_awareness_z)) # only use end data
 
@@ -1135,29 +1137,60 @@ intention_outcomes <- lm(behavioural_intention_z ~ trait_empathic_concern_z + mo
 # check_assumptions(intention_outcomes, "behavioural_intention_z", study1_intent[-c(74, 76), ]) # shapiro-wilk is still significant, but Q-Q plot looks much better
   
 # summary(intention_outcomes)
+intention_outcomes_table <- apa_print(intention_outcomes)$table
 
 # calculate the effect size of empathy, requires a model excluding empathy https://www.researchgate.net/post/Which-effect-size-estimate-should-I-use-for-a-linear-regression-with-a-continuous-dep-variable-dichotomous-indep-variable-and-covariates
 intention_outcomes_dropempathy <- lm(behavioural_intention_z ~ trait_empathic_concern_z + motivation_socialjustice_dich + ios_anna_z + problem_awareness_z, data = study1_intent[-c(71, 73), ])
 
 empathy_f2 <- (summary(intention_outcomes)$r.squared - summary(intention_outcomes_dropempathy)$r.squared) / (1 - summary(intention_outcomes)$r.squared)
+
+
+
+#### STUDY 2 ###
+study2_intent <- study2_long %>%
+  filter(timepoint == "End") # only use end data
+
+study2_intention_outcomes <- lm(behavioural_intention_z ~ ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study2_intent)
+# check_assumptions(study2_intention_outcomes, "behavioural_intention_z", study2_intent)
+study2_intention_target <- lm(behavioural_intention_z ~ ios_anna_z + ios_target_z + anna_empathic_concern_z + target_empathic_concern + problem_awareness_z, data = study2_intent)
+# check_assumptions(study2_intention_target) # empathy variables have heightened VIFs, but nothing problematic (all VIF < 5)
 ```
 
-After establishing that the event increased audiences' awareness, empathy, and closeness, we evaluated the influence of awareness, empathy, and closeness on the intention to support a charity that fights wrongful imprisonment at the end of the event (Hypotheses 1b, 2b, and 3b). Participants with higher trait empathic concern tended to have higher charitable intentions `r apa_print(cor.test(study1_intent$trait_empathic_concern, study1_intent$behavioural_intention, method = "spearman"))$full_result`, as did participants who selected helping the social justice cause among their motivations to get a ticket for the event `r apa_print(cor.test(study1_intent$motivation_socialjustice, study1_intent$behavioural_intention, method = "spearman"))$full_result`. <!-- should prolific participants be excluded from the motivation data, since they didn't buy a ticket? --> The variables were thus controlled for in the multiple linear regression $Intention \sim Trait Empathic Concern + Social Justice Motivation + Closeness + State Empathic Concern + Problem Awareness$ using just the data from the end of the event. State empathic concern significantly predicted intention with a moderate effect ($\beta = `r printnum(coef(summary(intention_outcomes))["anna_empathic_concern_z", "Estimate"])`$, $t (`r printnum(nobs(intention_outcomes) - summary(intention_outcomes)$fstatistic[2] - 1, digits = 0)`) = `r printnum(coef(summary(intention_outcomes))["anna_empathic_concern_z", "t value"])`$, $p < .001$, $f^2 = `r printnum(empathy_f2)`$) after controlling for differences in the covariates. In other words, participants who felt more empathic concern had a stronger intention to perform charitable behaviour, supporting Hypothesis 2b. In contrast to the predictions of Hypotheses 1b and 3b, problem awareness and relationship closeness did not significantly predict intention (both $b < .1$, $p > .3$). The total explained variance in intention was $R_{adj}^2 = `r printnum(summary(intention_outcomes)$adj.r.squared)`$.
+After establishing that the event increased audiences' awareness, empathy, and closeness, we evaluated the influence of these variables on the intention to support a charity that fights wrongful imprisonment (Hypotheses 1b, 2b, and 3b). Participants with higher trait empathic concern tended to have higher charitable intentions at the end of the event (`r apa_print(cor.test(study1_intent$trait_empathic_concern, study1_intent$behavioural_intention, method = "spearman"))$full_result`), as did participants who selected helping the social justice cause among their motivations to get a ticket for the event (`r apa_print(cor.test(study1_intent$motivation_socialjustice, study1_intent$behavioural_intention, method = "spearman"))$full_result`). <!-- should prolific participants be excluded from the motivation data, since they didn't buy a ticket? --> The variables were thus controlled for in the multiple linear regression $Intention \sim Trait Empathic Concern + Social Justice Motivation + Closeness + State Empathic Concern + Problem Awareness$ using just the data from the end of the event. State empathic concern significantly predicted intention with a moderate effect ($\beta = `r printnum(coef(summary(intention_outcomes))["anna_empathic_concern_z", "Estimate"])`$, $t (`r printnum(nobs(intention_outcomes) - summary(intention_outcomes)$fstatistic[2] - 1, digits = 0)`) = `r printnum(coef(summary(intention_outcomes))["anna_empathic_concern_z", "t value"])`$, $p < .001$, $f^2 = `r printnum(empathy_f2)`$) after controlling for differences in the covariates. In other words, participants who felt more empathic concern had a stronger intention to perform charitable behaviour, supporting Hypothesis 2b. In contrast to the predictions of Hypotheses 1b and 3b, problem awareness and relationship closeness did not significantly predict intention (both $b < .1$, $p > .3$). The total explained variance in intention was $R_{adj}^2 = `r printnum(summary(intention_outcomes)$adj.r.squared)`$.
 
 ```{r}
 #| label: tab-regression-intention
+#| apa_note: After excluding two data points that violated the normality of the model residuals, the model for study 1 included $N = `r nrow(intention_outcomes$model)`$ observations. 
 #| echo: false
 
-# TODO add study 2 regression
-# TODO create ?markdown? table for study 1 & 2
-# After excluding two data points that violated the normality of the model residuals, the model included $N = `r nrow(intention_outcomes$model)`$ observations. 
+# TODO manually copy this html table into the word doc or adjust styling inthe doc
+tab_model(intention_outcomes, study2_intention_outcomes, study2_intention_target, show.ci = FALSE, 
+          pred.labels = c("Intercept", "Trait Empathic Concern", "Social Justice Motivation", "Closeness (Anna)", "Empathic Concern (Anna)", "Problem Awareness", "Closeness (Acquaintance)", "Empathic Concern (Acquaintance)"), 
+          dv.labels = c("Study 1", "Study 2 (1. Step)", "Study 2 (2. Step)"))
+
+# Alternatively, use flextable BUT doesn't take math formulas, formatting might be a pain
+# apa_print(intention_outcomes)$table %>%
+#   select(term, estimate, p.value) %>%
+#   mutate(term = c("Intercept", "Trait Empathic Concern", "Social Justice Motivation", "Closeness (Anna)", "Empathic Concern (Anna)", "Problem Awareness")) %>%
+#   flextable() %>%
+#   flextable::add_header_row(
+#     values = c("", "Study 1"),
+#     colwidths = c(1, 2)
+#   ) %>%
+#   flextable::align(i = 1, j = 2:3, align = "center", part = "header") %>%
+#   flextable::add_body_row(top = FALSE, 
+#                           values = c("$N$", nrow(intention_outcomes$model)),
+#                           colwidths = c(1, 2)
+#   ) %>%
+#   flextable::add_body_row(top = FALSE, 
+#                           values = c("$R^2_{adjusted}$", printnum(r2(intention_outcomes)$R2_adjusted, digits = 3)),
+#                           colwidths = c(1, 2)
+#   ) 
 ```
 
 ```{r}
 #| label: regression-behaviour-intention
 #| echo: false
-
-# TODO add baseintention regression
 
 # filter dataframe (assigning the df object is required for computing the model r2)
 study1_behav <- study1_2long %>%
@@ -1167,21 +1200,26 @@ study1_behav <- study1_2long %>%
 # if comparing nested models with anova(), also exclude NAs in other predictors:  & !is.na(ios_anna_z) & !is.na(empathic_concern_z) & !is.na(problem_awareness_z)
 
 # behaviour ~ intention
-sumbehav_endintention <- MASS::polr(sum_behaviour_fact ~ behavioural_intention_z, data = study1_behav, Hess = TRUE)
+sumbehav_intention <- MASS::polr(sum_behaviour_fact ~ attendance + order + behavioural_intention_z, data = study1_behav, Hess = TRUE)
+
+# store OR values in an object 
+sumbehav_intention_OR <- get_OR_CI(sumbehav_intention)
+
+# calculate delta R2
+# r2_nagelkerke(sumbehav_intention)
 
 
-# model comparison
-# anova(sumbehav_step1, sumbehav_step2) # data is more likely under model including intention
+# Compare intention before and after the event
+sumbehav_endintention <- polr(sum_behaviour_fact ~ behavioural_intention_z, data = study1_behav, Hess = TRUE)
+sumbehav_baseintention <- polr(sum_behaviour_fact ~ base_behavioural_intention_z, data = study1_behav, Hess = TRUE)
 
-# store values in an object 
-sumbehav_endintention_OR <- get_OR_CI(sumbehav_endintention)
-# sumbehav_step2_OR <- get_OR_CI(sumbehav_step2)
+sumbehav_baseintention_OR <- get_OR_CI(sumbehav_baseintention)
 
-r2_nagelkerke(sumbehav_endintention)
-# r2_nagelkerke(sumbehav_step2)
+# r2_nagelkerke(sumbehav_endintention)
+# r2_nagelkerke(sumbehav_baseintention)
 ```
 
-At the end of the event, we assessed three charitable behaviours supporting the charity *Innocence Canada*. Among the participants who completed the event, `r sum(study1_df$behaviour_dich, na.rm = T)` (`r printnum(sum(study1_df$behaviour_dich, na.rm = T)/sum(!is.na(study1_df$behaviour_dich))*100)`%) performed at least one behaviour: `r sum(study1_df$flyer, na.rm = T)` participants took an *Innocence Canada* flyer, `r sum(study1_df$mailing, na.rm = T)` signed up to their mailing list, and `r sum(study1_df$post_donation, na.rm = T)` made a donation, raising a total of CAD `r sum(study1_df$donation_amount, na.rm = T)` (see @fig-waffle-plot). To test whether participants' charitable intentions were implemented in actual behaviour (Hypothesis 4), we calculated a sum score of behaviours for participants with applicable values (yes or no) on all three behaviours ($n = `r sum(!is.na(study1_df$sum_behaviour))`$). On average, in-person participants demonstrated more behaviours (`r print_descr(subset(study1_df, attendance == "In-person")$sum_behaviour)`) than participants watching the livestream (`r print_descr(subset(study1_df, attendance == "Livestream")$sum_behaviour)`, `r apa_print(wilcox.test(sum_behaviour~attendance, data = study1_df))$full_result`). The sum of behaviours did not differ between participants who saw the film first (`r print_descr(subset(study1_df, order == "Film first")$sum_behaviour)`) compared to those who saw the performance first (`r print_descr(subset(study1_df, order == "Perf first")$sum_behaviour)`, `r apa_print(wilcox.test(sum_behaviour~order, data = study1_df))$full_result`). Participants with higher intentions at the end of the event tended to demonstrate more behaviours (`r paste0("$OR = ", round(sumbehav_endintention_OR["behavioural_intention_z", "OR"], 2), "$, 95% CI [", round(sumbehav_endintention_OR["behavioural_intention_z", "CI_lower"], 2), ", ", round(sumbehav_endintention_OR["behavioural_intention_z", "CI_upper"], 2), "]")`), explaining a behavioural variance of $R_{Nagelkerke}^2 = `r printnum(r2_nagelkerke(sumbehav_endintention))`$. 
+At the end of the event, we assessed three charitable behaviours supporting the charity *Innocence Canada*. Among the participants who completed the event, `r sum(study1_df$behaviour_dich, na.rm = T)` (`r printnum(sum(study1_df$behaviour_dich, na.rm = T)/sum(!is.na(study1_df$behaviour_dich))*100)`%) performed at least one behaviour: `r sum(study1_df$flyer, na.rm = T)` participants took an *Innocence Canada* flyer, `r sum(study1_df$mailing, na.rm = T)` signed up to their mailing list, and `r sum(study1_df$post_donation, na.rm = T)` made a donation, raising a total of CAD `r sum(study1_df$donation_amount, na.rm = T)` (see @fig-waffle-behaviour). To test whether participants' charitable intentions were implemented in actual behaviour (Hypothesis 4), we calculated a sum score of behaviours for participants with applicable values (yes or no) on all three behaviours ($n = `r sum(!is.na(study1_df$sum_behaviour))`$). A logistic regression with the formula $Behaviours \sim Attendance + Order + Intention$ revealed that in-person participants demonstrated more behaviours (`r print_descr(subset(study1_df, attendance == "In-person")$sum_behaviour)`) than participants watching the livestream (`r print_descr(subset(study1_df, attendance == "Livestream")$sum_behaviour)`, `r paste0("$OR = ", round(sumbehav_intention_OR["attendanceInpersonvsStream", "OR"], 2), "$, 95% CI [", round(sumbehav_intention_OR["attendanceInpersonvsStream", "CI_lower"], 2), ", ", round(sumbehav_intention_OR["attendanceInpersonvsStream", "CI_upper"], 2), "]")`). The sum of behaviours did not differ between participants who saw the film first (`r print_descr(subset(study1_df, order == "Film first")$sum_behaviour)`) compared to those who saw the performance first (`r print_descr(subset(study1_df, order == "Perf first")$sum_behaviour)`, `r paste0("$OR = ", round(sumbehav_intention_OR["orderFPvsPF", "OR"], 2), "$, 95% CI [", round(sumbehav_intention_OR["orderFPvsPF", "CI_lower"], 2), ", ", round(sumbehav_intention_OR["orderFPvsPF", "CI_upper"], 2), "]")`). Crucially, participants with higher intentions at the end of the event tended to demonstrate more behaviours (`r paste0("$OR = ", round(sumbehav_intention_OR["behavioural_intention_z", "OR"], 2), "$, 95% CI [", round(sumbehav_intention_OR["behavioural_intention_z", "CI_lower"], 2), ", ", round(sumbehav_intention_OR["behavioural_intention_z", "CI_upper"], 2), "]")`), supporting Hypothesis 4. The model explained a behavioural variance of $R_{Nagelkerke}^2 = `r printnum(r2_nagelkerke(sumbehav_endintention))`$. 
 
 ```{r}
 #| label: fig-waffle-behaviour
@@ -1222,7 +1260,7 @@ ggplot(data = behaviour_df,
         axis.ticks = element_blank())
 ```
 
-It is important to note that awareness did not significantly increase from baseline (print_descr) to intermission (print_descr) to the end of the event (print_descr). Did the event matter at all for participants' charitable behaviour, or was their behaviour already determined by their intentions prior to attending the event? TODO We compared baseline intention vs. end intention...
+It is important to note that participants' charitable intentions only increased minimally from baseline (`r print_descr(subset(study1_3long, timepoint == "Baseline")$behavioural_intention)`) to the end of the event (`r print_descr(subset(study1_3long, timepoint == "End")$behavioural_intention)`, `r apa_print(t.test(subset(study1_3long, timepoint == "Baseline")$behavioural_intention, subset(study1_3long, timepoint == "End")$behavioural_intention, paired = T))$full_result`). Did the event matter at all for participants' charitable behaviour, or was their behaviour already determined by their intentions prior to attending the event? We compared the predictive power of intention before and after the event with two separate logistic regressions. Baseline intention significantly predicted the sum of behaviours, although with a smaller effect than intention at the end of the event (`r paste0("$OR = ", round(sumbehav_baseintention_OR["base_behavioural_intention_z", "OR"], 2), "$, 95% CI [", round(sumbehav_baseintention_OR["base_behavioural_intention_z", "CI_lower"], 2), ", ", round(sumbehav_baseintention_OR["base_behavioural_intention_z", "CI_upper"], 2), "]")`). Importantly, baseline intention explained much less variance in behaviour ($R_{Nagelkerke}^2 = `r printnum(performance::r2_nagelkerke(sumbehav_baseintention))`$) compared to intention at the end of the event ($R_{Nagelkerke}^2 = `r printnum(performance::r2_nagelkerke(sumbehav_endintention))`$).
 
 ## Discussion
 

@@ -411,7 +411,7 @@ check_assumptions <- function(model, dv, df) {
   title("Check normality of residuals:", line = 0.3)
   print(shapiro.test(residuals(model)))
   
-  # normality of random effect
+  # normality of random effect (only for lmer)
   if (class(model) == "lmerModLmerTest") {
     rand_intercepts <- ranef(model)$p_id$`(Intercept)`
     qqnorm(rand_intercepts)
@@ -424,8 +424,10 @@ check_assumptions <- function(model, dv, df) {
   plot(fitted(model), residuals(model), xlab="Fitted", ylab="Residuals")
   abline(h = 0, col = "red")
   title("Check homogeneity of variances:")
-  my_formula <- formula(paste0(dv, " ~ cell"))
-  print(bartlett.test(my_formula, data = df))
+  if (class(model) == "lmerModLmerTest") {
+    my_formula <- formula(paste0(dv, " ~ cell"))
+    print(bartlett.test(my_formula, data = df)) # Bartlett test only for categorical predictors
+  }
   
   # for multicollinearity
   cat("\n       Variance Influence Factors: \n\n")
