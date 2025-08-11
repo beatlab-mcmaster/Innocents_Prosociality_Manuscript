@@ -853,7 +853,7 @@ Figures were created with *ggplot2* [@R-ggplot2], *ggpubr* [@R-ggpubr], *ggridge
 
 ## Results
 
-TODO Opening paragraph: takeaways from the subjective experience paragraph? + details & figures in supplemental
+In contrast to the affective reactions to typical live entertainment events reported in the literature, participants' positivity, relaxation, and alertness tended to decrease throughout the event. Congruously, both the film and the performance were rated as slightly too long on average. Nonetheless, participants reported high attentiveness, interest, enjoyment, insightfulness, and felt moved and wanted to reengage with similar stimuli, for both the film and the performance, and both in-person and livestream attendance. Feeling chills and tearing up were less common. Interestingly, regardless of whether participants saw the film or the performance first, a majority indicated that they preferred the order they saw the stimuli in over the alternative order, although this preference was stronger among participants who saw the film first and the performance afterwards. For more details regarding participants' self-reported experience, see @apx-eventexperience.
 
 ### Effect of Event Conditions
 
@@ -1406,21 +1406,7 @@ A regular paragraph without any indentation is not part of the footnote and will
 
 # Detailed sample descriptions {#apx-sampledescription}
 
-Appendices are created as level 1 headings with an identifier with an `#apx-` prefix. Appendix titles should be in title case and should describe the content of the appendix.
-
-If there is only one appendix, the label automatically inserted above the the appendix title will be **Appendix**. If there are multiple appendices, the labels **Appendix A**, **Appendix B**, **Appendix C** and so forth will be inserted above the titles.
-
-To cite an appendix as a whole, reference it with the `@apx-` prefix.
-
-This is an appendix with a table using markdown (see @tbl-letters).
-
-| Col 1 | Col 2 | Col 3 |
-|-------|-------|-------|
-| A     | B     | C     |
-| E     | F     | G     |
-| A     | G     | G     |
-
-: My Caption {#tbl-letters apa-note="These are letters."}
+TODO
 
 # Technical implementation {#apx-implementation}
 
@@ -1435,6 +1421,10 @@ Both in-person and online participants consented to eye-tracking and cardiac mon
 ## Environment
 
 The LIVELab is equipped with technology that meets the demands of concert halls as well as psychological laboratories. It has a capacity of 106 seats. For this study, in-person participants were seated in the second, third and fourth front rows. Including participants, the event was attended by 55 in-person audience members on April 2nd and 60 audience members on April 4th. The performance took place on the stage, where the sound was recorded by eight microphones for the different instruments and two microphones for the audience (e.g., to capture applause), and presented over a PA system consisting of two Meyer 500HP subwoofers and 5 Meyer UPJ-1P speakers. For the livestream, the performance was filmed from a static PTZOptics pt30x-sdi-g2 camera positioned behind and above the audience seating to capture an unobstructed view of the stage. The livestream audio was the same mix presented in the concert hall. The film was screened for the in-person audience on a 384.5 cm x 216 cm Samsung LH015IER LED video wall, using the same PA sound system. The film video and audio were streamed directly to YouTube. For livestream participants, the stream was presented in the jsPsych environment using the AVOKE plugin \[TODO cite\].
+
+# Event Experience {#apx-eventexperience}
+
+TODO
 
 # Model Comparisons {#apx-modelcomps}
 
