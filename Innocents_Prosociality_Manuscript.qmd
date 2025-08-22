@@ -442,6 +442,8 @@ rm(base_vars, docu_vars, perfo_vars, post_vars)
 #| label: prepstudy2
 #| include: false
 
+# TODO check whether participants guessed hypotheses and flag for analysis
+
 # load study 2 data
 study2_df_deident <- read_csv(here("data/study2_df_deident.csv"))
 
