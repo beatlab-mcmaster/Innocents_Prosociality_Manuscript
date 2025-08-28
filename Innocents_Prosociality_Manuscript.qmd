@@ -604,13 +604,13 @@ study2_df <- study2_df %>%
          post_intent_flyer = post_tpb14,
          post_intent_donation = post_tpb15,
          identity_woman = identity4,
-         # identity_genderdiverse = identity5, # TODO uncomment if full sample includes a genderdiverse participant
+         identity_genderdiverse = identity5, 
          identity_lgbq = identity3,
          identity_indigenous = identity1,
          identity_poc = identity2,
          identity_religious = identity6,
          identity_none = `identity-1`,
-         # identity_NA = `identity-9`,
+         identity_NA = `identity-9`,
          experience_disability = experience1,
          experience_charges = experience2,
          experience_unsheltered = experience3,
@@ -866,6 +866,34 @@ outcomes <- combined_long %>%
   pivot_wider(id_cols = c(p_id, study, attendance, order), names_from = timepoint, values_from = c(ios_anna, ios_target, anna_empathic_concern, target_empathic_concern, problem_awareness))
 ```
 
+```{r}
+#| label: check-correlations
+#| include: false
+# get names of multiple choice variables
+multichoice_vars <- c(grep("^identity", colnames(study1_2long), value = TRUE), grep("^experience", colnames(study1_2long), value = TRUE), grep("^motivation", colnames(study1_2long), value = TRUE), grep("^relationship", colnames(study1_2long), value = TRUE))
+
+# remove variables that had only missings or character values
+multichoice_vars <- setdiff(multichoice_vars, c("relationship_artist", "motivation_other", "motivation_socialjustice_dich"))
+
+# recode multiple choice options as dichotomous variables
+study1_dichotom <- study1_3long %>%
+  mutate(across(all_of(multichoice_vars), ~ replace(.x, is.na(.x), 0))) 
+
+# define control variables
+control_vars <- c("age", "familiarity", "liking", "demo_openness", "trait_empathic_concern", "trait_personal_distress", "income", "education", "omsi", "politics", multichoice_vars)
+
+# Check correlations with control variables
+dv_corr("ios_anna", control_vars, study1_dichotom, output = "table")
+dv_corr("anna_empathic_concern", control_vars, study1_dichotom, output = "table") 
+dv_corr("problem_awareness", control_vars, study1_dichotom, output = "table") # demo_openness r = .30, politics r = .34
+dv_corr("behavioural_intention", control_vars, study1_dichotom, output = "table") # liking r = 31, motivation_socialjustice r = .37, trait_empathic_concern r = .34
+dv_corr("behavioural_intention", control_vars, subset(study1_dichotom, timepoint == "End"), output = "table") # motivation_socialjustice r = .32, trait_empathic_concern r = .34
+dv_corr("behavioural_intention", control_vars, subset(study1_dichotom, timepoint == "Baseline"), output = "table") # liking r = .40, trait_empathic_concern r = .42, motivation_socialjustice r = .39
+dv_corr("sum_behaviour", control_vars, subset(study1_dichotom, timepoint == "End"), method = "spearman", output = "table") 
+
+rm(study1_dichotom, control_vars, multichoice_vars)
+```
+
 ```{r} 
 #| label: outcome-lmms
 #| include: false
@@ -946,14 +974,14 @@ empathy_cov <- lmer(anna_empathic_concern_z ~ base_anna_empathic_concern_z + (1|
 
 #### Awareness LMM ###
 
-# awareness_lmm <- lmer(problem_awareness_z ~ demo_openness_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# awareness_lmm <- lmer(problem_awareness_z ~ demo_openness_z + politics_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
 # check_assumptions(awareness_lmm, "problem_awareness_z", study1_2long) # residuals & random intercepts violate normality assumption
 
 # log-transform makes matters worse:
 # study1_2long <- study1_2long %>%
 #   mutate(problem_awareness_log = log(problem_awareness))
 # 
-# awareness_log <- lmer(problem_awareness_log ~ demo_openness_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# awareness_log <- lmer(problem_awareness_log ~ demo_openness_z + politics_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
 # check_assumptions(awareness_log, "problem_awareness_log", study1_2long)
 # 
 # rm(awareness_log)
@@ -962,7 +990,7 @@ empathy_cov <- lmer(anna_empathic_concern_z ~ base_anna_empathic_concern_z + (1|
 # study1_2long <- study1_2long %>%
 #   mutate(problem_awareness_recpr = 1/(problem_awareness))
 # 
-# awareness_recpr <- lmer(problem_awareness_recpr ~ demo_openness_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# awareness_recpr <- lmer(problem_awareness_recpr ~ demo_openness_z + politics_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
 # check_assumptions(awareness_recpr, "problem_awareness_recpr", study1_2long)
 # 
 # rm(awareness_recpr)
@@ -970,18 +998,18 @@ empathy_cov <- lmer(anna_empathic_concern_z ~ base_anna_empathic_concern_z + (1|
 # Extract random intercepts
 # awareness_intercepts <- ranef(awareness_lmm)$p_id
 # # Find the indices of the most extreme residuals
-# order(abs(awareness_intercepts$`(Intercept)`), decreasing = TRUE)[1:2] # indices: c(81, 24)
-# rownames(awareness_intercepts)[c(81, 24)] # p_id = c("sub-on107", "sub-in028")
+# order(abs(awareness_intercepts$`(Intercept)`), decreasing = TRUE)[1:2] # indices: c(79, 25)
+# rownames(awareness_intercepts)[c(79, 25)] # p_id = c("sub-on107", "sub-in028")
 # 
 # rm(awareness_intercepts)
 
 # Excluding the two outlier intercepts fixed the assumptions
-awareness_lmm <- lmer(problem_awareness_z ~ demo_openness_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = subset(study1_2long, !(p_id %in% c("sub-on107", "sub-in028")) & !is.na(problem_awareness_z)))
+awareness_lmm <- lmer(problem_awareness_z ~ demo_openness_z + politics_z + base_problem_awareness_z + attendance * medium * timepoint + (1|p_id), data = subset(study1_2long, !(p_id %in% c("sub-on107", "sub-in028")) & !is.na(problem_awareness_z)))
 # check_assumptions(awareness_lmm, "problem_awareness_z", subset(study1_2long, !(p_id %in% c("sub-on107", "sub-in028")) & !is.na(problem_awareness_z) ))
 summary(awareness_lmm)
 my_effectsize(awareness_lmm)
 
-awareness_cov <- lmer(problem_awareness_z ~ demo_openness_z + base_problem_awareness_z + (1|p_id), data = subset(study1_2long, !(p_id %in% c("sub-on107", "sub-in028")) & !is.na(problem_awareness_z)))
+awareness_cov <- lmer(problem_awareness_z ~ demo_openness_z + politics_z + base_problem_awareness_z + (1|p_id), data = subset(study1_2long, !(p_id %in% c("sub-on107", "sub-in028")) & !is.na(problem_awareness_z)))
 ```
 
 ```{r} 
@@ -1045,7 +1073,7 @@ innocents_posthoctest <- study1_3long %>%
 
 #### Awareness
 
-Openness to experience was moderately associated with higher awareness, `r apa_print(cor.test(study1_3long$problem_awareness, study1_3long$demo_openness, method = "spearman"))$full_result` and was therefore included as a covariate in the LMM, resulting in the formula $Awareness \sim Openness + Baseline + Attendance * Stimulus * Time + (1|Participant)$. For all three outcomes (awareness, empathy, and closeness), the baseline significantly predicted the outcome, but the data were significantly more likely under the full model including the event conditions, compared to a model with just the covariates and the random intercept (for the full model details and model comparisons see @apx-modelcomps). 
+Higher openness to experience was moderately associated with higher awareness (`r apa_print(cor.test(study1_3long$problem_awareness, study1_3long$demo_openness, method = "spearman"))$full_result`), as was more left-leaning political orientation (`r apa_print(cor.test(study1_3long$problem_awareness, study1_3long$politics, method = "spearman"))$full_result`). Both variables were therefore included as covariates in the LMM, resulting in the formula $Awareness \sim Openness + Politics + Baseline + Attendance * Stimulus * Time + (1|Participant)$. For all three outcomes (awareness, empathy, and closeness), the baseline significantly predicted the outcome, but the data were significantly more likely under the full model including the event conditions, compared to a model with just the covariates and the random intercept (for the full model details and model comparisons see @apx-modelcomps). 
 
 The main effect and interactions involving the stimulus were not significant, indicating no difference in problem awareness between participants who had seen the performance compared to the film. Thus, the data did not support Hypothesis 1a. The only significant fixed effect was a small main effect of time, `r eval_fixed(awareness_lmm, "timepointEndvsInter")`, with participants reporting higher problem awareness at the end of the event (`r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_End)`) compared to intermission (`r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_Intermission)`), regardless of stimulus and attendance mode. An additional post-hoc test revealed that the increase from baseline (`r print_descr(outcomes[outcomes$study=="Study 1", ]$problem_awareness_Baseline)`) to intermission was also small but significant, `r apa_print(pa_1sthalf)$full_result`, $d = `r printnum(pa_1sthalf_d$estimate)`$ (see @fig-awareness). 
 
@@ -1258,7 +1286,7 @@ ggplot(data = behaviour_df,
         axis.ticks = element_blank())
 ```
 
-It is important to note that participants' charitable intentions only increased minimally from baseline (`r print_descr(subset(study1_3long, timepoint == "Baseline")$behavioural_intention)`) to the end of the event (`r print_descr(subset(study1_3long, timepoint == "End")$behavioural_intention)`, `r apa_print(t.test(subset(study1_3long, timepoint == "Baseline")$behavioural_intention, subset(study1_3long, timepoint == "End")$behavioural_intention, paired = T))$full_result`). Did the event matter at all for participants' charitable behaviour, or was their behaviour already determined by their intentions prior to attending the event? We compared the predictive power of intention before and after the event with two separate logistic regressions. Baseline intention significantly predicted the sum of behaviours, although with a smaller effect than intention at the end of the event (`r paste0("$OR = ", round(sumbehav_baseintention_OR["base_behavioural_intention_z", "OR"], 2), "$, 95% CI [", round(sumbehav_baseintention_OR["base_behavioural_intention_z", "CI_lower"], 2), ", ", round(sumbehav_baseintention_OR["base_behavioural_intention_z", "CI_upper"], 2), "]")`). Importantly, baseline intention explained much less variance in behaviour ($R_{Nagelkerke}^2 = `r printnum(performance::r2_nagelkerke(sumbehav_baseintention))`$) compared to intention at the end of the event ($R_{Nagelkerke}^2 = `r printnum(performance::r2_nagelkerke(sumbehav_endintention))`$).
+It is important to note that participants' charitable intentions only increased minimally from baseline (`r print_descr(subset(study1_3long, timepoint == "Baseline")$behavioural_intention)`) to the end of the event (`r print_descr(subset(study1_3long, timepoint == "End")$behavioural_intention)`, `r apa_print(t.test(subset(study1_3long, timepoint == "Baseline")$behavioural_intention, subset(study1_3long, timepoint == "End")$behavioural_intention, paired = T))$full_result`). Did the event matter at all for participants' charitable behaviour, or was their behaviour already determined by their intentions prior to attending the event? We compared the predictive power of intention before and after the event with two separate logistic regressions. Baseline intention significantly predicted the sum of behaviours, although with a smaller effect than intention at the end of the event (`r paste0("$OR = ", round(sumbehav_baseintention_OR["base_behavioural_intention_z", "OR"], 2), "$, 95% CI [", round(sumbehav_baseintention_OR["base_behavioural_intention_z", "CI_lower"], 2), ", ", round(sumbehav_baseintention_OR["base_behavioural_intention_z", "CI_upper"], 2), "]")`). Importantly, baseline intention explained much less variance in behaviour ($R_{Nagelkerke}^2 = `r printnum(performance::r2_nagelkerke(sumbehav_baseintention))`$) compared to intention at the end of the event.
 
 ## Discussion
 
@@ -1315,7 +1343,7 @@ Problem awareness and the other NAM and TPB variables were assessed using the sa
 
 #### Event experience
 
-We asked participants in both conditions to describe the stimulus they had seen in up to ten of their own words. Given that participants only saw one of the two stimuli, we abridged the question whether participants liked the order of film and performance.
+To check whether participants were successfully deceived into believing they saw a livestream in real time, we added a scale assessing participants' social and physical sense of presence [@swarbrick2021], measured with 7 items that were rated on a 7-point scale ranging from 1 ("disagree strongly") to 7 ("agree strongly"). Other than in study 1, we asked participants in both conditions (not just for the performance) to describe the stimulus they had seen in up to ten of their own words. Given that participants only saw one of the two stimuli, we abridged the question whether participants liked the order of film and performance. We further added scales measuring aesthetic emotions, immersion, and live music experience, which were assessed for a different research question and will not be analyzed in this study. 
 
 #### Person-level covariates
 
@@ -1328,6 +1356,50 @@ Pre-processing was the same as in study 1, excluding no participants for rushing
 To evaluate changes in closeness and empathy towards Anna Vasquez and towards the hypothetical victim and changes in problem awareness, we fitted separate LMMs with stimulus and time as fixed effects and participant as random effect, using the same specifications as in study 1. Given the simpler pre-post-design, baseline ratings were not added as a covariate, but instead reflected one of the two levels of the factor time. As in study 1, the influence of the self-reported outcomes on behavioural intention was evaluated with a multiple linear regression, and the influence of intention on observed behaviour was evaluated with an ordinal logistic regression. To compare the effects of watching one stimulus in study 2 with the effects of watching both stimuli in study 1, we pooled the pre-post data from both studies (disregarding the responses collected at intermission in study 1) and fitted LMMs for the continuous self-reported outcomes with study and time as fixed effects and participant as random effect, and a Wilcoxon rank-sum test for the sum of behaviours participants engaged in. 
 
 ## Results
+
+TODO start with paragraph comparing event experience to study 1; report sense of presence
+
+### Effect of Event Conditions
+
+```{r}
+#| label: study2-check-correlations
+#| include: false
+# get names of multiple choice variables
+multichoice_vars <- c(grep("^identity", colnames(study2_long), value = TRUE), grep("^experience", colnames(study2_long), value = TRUE))
+
+# recode multiple choice options as dichotomous variables
+study1_dichotom <- study1_2long %>%
+  mutate(across(all_of(multichoice_vars), ~ replace(.x, is.na(.x), 0))) 
+
+# define control variables
+control_vars <- c("age", "familiarity", "liking", "priorknowledge", "demo_openness", "income", "education", "omsi", "politics", multichoice_vars)
+
+# Check correlations with control variables
+dv_corr("ios_anna_z", control_vars, study2_dichotom, output = "table") # liking r = .37
+dv_corr("ios_target_z", control_vars, study2_dichotom, output = "table") # identity_none r = .34
+dv_corr("anna_empathic_concern_z", control_vars, study2_dichotom, output = "table") # liking r = .36
+dv_corr("target_empathic_concern_z", control_vars, study2_dichotom, output = "table") # liking r = .34
+dv_corr("problem_awareness_z", control_vars, study2_dichotom, output = "table") # identity_lgbq r = .37
+dv_corr("behavioural_intention_z", control_vars, study2_dichotom, output = "table") # liking r = .47
+dv_corr("behavioural_intention_z", control_vars, subset(study2_dichotom, timepoint == "End"), output = "table") # liking r = .53
+dv_corr("behavioural_intention_z", control_vars, subset(study2_dichotom, timepoint == "Baseline"), output = "table") # liking r = .41
+dv_corr("sum_behaviour", control_vars, subset(study2_dichotom, timepoint == "End"), method = "spearman", output = "table") # liking r = .69; openness r = .45
+
+rm(study2_dichotom, control_vars, multichoice_vars)
+```
+
+```{r} 
+#| label: study2-outcome-lmms
+#| include: false
+
+#### Closeness LMM ###
+
+# build full model
+closeness_lmm <- lmer(ios_anna_z ~ base_ios_anna_z + attendance * medium * timepoint + (1|p_id), data = study1_2long)
+# check_assumptions(closeness_lmm, "ios_anna_z", study1_2long) # three outliers violate normality of random intercepts
+summary(closeness_lmm)
+my_effectsize(closeness_lmm)
+```
 
 
 <!-- Run regression of intention twice: once for the film, once for the performance to see whether different factors are predictive? -->
@@ -1456,8 +1528,8 @@ model_comp_table <- matrix(ncol = 2, nrow = 0) %>% # initiate table structure
   rbind(c("  LRT Test", model_comp(empathy_cov, empathy_lmm))) %>%
   rbind(c("", "")) %>%
   rbind(c("Awareness$^b$", paste0("$N_{observations} = ", nobs(awareness_lmm), "$; $N_{participants} = ", awareness_lmm@Gp[2], "$"))) %>%
-  rbind(c("  Base Model", "Awareness \\textasciitilde Openness + Baseline + (1|Participant)")) %>%
-  rbind(c("  Full Model", "Awareness \\textasciitilde Openness + Baseline + Attendance * Stimulus * Time + (1|Participant)")) %>%
+  rbind(c("  Base Model", "Awareness \\textasciitilde Openness + Politics + Baseline + (1|Participant)")) %>%
+  rbind(c("  Full Model", "Awareness \\textasciitilde Openness + Politics + Baseline + Attendance * Stimulus * Time + (1|Participant)")) %>%
   rbind(c("  LRT Test", model_comp(awareness_cov, awareness_lmm)))
   
 # set colnames
