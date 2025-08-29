@@ -90,6 +90,9 @@ format:
 #| label: setup
 #| include: false
 
+# before first rendering, add apaquarto extension:
+# quarto::quarto_add_extension("wjschne/apaquarto")
+
 # clear environment
 rm(list=ls())
 
@@ -655,6 +658,7 @@ post_vars <- grep("^post_", colnames(study2_df), value=TRUE)
 study2_long <- study2_df %>%
   pivot_longer(all_of(c(base_vars, post_vars)), names_to = c("timepoint", ".value"), names_pattern = "^(.*?)_(.*)$") %>%
   mutate(timepoint = factor(timepoint, levels = c("base", "post"), labels = c("Baseline", "End")),
+         group = factor(group),
          medium = case_when(
            timepoint == "Baseline" ~ "Baseline",
            timepoint == "End" & order == "Film first" ~ "Film",
@@ -900,7 +904,7 @@ rm(study1_dichotom, control_vars, multichoice_vars)
 
 #### Impute means for baseline covariates ###
 study1_2long <- study1_2long %>%
-  mutate(across(.cols = c(base_ios_anna_z, base_anna_empathic_concern_z, base_problem_awareness_z), 
+  mutate(across(.cols = c(base_ios_anna_z, base_anna_empathic_concern_z, base_problem_awareness_z, politics_z, demo_openness_z), 
                 .fns = ~ ifelse(is.na(.x), 0, .x)))
 
 #### Closeness LMM ###
@@ -1380,11 +1384,11 @@ TODO start with paragraph comparing event experience to study 1; report sense of
 multichoice_vars <- c(grep("^identity", colnames(study2_long), value = TRUE), grep("^experience", colnames(study2_long), value = TRUE))
 
 # recode multiple choice options as dichotomous variables
-study1_dichotom <- study1_2long %>%
+study2_dichotom <- study2_long %>%
   mutate(across(all_of(multichoice_vars), ~ replace(.x, is.na(.x), 0))) 
 
 # define control variables
-control_vars <- c("age", "familiarity", "liking", "priorknowledge", "demo_openness", "income", "education", "omsi", "politics", multichoice_vars)
+control_vars <- c("age", "familiarity", "liking", "demo_openness", "income", "education", "omsi", "politics", multichoice_vars)
 
 # Check correlations with control variables
 dv_corr("ios_anna_z", control_vars, study2_dichotom, output = "table") # liking r = .37
@@ -1415,10 +1419,10 @@ study2_long <- study2_long %>%
 
 #### Awareness LMM ###
 
-awareness_lmm <- lmer(problem_awareness_z ~ identity_lgbq_dich + group * timepoint + (1|p_id), data = study2_long)
-# check_assumptions(awareness_lmm, "problem_awareness_z", study2_long) 
-summary(awarenes_lmm)
-my_effectsize(awareness_lmm)
+s2_awareness_lmm <- lmer(problem_awareness_z ~ identity_lgbq_dich + group * timepoint + (1|p_id), data = study2_long)
+# check_assumptions(s2_awareness_lmm, "problem_awareness_z", study2_long) 
+summary(s2_awareness_lmm)
+my_effectsize(s2_awareness_lmm)
 
 #### Anna Empathy LMM ###
 
@@ -1603,34 +1607,6 @@ Participants in study 1 performed more/less/the same amount of behaviours as par
 
 # General Discussion
 
-## Displaying Figures
-
-Do you want the tables and figures to be at the end of the document? You can set the `floatsintext` option to false. The reference labels will work no matter where they are in the text.
-
-A reference label for a figure must have the prefix `fig-`, and in a code chunk, the caption must be set with `fig-cap`. Captions are in [title case](https://apastyle.apa.org/style-grammar-guidelines/capitalization/title-case).
-
-```{r}
-#| label: fig-myplot
-#| fig-cap: The Figure Caption
-#| apa-note: This is the note below the figure.
-#| fig-height: 2
-#| fig-width: 3
-ggplot(data.frame(x = c(0, 35)), aes(x)) +
-  stat_function(fun = dchisq, 
-                args = list(df = 10),
-                geom = "area",
-                n = 1000,
-                color = NA,
-                fill = "#41448780") +
-  theme_void(base_size = 18)
-```
-
-To refer to any figure or table, use the `@` symbol followed by the reference label (e.g., @fig-myplot).
-
-See @fig-appendfig, an example of an imported graphic using markdown syntax.
-
-![Appendix Figure](sampleimage.png){#fig-appendfig apa-note="A *note* below the figure"}
-
 ## Displaying Tables
 
 We can make a table the same way as a figure. Generating a table that conforms to APA format in all document formats can be tricky. When the table is simple, the `kable` function from knitr works well. Feel free to experiment with different methods, but I have found that David Gohel's [flextable](https://davidgohel.github.io/flextable/) to be the best option when I need something more complex.
@@ -1645,18 +1621,6 @@ tibble(Numbers = seq(1,4), Letters = LETTERS[seq(Numbers)]) %>%
 ```
 
 To refer to this table in text, use the `@` symbol followed by the reference label like so: As seen in @tbl-mytable, the first few numbers and letters of the alphabet are displayed.
-
-## Footnotes
-
-A footnote is usually displayed at the bottom of the page on which the footnote occurs. A short note can be specified with the `^[My note here]` syntax.[^1] A longer note can be specified with the `[^id]` syntax with the text specified on a separate line like so `[^id]: Text here`.[^2]
-
-[^1]: Here is my short footnote!
-
-[^2]: This is a longer footnote. If it has multiple paragraphs, subsequent paragraphs need to be indented with two tabs.
-
-    This paragraph is still part of the footnote because it is indented with two tabs.
-
-A regular paragraph without any indentation is not part of the footnote and will be part of the main body of the document.
 
 ## Tables
 
