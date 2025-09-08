@@ -245,6 +245,8 @@ study1_df_recoded <- study1_df_variance %>%
                 .fns = ~ 8 - .x),
          across(.cols = c(open1, open6, open11, iri4, iri13, iri14, iri18, iri19),
                 .fns = ~ 6 - .x),
+         perfo_duration = perfo_duration - 4,
+         docu_duration = docu_duration - 4,
          mailing_presubsribed = ifelse(mailing == -9, 1, 0),
          mailing = replace(mailing, mailing == -9, NA_real_), 
          mailing = replace(mailing, mailing == -1, 0), # coding error between inperson and online surveys
@@ -545,6 +547,7 @@ study2_df_recoded <- study2_df_variance %>%
   mutate(mailing_presubsribed = ifelse(mailing == -9, 1, 0),
          across(.cols = c(age, caffeine, liking, income, education, politics, mailing),
                 .fns = ~ case_match(.x, -9 ~ NA, .default = .x)),
+         post_duration = post_duration - 4,
          resource_click = case_match(resource_noclick, 0 ~ FALSE, .default = resource_click),
          donation_click = case_match(donation_noclick, 0 ~ FALSE, .default = donation_click),
          across(.cols = c(base_nam3, base_tpb11, post_nam3, post_tpb11),
@@ -859,7 +862,21 @@ Figures were created with *ggplot2* [@R-ggplot2], *ggpubr* [@R-ggpubr], *ggridge
 
 ## Results
 
-In contrast to the affective reactions to typical live entertainment events reported in the literature, participants' positivity, relaxation, and alertness tended to decrease throughout the event. Congruously, both the film and the performance were rated as slightly too long on average. Nonetheless, participants reported high attentiveness, interest, enjoyment, insightfulness, and felt moved and wanted to reengage with similar stimuli, for both the film and the performance, and both in-person and livestream attendance. Feeling chills and tearing up were less common. Interestingly, regardless of whether participants saw the film or the performance first, a majority indicated that they preferred the order they saw the stimuli in over the alternative order, although this preference was stronger among participants who saw the film first and the performance afterwards. For more details regarding participants' self-reported experience, see @apx-eventexperience.
+```{r}
+#| label: eventexperience-change
+#| include: false
+
+# calculate pre-post changes in event experience variables
+s1_changes <- study1_2long %>%
+  filter(timepoint == "End") %>%
+  mutate(positivity_c = pleasure - base_pleasure,
+         relaxation_c = tense*(-1) - base_tense*(-1), # flip poles because in the text I use the positively connotated anchors
+         alert_c = awake - base_awake)
+```
+
+TODO change to engagement factorscore?
+
+In contrast to the affective reactions to typical live entertainment events reported in the literature, participants' positivity (`r print_descr(s1_changes$positivity_c)`), relaxation (`r print_descr(s1_changes$relaxation_c)`), and alertness (`r print_descr(s1_changes$alert_c)`) tended to decrease throughout the event. Congruously, both the film (`r print_descr(study1_df$docu_duration)`) and the performance (`r print_descr(study1_df$perfo_duration)`) were rated as slightly too long on average. Nonetheless, participants reported high attentiveness (`r print_descr(study1_2long$concentration)`), interest (`r print_descr(study1_2long$interest)`), enjoyment (`r print_descr(study1_2long$enjoy)`), insightfulness (`r print_descr(study1_2long$insight)`), and felt moved (`r print_descr(study1_2long$moved)`) and wanted to reengage (`r print_descr(study1_2long$reengage)`) with similar stimuli, for both the film and the performance, and both in-person and livestream attendance. Feeling chills and tearing up were less common. Interestingly, regardless of whether participants saw the film or the performance first, a majority indicated that they preferred the order they saw the stimuli in over the alternative order, although this preference was stronger among participants who saw the film first and the performance afterwards. For more details regarding participants' self-reported experience, see @apx-eventexperience.
 
 ```{r}
 #| label: outcome-descriptives
