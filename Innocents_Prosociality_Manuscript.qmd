@@ -1624,7 +1624,7 @@ Participants in study 1 performed more/less/the same amount of behaviours as par
 
 # General Discussion
 
-artworks elicit more psychological distance than photographic representations of climate change; photographs are more immediately recognizable and leave less room for interpretation [@barkela2025]
+artworks inspure social mentalization more than images believed to be created by computers [@iosifyan2025]; but artworks elicit more psychological distance than photographic representations of climate change & photographs are more immediately recognizable and leave less room for interpretation [@barkela2025]
 no difference in behavioural intentions after viewing aesthetic vs amateur war photography [@altenmuller2023]
 
 ## Displaying Tables
