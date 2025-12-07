@@ -163,7 +163,7 @@ plot_dotbars <- function(df, dv, by_v, ylab, xlab, my_colour) {
 }
 
 # Plot means and CI by order across timepoint function
-plot_meanSE <- function(df, dv, ylab, xlab, facet_var = NULL) {
+plot_meanSE <- function(df, dv, ylab, xlab, colors, facet_var = NULL) {
 
 dv <- sym(dv)
 
@@ -177,10 +177,10 @@ dv <- sym(dv)
     geom_blank() +
     geom_line(aes(x = dodge_order, group = p_id),
               color = "darkgray",
-              alpha = .7) +
+              alpha = .5) +
     geom_point(aes(x = dodge_order),
-               alpha = .7) +
-    scale_color_manual(values = c("gray30", "#FFEB00", "#661BFF"), guide = "none") +
+               alpha = .5) +
+    scale_color_manual(values = c("gray30", colors), guide = "none") +
     scale_shape_manual(values = c(1, 2, 0), guide = "none") +
     new_scale("shape") +
     new_scale("color") +
@@ -200,7 +200,7 @@ dv <- sym(dv)
                  linewidth = 1.2,
                  show.legend = FALSE, 
                  position = position_nudge(.08)) +
-    scale_color_manual(values = c("gray30", "#FFEB00", "#661BFF"), guide = "none") +
+    scale_color_manual(values = c("gray30", colors), guide = "none") +
     stat_summary(aes(x = dodge_order,
                      shape = medium,
                      fill = medium),
@@ -209,7 +209,7 @@ dv <- sym(dv)
                  geom = "point",
                  size = 3, 
                  position = position_nudge(.08)) +
-    scale_fill_manual(values = c("gray30", "#FFEB00", "#661BFF"), name = "Measurement") +
+    scale_fill_manual(values = c("gray30", colors), name = "Measurement") +
     scale_shape_manual(values = c(21, 24, 22), name = "Measurement") +
     scale_y_continuous(limits = c(0.8,7.2)) +
     theme_bw() +
