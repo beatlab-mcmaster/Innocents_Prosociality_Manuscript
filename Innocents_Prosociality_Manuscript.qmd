@@ -800,6 +800,7 @@ Leading up to the event, all ticket holders were invited to sign up for particip
 
 Study 1 consisted of three surveys: A pre-survey before the event, a survey at intermission evaluating the stimulus presented in the first half of the event, and a survey at the end, evaluating the second half of the event (see @fig-procedure-study1). In addition, person-level covariates were assessed either in the pre-survey or in the survey at the end. After obtaining informed consent, the pre-survey assessed a baseline of the behavioural predictors interpersonal closeness with a wrongfully imprisoned person, state empathy for their story, problem awareness of wrongful imprisonment, and intentions to support organizations fighting wrongful imprisonment. Moreover, the pre-survey included the other NAM-TPB variables and an affect measure. Participants filled out the pre-survey either in the days leading up to the event, or in the hour right before the event. Closeness with the other audience members and affect were always assessed immediately before the event, because they are specific to the time and context of the event. Participants then saw the film or the performance in the first half of the event, and, after a 30-minute intermission, the other stimulus. After both the film and the performance, we assessed participants' affect, experience of the event, and again measured their closeness, empathy, awareness, and intentions. The end survey additionally included the remaining NAM-TPB variables, and some questions that were used to answer other research questions not analysed here. At the end of the event, we observed actual behaviour in support of *Innocence Canada*, an organization that advocates for innocent prisoners in Canada. Study 1 was approved by the McMaster Research Ethics Board (MREB#1975).
 
+<!--
 ::: {#fig-procedure layout-ncol=2}
 
 ![](images/Innocents_Diagram_Study1Design.png){#fig-procedure-study1}
@@ -808,8 +809,7 @@ Study 1 consisted of three surveys: A pre-survey before the event, a survey at i
 
 Schematics of the procedures of study 1 (A) and study 2 (B). Pen and paper icons indicate the time points at which participants completed the surveys. The icons of a sitting person represent in-person participants, whereas the icons of a person inside a computer screen indicate participants who streamed the event.
 :::
-
-<!-- TODO update study 2 participant count in procedure fig -->
+-->
 
 The events took place in McMaster University's Large Interactive Virtual Environment laboratory (LIVELab, <https://livelab.mcmaster.ca/>), a concert venue equipped for psychological research, and were also livestreamed via YouTube. Livestream participants opened a custom website on their personal computers which presented the surveys and the event stream. To create a controlled experience, the website prohibited access to stream controls (like pausing the stream) and only displayed the video stream, not any additional YouTube features like the chat. Livestream participants were instructed to sit in a quiet environment and use headphones for the best experience, but `r printnum(nrow(subset(study1_df, speaker == 3)))` participants self-reported that they still used the built-in speakers of their machine. Nonetheless, the sound quality was rated as very good ($M = `r printnum(mean(study1_df$sound_quality, na.rm = TRUE), digits = 2)`$ on a 7-point scale), as was the video quality ($M =`r printnum(mean(study1_df$video_quality, na.rm = TRUE), digits = 2)`$), the video fluency ($M = `r printnum(mean(study1_df$video_fluency, na.rm = TRUE), digits = 2)`$), and the camera framing ($M =`r printnum(mean(study1_df$camera_frame, na.rm = TRUE), digits = 2)`$). In-person participants filled out the surveys on LIVELab's tablets or on paper. Participants who signed up in advance were given a link to fill out the pre-survey on their own machines. All surveys, and the presentation of the stream for livestream participants, were coded in jsPsych [@leeuw2023], using custom-built audiovisual presentation plugins [TODO cite AVOKE preprint] and hosted through JATOS [@lange2015] on our lab server. Print versions and codebooks of the survey are available at <https://doi.org/10.5281/zenodo.15282949>. Note that in-person participants were equipped with mobile eye-tracking glasses and smartwatches for physiological measurements that were analysed for other research questions. For the same reason, livestream participants were recorded via their webcam. Both in-person and livestream participants had to undergo brief calibrations before and after the event and at intermission. For the full technical details of the event, see @apx-implementation.
 
@@ -1201,7 +1201,7 @@ plot_meanSE(df = combined_long, dv = "jitter_ios_anna", ylab = "Relationship Clo
 #| label: regression-intention-predictors
 #| include: false
 
-rm(ec_1sthalf_film, ec_1sthalf_film_d, ec_1sthalf_perf, ec_1sthalf_perf_d, ec_2ndhalf_film, ec_2ndhalf_film_d, ec_2ndhalf_perf, ec_2ndhalf_perf_d, innocents_posthoctest, ios_1sthalf_film, ios_1sthalf_film_d, ios_1sthalf_perf, ios_1sthalf_perf_d, ios_2ndhalf_film, ios_2ndhalf_film_d, ios_2ndhalf_perf, ios_2ndhalf_perf_d, outcomes, pa_1sthalf, pa_1sthalf_d)
+rm(ec_1sthalf_film, ec_1sthalf_film_d, ec_1sthalf_perf, ec_1sthalf_perf_d, ec_2ndhalf_film, ec_2ndhalf_film_d, ec_2ndhalf_perf, ec_2ndhalf_perf_d, innocents_posthoctest, ios_1sthalf_film, ios_1sthalf_film_d, ios_1sthalf_perf, ios_1sthalf_perf_d, ios_2ndhalf_film, ios_2ndhalf_film_d, ios_2ndhalf_perf, ios_2ndhalf_perf_d, pa_1sthalf, pa_1sthalf_d)
 
 #### STUDY 1 ###
 study1_intent <- study1_2long %>%
@@ -1252,13 +1252,17 @@ study2_intent <- study2_long %>%
 
 study2_intention_outcomes <- lm(behavioural_intention_z ~ liking_z + ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study2_intent)
 # check_assumptions(study2_intention_outcomes, "behavioural_intention_z", study2_intent)
-study2_intention_target <- lm(behavioural_intention_z ~ liking_z + ios_anna_z + ios_target_z + anna_empathic_concern_z + target_empathic_concern_z + problem_awareness_z, data = study2_intent)
-# check_assumptions(study2_intention_target) # empathy variables have heightened VIFs, but nothing problematic (all VIF < 5)
+
+study2_intention_outcomes2 <- lm(behavioural_intention_z ~ liking_z + ios_anna_z + target_empathic_concern_z + problem_awareness_z, data = study2_intent)
+# check_assumptions(study2_intention_outcomes2, "behavioural_intention_z", study2_intent)
+
+study2_intention_outcomes3 <- lm(behavioural_intention_z ~ liking_z + ios_target_z + target_empathic_concern_z + problem_awareness_z, data = study2_intent)
+# check_assumptions(study2_intention_outcomes3, "behavioural_intention_z", study2_intent)
 
 # calculate the effect size of problem awareness, requires a model excluding empathy https://www.researchgate.net/post/Which-effect-size-estimate-should-I-use-for-a-linear-regression-with-a-continuous-dep-variable-dichotomous-indep-variable-and-covariates
 study2_intention_target_dropawareness <- lm(behavioural_intention_z ~ liking_z + ios_anna_z + ios_target_z + anna_empathic_concern_z + target_empathic_concern_z, data = study2_intent)
 
-awareness_f2 <- (summary(study2_intention_target)$r.squared - summary(study2_intention_target_dropawareness)$r.squared) / (1 - summary(study2_intention_target)$r.squared)
+awareness_f2 <- (summary(study2_intention_outcomes)$r.squared - summary(study2_intention_target_dropawareness)$r.squared) / (1 - summary(study2_intention_outcomes)$r.squared)
 ```
 
 Participants' intentions to support a charity that fights wrongful imprisonment were moderately associated with trait empathic concern (`r apa_print(cor.test(study1_3long$behavioural_intention, study1_3long$trait_empathic_concern, method = "spearman"))$full_result`) and with selecting 'helping the social justice cause' as a motivation to get a ticket for the event (`r apa_print(cor.test(study1_3long$behavioural_intention, study1_3long$motivation_socialjustice, method = "spearman"))$full_result`). <!-- TODO should prolific participants be excluded from the motivation data, since they didn't buy a ticket? -->The variables were thus controlled for. The LMM analysis did not reveal any significant main effects or interactions involving stimuli and attendance. Time had a small effect, `r eval_fixed(intention_lmm, "timepointEndvsInter")`, with participants reporting higher problem awareness at the end of the event (`r print_descr(outcomes[outcomes$study=="Study 1", ]$behavioural_intention_End)`) compared to intermission (`r print_descr(outcomes[outcomes$study=="Study 1", ]$behavioural_intention_Intermission)`). An additional post-hoc test found no significant increase from baseline (`r print_descr(outcomes[outcomes$study=="Study 1", ]$behavioural_intention_Baseline)`) to intermission `r apa_print(int_1sthalf)$full_result`, $d = `r printnum(int_1sthalf_d$estimate)`$. 
@@ -1272,9 +1276,9 @@ Hypotheses 1b, 2b, and 3b were concerned with the influence of audiences' awaren
 #| echo: false
 
 # TODO manually copy this html table into the word doc or adjust styling inthe doc
-tab_model(intention_outcomes, study2_intention_outcomes, study2_intention_target, show.ci = FALSE, 
+tab_model(intention_outcomes, study2_intention_outcomes, study2_intention_outcomes2, study2_intention_outcomes3, show.ci = FALSE, 
           pred.labels = c("Intercept", "Trait Empathic Concern", "Social Justice Motivation", "Closeness (Anna)", "Empathic Concern (Anna)", "Problem Awareness", "Liking Percussion", "Closeness (Acquaintance)", "Empathic Concern (Acquaintance)"), 
-          dv.labels = c("Study 1", "Study 2 (1. Step)", "Study 2 (2. Step)"))
+          dv.labels = c("Study 1", "Study 2 (M1)", "Study 2 (M2)", "Study 2 (M3)"))
 
 # Alternatively, use flextable BUT doesn't take math formulas, formatting might be a pain
 # apa_print(intention_outcomes)$table %>%
@@ -1333,8 +1337,8 @@ At the end of the event, we assessed three charitable behaviours supporting the 
 #| label: fig-waffle-behaviour
 #| fig-cap: Charitable Behaviour Counts
 #| apa-note: Split for in-person and livestream audiences of study 1, and film and performance audiences of study 2 (from left to right). Note that participants in study 1 who did not complete the event were excluded from this analysis. For mailing, 'not applicable' refers to participants who indicated that they were already signed up to the mailing list of the charity. For donation, 'not applicable' refers to participants who did not participate in the follow-up survey asking about donation behaviour.
-#| out-width: 100%
-#| out-height: 70%
+#| out-width: 70%
+#| out-height: 100%
 #| echo: false
 
 # TODO add icons
@@ -1363,7 +1367,7 @@ ggplot(data = behaviour_df,
               size = 0.5,
               n_rows = 3) +
   scale_fill_manual(values = c("#002060", "#BEBEBE", "white")) +
-  facet_grid(vars(Behaviour), vars(facet), scales = "free") +
+  facet_grid(vars(facet), vars(Behaviour), scales = "free") +
   theme_bw() +
   theme(legend.position = "top",
         panel.grid = element_blank(),
@@ -1600,18 +1604,18 @@ my_effectsize(target_empathy_lmm)
 #### Anna Closeness LMM ###
 
 anna_closeness_lmm <- lmer(ios_anna_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long)
-check_assumptions(anna_closeness_lmm, "ios_anna_z", study2_long) # residuals and intercepts violate normality
+# check_assumptions(anna_closeness_lmm, "ios_anna_z", study2_long) # residuals and intercepts violate normality
 
 # # Extract and standardize residuals
 # anna_closeness_residuals <- resid(anna_closeness_lmm, type = "pearson")
 # # Find the indices of the most extreme residuals
-# order(abs(anna_closeness_residuals), decreasing = F)[1:6] # 27  57  28  58  67 282
-# lattice::qqmath(anna_closeness_lmm, id=0.1, idLabels=~.obs)
+# order(abs(anna_closeness_residuals), decreasing = T)[1:6] # 29 30 57 63 58 64 ISSUE: list of residuals is shorter than original df, therefore indices change. Use number names instead of indices
+# anna_closeness_residuals[c(29, 30, 57, 63, 58, 64)] # indices: 31, 32, 63, 69, 64, 70
 # 
 # rm(anna_closeness_residuals)
 # 
-# anna_closeness_lmm <- lmer(ios_anna_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long[-c(27,  57,  28,  58,  67, 282), ])
-# check_assumptions(anna_closeness_lmm, "ios_anna_z", study2_long[-c(27,  57,  28,  58,  67, 282), ]) # the same outliers are still there?!
+# anna_closeness_lmm <- lmer(ios_anna_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long[-c(31, 32, 63, 69, 64, 70), ])
+# check_assumptions(anna_closeness_lmm, "ios_anna_z", study2_long[-c(31, 32, 63, 69, 64, 70), ]) # residual outliers are gone, but assumptions are still violated
 
 summary(anna_closeness_lmm)
 my_effectsize(anna_closeness_lmm)
@@ -1630,8 +1634,35 @@ summary(target_closeness_lmm)
 my_effectsize(target_closeness_lmm)
 
 #### Behavioural intention LMM ###
-s2_intention_lmm <- lmer(behavioural_intention_z ~ group * timepoint + (1|p_id), data = study2_long)
+s2_intention_lmm <- lmer(behavioural_intention_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long)
+# check_assumptions(s2_intention_lmm, "behavioural_intention_z", study2_long) # non-normal residuals
+
+# # Extract and standardize residuals
+# intention_residuals <- resid(s2_intention_lmm, type = "pearson")
+# # Find the most extreme residuals
+# order(abs(intention_residuals), decreasing = T)[1:4] # 149 150 297 298
+# # look up their indices
+# intention_residuals[c(149, 150, 297, 298)] # 149       150       297       298
+# 
+# rm(intention_residuals)
+
+s2_intention_lmm <- lmer(behavioural_intention_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long[-c(149, 150, 297, 298), ])
+# check_assumptions(s2_intention_lmm, "behavioural_intention_z", study2_long[-c(149, 150, 297, 298), ]) # now, residuals are normal
+
+# # extract intercepts
+# intention_intercepts <- ranef(s2_intention_lmm)$p_id
+# # find p_ids with largest positive and negative intercepts
+# order(intention_intercepts$`(Intercept)`, decreasing = T)[1] # 143
+# order(intention_intercepts$`(Intercept)`, decreasing = F)[1] # 145
+# rownames(intention_intercepts)[c(143, 145)] # "sub-on27"   "sub-on271"
+# # find indices of those p_ids in original data
+# which(study2_long$p_id %in% c("sub-on27", "sub-on271")) # 13  14 141 142
+# 
+# s2_intention_lmm <- lmer(behavioural_intention_z ~ group * timepoint + (1|p_id), data = study2_long[-c(149, 150, 297, 298, 13, 14, 141, 142), ])
+# check_assumptions(s2_intention_lmm, "behavioural_intention_z", study2_long[-c(149, 150, 297, 298, 13, 14, 141, 142), ]) # exclusion did not help
+
 summary(s2_intention_lmm)
+my_effectsize(s2_intention_lmm)
 ```
 
 As opposed to study 1, openness and political orientation had associations smaller than $r = .3$ with problem awareness and were not included as covariates in the model. However, participants who self-identified with a marginalized sexual orientation tended to have a higher problem awareness (`r apa_print(cor.test(study2_long$problem_awareness_z, study2_long$identity_lgbq_dich, method = "spearman"))$full_result`); hence this variable was controlled for. Consistent with study 1, the model $Awareness \sim LGBQ + Stimulus * Time + (1|Participant)$ yielded the hypothesized small effect of time `r eval_fixed(s2_awareness_lmm, "timepointPostvsPre")`, with participants reporting higher problem awareness after the event (`r print_descr(study2_df$post_problem_awareness)`) than before (`r print_descr(study2_df$base_problem_awareness)`; see @fig-awareness). The stimuli did not have a significant main effect or interaction with time.
@@ -1716,15 +1747,17 @@ plot_meanSE(df = ., dv = "jitter_ios", ylab = "Relationship Closeness", xlab = "
 
 ### Charitable Behaviour
 
-<!-- TODO to avoid multicollinearity, try model comp approach -->
+Participants' intentions to support a charity fighting wrongful imprisonment showed a small increase from baseline (`r print_descr(study2_df$base_behavioural_intention)`) to after the event (`r print_descr(study2_df$post_behavioural_intention)`), `r eval_fixed(s2_intention_lmm, "timepointPostvsPre")`, comparable to study 1. We compared several preregistered regression models to predict participants' charitable intentions at the end of the event. Since intentions were associated with liking contemporary percussion music, this variable was controlled for in all models. First, we predicted intentions from the variables used in study 1: $Intention \sim Liking + Closeness (Anna) + Empathy (Anna) + Awareness$. We replicated the effect of empathy with Anna Vasquez on intentions ($\beta = `r printnum(coef(summary(study2_intention_outcomes))["anna_empathic_concern_z", "Estimate"])`$, $t (`r printnum(nobs(study2_intention_outcomes) - summary(study2_intention_outcomes)$fstatistic[2] - 1, digits = 0)`) = `r printnum(coef(summary(study2_intention_outcomes))["anna_empathic_concern_z", "t value"])`$, $p = `r printnum(coef(summary(study2_intention_outcomes))["anna_empathic_concern_z", "Pr(>|t|)"], digits = 3)`$), but unexpectedly, closeness with Anna Vasquez ($\beta = `r printnum(coef(summary(study2_intention_outcomes))["ios_anna_z", "Estimate"])`$, $t (`r printnum(nobs(study2_intention_outcomes) - summary(study2_intention_outcomes)$fstatistic[2] - 1, digits = 0)`) = `r printnum(coef(summary(study2_intention_outcomes))["ios_anna_z", "t value"])`$, $p = `r printnum(coef(summary(study2_intention_outcomes))["ios_anna_z", "Pr(>|t|)"], digits = 3)`$) and problem awareness ($\beta = `r printnum(coef(summary(study2_intention_outcomes))["problem_awareness_z", "Estimate"])`$, $t (`r printnum(nobs(study2_intention_outcomes) - summary(study2_intention_outcomes)$fstatistic[2] - 1, digits = 0)`) = `r printnum(coef(summary(study2_intention_outcomes))["problem_awareness_z", "t value"])`$, $p < .001$) were stronger predictors of intentions. Together, the explained variance in intentions was $R^2_{adj} = `r printnum(summary(study2_intention_outcomes)$adj.r.squared)`$.
 
-Participants who liked contemporary percussion music tended to have stronger intentions to support a charity fighting wrongful imprisonment at the end of the event (`r apa_print(cor.test(study2_intent$behavioural_intention_z, study2_intent$liking_z, method = "spearman"))$full_result`). Therefore, the variable was controlled for in the regression $Intention \sim Liking + Closeness (Anna) + Closeness (Victim) + Empathy (Anna) + Empathy (Victim) + Awareness$. Including the intercorrelated closeness and empathy ratings for both target persons lead to heightened variance influence factors, but none exceeded the critical value of 5. In contrast to study 1, not empathy but problem awareness significantly predicted charitable intentions, with participants who were more aware of wrongful imprisonment reporting higher intentions to support a charity ($\beta = `r printnum(coef(summary(study2_intention_target))["problem_awareness_z", "Estimate"])`$, $t (`r printnum(nobs(study2_intention_target) - summary(study2_intention_target)$fstatistic[2] - 1, digits = 0)`) = `r printnum(coef(summary(study2_intention_target))["problem_awareness_z", "t value"])`$, $p < .001$, $f^2 = `r printnum(awareness_f2)`$). The total explained variance in intention was $R_{adj}^2 = `r printnum(summary(study2_intention_target)$adj.r.squared)`$ (see @tab-regression-intention).
+Next, we replaced the empathy target: $Intention \sim Liking + Closeness (Anna) + Empathy (Victim) + Awareness$. Counter to hypothesis 2, empathy with the hypothetical victim was a slightly weaker predictor of intentions ($\beta = `r printnum(coef(summary(study2_intention_outcomes2))["target_empathic_concern_z", "Estimate"])`$, $t (`r printnum(nobs(study2_intention_outcomes2) - summary(study2_intention_outcomes2)$fstatistic[2] - 1, digits = 0)`) = `r printnum(coef(summary(study2_intention_outcomes2))["target_empathic_concern_z", "t value"])`$, $p = `r printnum(coef(summary(study2_intention_outcomes2))["target_empathic_concern_z", "Pr(>|t|)"], digits = 3)`$) than empathy with Anna Vasquez, and the model did not have a better variance explanation ($R^2_{adj} = `r printnum(summary(study2_intention_outcomes2)$adj.r.squared)`$). 
+
+Finally, we exploratively replaced the closeness target as well: $Intention \sim Liking + Closeness (Victim) + Empathy (Victim) + Awareness$. Closeness with the hypothetical victim was a slightly weaker predictor of intentions ($\beta = `r printnum(coef(summary(study2_intention_outcomes3))["ios_target_z", "Estimate"])`$, $t (`r printnum(nobs(study2_intention_outcomes3) - summary(study2_intention_outcomes3)$fstatistic[2] - 1, digits = 0)`) = `r printnum(coef(summary(study2_intention_outcomes3))["ios_target_z", "t value"])`$, $p = `r printnum(coef(summary(study2_intention_outcomes3))["ios_target_z", "Pr(>|t|)"], digits = 3)`$) than closeness with Anna Vasquez, and the variance explained did not increase ($R^2_{adj} =`r printnum(summary(study2_intention_outcomes3)$r.squared)`$; see @tbl-regression-intention). 
 
 <!-- Run regression of intention twice: once for the film, once for the performance to see whether different factors are predictive? -->
 
 ```{r}
 #| label: regression-behaviour-intention2
-#| echo: false
+#| include: false
 
 # z-score predictor
 study2_df <- study2_df %>%
@@ -1745,7 +1778,7 @@ r2_nagelkerke(study2_sumbehav_intention)
 r2_nagelkerke(study2_sumbehav_baseintention)
 ```
 
-Looking at actual charitable behaviours in support of the charity *Innocence Canada*, `r sum(study2_df$behaviour_dich, na.rm = T)` (`r printnum(sum(study2_df$behaviour_dich, na.rm = T)/sum(!is.na(study2_df$behaviour_dich))*100)`%) participants performed at least one behaviour: `r sum(study2_df$flyer, na.rm = T)` participants downloaded flyer of the charity, `r sum(study2_df$mailing, na.rm = T)` signed up to their mailing list, and `r sum(study2_df$post_donation, na.rm = T)` made a donation, raising a total of CAD `r sum(study2_df$donation_amount, na.rm = T)` (see @fig-waffle-behaviour). A Wilcoxon rank-sum test revealed that participants who watched the film did/did not perform more behaviours than those who watched the performance (`r apa_print(wilcox.test(sum_behaviour ~ group, data = study2_df))$full_result`). As predicted, participants with higher intentions tended to demonstrate more behaviours (`r paste0("$OR = ", round(study2_sumbehav_intention_OR["post_behavioural_intention_z", "OR"], 2), "$, 95% CI [", round(study2_sumbehav_intention_OR["post_behavioural_intention_z", "CI_lower"], 2), ", ", round(study2_sumbehav_intention_OR["post_behavioural_intention_z", "CI_upper"], 2), "]")`). Intention at the end of the study explained a behavioural variance of $R_{Nagelkerke}^2 = `r printnum(r2_nagelkerke(study2_sumbehav_intention))`$, and thus had more explanatory power than intention at baseline ($R_{Nagelkerke}^2 = `r printnum(r2_nagelkerke(study2_sumbehav_baseintention))`$). 
+Looking at actual charitable behaviours in support of the charity *Innocence Canada*, `r sum(study2_df$behaviour_dich, na.rm = T)` (`r printnum(sum(study2_df$behaviour_dich, na.rm = T)/sum(!is.na(study2_df$behaviour_dich))*100)`%) participants performed at least one behaviour, a considerably lower rate than livestream particpants in study 1: `r sum(study2_df$flyer, na.rm = T)` participants downloaded flyer of the charity, `r sum(study2_df$mailing, na.rm = T)` signed up to their mailing list, and `r sum(study2_df$post_donation, na.rm = T)` made a donation, raising a total of CAD `r sum(study2_df$donation_amount, na.rm = T)` (see @fig-waffle-behaviour). As predicted (hypothesis 3b), a Wilcoxon rank-sum test revealed that no significant difference between participants who watched the film or the performance (`r apa_print(wilcox.test(sum_behaviour ~ group, data = study2_df))$full_result`). As predicted (hypothesis 3a), participants with higher intentions tended to demonstrate more behaviours (`r paste0("$OR = ", round(study2_sumbehav_intention_OR["post_behavioural_intention_z", "OR"], 2), "$, 95% CI [", round(study2_sumbehav_intention_OR["post_behavioural_intention_z", "CI_lower"], 2), ", ", round(study2_sumbehav_intention_OR["post_behavioural_intention_z", "CI_upper"], 2), "]")`). Intentions after the event explained a behavioural variance of $R_{Nagelkerke}^2 = `r printnum(r2_nagelkerke(study2_sumbehav_intention))`$. As opposed to study 1, however, intentions at baseline had more explanatory power for participants' actual behaviour ($R_{Nagelkerke}^2 = `r printnum(r2_nagelkerke(study2_sumbehav_baseintention))`$). 
 
 <!-- Add condition as predictor to the ordinal regression to test film-performance differences in behaviour, rather than with Wilcoxon rank-sum test? -->
 
@@ -1764,8 +1797,10 @@ combined_prepost <- combined_long %>%
 contrasts(combined_prepost$timepoint) <- cbind(PostvsPre = c(-1, 1))
 contrasts(combined_prepost$study) <- cbind(study1vs2 = c(1, -1))
   
+# TODO check correlations with covariates
+
 combined_awareness <- lmer(problem_awareness_z ~ timepoint * study + (1|p_id), data = combined_prepost)
-check_assumptions(combined_awareness, "problem_awareness_z", combined_prepost) # TODO non-normal residuals
+check_assumptions(combined_awareness, "problem_awareness_z", combined_prepost) # TODO non-normal residuals and intercepts
 
 combined_empathy <- lmer(anna_empathic_concern_z ~ timepoint * study + (1|p_id), data = combined_prepost)
 check_assumptions(combined_empathy, "anna_empathic_concern_z", combined_prepost) # TODO non-normal residuals and intercepts 
@@ -1779,11 +1814,9 @@ wilcox.test(sum_behaviour ~ study, data = combined_prepost, subset = attendance 
 wilcox.test(sum_behaviour ~ study, data = combined_prepost, subset = timepoint == "End")
 ```
 
-To compare the effects of watching one stimulus or both stimuli, we fitted LMMs predicting empathy and closeness (with Anna Vasquez) and problem awareness from time (pre vs. post) and study (study 1 vs. study 2), with random intercepts for participants. For awareness, there was a main effect of xyz... For empathy, study and timepoint interacted ... For closeness, xyz.
+To compare the effects of watching one stimulus or both stimuli (hypothesis 4), we fitted LMMs predicting empathy and closeness (with Anna Vasquez) and problem awareness based on time (pre vs. post) and study (study 1 vs. study 2), with random intercepts for participants. For awareness, there was a main effect of time, `r eval_fixed(combined_awareness, "timepointPostvsPre")`, which did not interact with the studies, indicating no difference between the increases in problem awareness in the two studies. For empathy, there was a main effect of time, `r eval_fixed(combined_empathy, "timepointPostvsPre")`, and a small main effect of the studies, `r eval_fixed(combined_empathy, "studystudy1vs2")`, indicating that participants in study 2 reported higher empathy than participants in study 1. However, the interaction between time and study was not significant, providing no support for differential increases in empathy from before to after the event. For closeness, there was a main effect of time, `r eval_fixed(combined_closeness, "timepointPostvsPre")`, which interacted with the studies, `r eval_fixed(combined_closeness, "timepointPostvsPre:studystudy1vs2")`, indicating larger increases in closeness in study 1 compared to study 2. Finally, even thouhgh the descriptive difference in the amount of charitable behaviours between the two studies pointed in the expected direction (hypothesis 5; see @fig-waffle-behaviour), this difference was not significance in a Wilcoxon rank-sum test, `r apa_print(wilcox.test(sum_behaviour ~ study, data = combined_prepost, subset = attendance == "Livestream" & timepoint == "End"))$full_result`.
 
-\@Lauren does this LMM analysis make sense or is it redundant with study 1, where we already evaluated the effect of one vs. both stimuli?
-
-Participants in study 1 performed more/less/the same amount of behaviours as participants in study 2 (`r apa_print(wilcox.test(sum_behaviour ~ study, data = combined_prepost, subset = attendance == "Livestream" & timepoint == "End"))$full_result`).
+<!-- TODO Wilcox test with only study1 livestream data (cf. prereg)-->
 
 ## Discussion
 
