@@ -719,52 +719,41 @@ combined_long <- study1_3long %>%
         jitter_awareness = jitter(problem_awareness, amount = .15)) 
 ```
 
-Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were implemented to enforce justice, but across societies, systemic issues lead to the wrongful imprisonment of innocent individuals. How can we mobilize support to fight social injustices such as wrongful imprisonment? Arts and media are a way of reaching and engaging broad audiences. Film, TV, and theatre, using the power of storytelling, can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. Given that music typically has less narration than the previously mentioned media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it [e.g., @onderdijk2021; @swarbrick2023; @rabinowitch2023; @chang2021; @boer2011; @lonsdale2009; @rentfrow2009], few studies have investigated how music influences our views of people and issues that are the subject of music. In addition, though theories of prosocial behaviour and social engagement propose various predictors that could explain how arts and media can advocate for social justice issues, this plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
+# Introduction 
 
-In two studies, we evaluate how an abstract music performance engages audiences with the issue of wrongful imprisonment, compared to a narrative documentary film. We assess changes in three affective and cognitive variables, empathic concern, relationship closeness, and problem awareness, and compare their influence on supportive behaviour of audiences in the concert hall and at home. This study provides empirical support for the mobilizing potential of music as a medium with less narration, and highlights which facet of audiences' attitudes artists should appeal to in order to gain support for their cause.
+Despite our shared struggle for a better world, societies remain unjust. For example, criminal justice systems were implemented to enforce justice, but across societies, systemic issues lead to the wrongful imprisonment of innocent individuals. Arts and media are a way of reaching and engaging broad audiences to mobilize support to fight social injustices such as wrongful imprisonment. Film, TV, and theatre, using the power of storytelling, can shape attitudes and behaviours with regards to social injustice. Music is also commonly used to advocate for social justice issues, for instance in the forms of charity concerts and protest songs. Given that music typically has less storytelling than the previously mentioned media, it remains unclear how socially responsible music promotes audiences' engagement with social justice issues. While previous research has uncovered how music shapes our evaluation of the people making the music or listening to it [e.g., @onderdijk2021; @swarbrick2023; @rabinowitch2023; @chang2021; @boer2011; @lonsdale2009; @rentfrow2009], few studies have investigated how music influences our views of the people and issues that are the subject of music. In addition, though theories of prosocial and charitable behaviour propose various predictors that could explain how arts and media can advocate for social justice issues, this plurality makes it difficult for researchers to integrate previous works, and for artists to understand which factors are decisive to effectively engage their audience.
+
+In two studies, we evaluate how an abstract music performance engages audiences with the issue of wrongful imprisonment, compared to a narrative documentary film. We assess changes in three affective and cognitive variables, empathic concern, relationship closeness, and problem awareness, and compare their influence on supportive behaviours observed in audiences in the concert hall and at home. This study provides empirical support for the mobilizing potential of music as a medium with less narration, and highlights which attitudinal facet artists should appeal to in order to gain support for their cause.
 
 ## Mobilizing support for social justice causes
 
-The aim of social justice advocacy is to foster engagement with a social justice issue and mobilize supportive behaviour for that cause. How social justice behaviour emerges has been studied under different keywords - including prosocial behaviour, altruism, philanthropy, and charitable behaviour - by scholars from different disciplines, resulting in a variety of theories and models [@bekkers2011]. This issue of parallel theories accounting for the same phenomenon is not limited to the study of social justice behaviour: Psychological research more broadly has been critized for hindering research progress because each researcher investigates their pet theory in isolation, when instead theory integration would be necessary to further our understanding of human behaviour [@muthukrishna2019; @almaatouq2024]. Beyond scholarly inefficiency, parallel theories also hinder the application of psychological research by confusing practitioners about which factors are decisive in which context [@leeuw2022]. It is therefore necessary to empirically compare the predictions of different theories of social justice behaviour [@bekkers2011]. In this study, we compare normative, empathic, and relational influences on social justice behaviour.
+The aim of social justice advocacy is to foster engagement with a social justice issue and mobilize supportive behaviour for that cause. How social justice behaviour emerges has been studied under different keywords - including prosocial behaviour, altruism, philanthropy, and charitable behaviour - by scholars from different disciplines, resulting in a variety of theories and models [@bekkers2011]. This issue of parallel theories accounting for the same phenomenon is not limited to the study of social justice behaviour: Psychological research more broadly has been criticized for slowing research progress because researchers investigate their pet theory in isolation, when instead theory integration would be necessary to further our understanding of human behaviour [@muthukrishna2019; @almaatouq2024]. Beyond scholarly inefficiency, parallel theories also hinder the application of psychological research by confusing practitioners about which factors are decisive in which context [@leeuw2022]. It is therefore necessary to empirically compare the predictions of different theories of social justice behaviour [@bekkers2011]. In this study, we compare normative, empathic, and relational influences on social justice behaviour.
 
-Justice is a moral concept, and fighting injustices or supporting social justice causes can be conceived as morally-driven behaviour. The norm activation model [NAM, @schwartz1977] lays out the process of how personal norms create a moral obligation to act. According to the model, an actor first has to become aware of a problematic situation (e.g., wrongful imprisonment) puts those affected (e.g., innocent prisoners) in distress. Subsequently, an actor needs to feel responsible for changing the problematic situation and responding to the distress of those affected (e.g., by making a donation to an NGO that re-investigates cases of wrongful imprisonment). As a third component, the problem must be relevant to the personal norms of the actor (e.g., justice in the legal system), for these norms to be activated and guide behaviour. In combination, problem awareness, ascription of responsibility, and personal norms create a moral obligation to help solve the problem or reduce the distress of those affected, so that the actor acts in accordance with their norms [@schwartz1977; @degroot2009]. Importantly, the NAM postulates a causal chain of the three components, which explains why people do not always adhere to all of their norms: If one is not aware of a problem or does not believe that they can change it, their norms are not activated in that situation and therefore can not guide their behaviour [although the empirical evidence regarding this causal chain is mixed\; @klockner2013].
+Justice is a moral concept, and supporting social justice causes can be conceived as morally-driven behaviour. The norm activation model [NAM, @schwartz1977] lays out the process of how personal norms create a moral obligation to act. According to the model, an actor first has to become aware of a problematic situation (e.g., wrongful imprisonment) that puts those affected (e.g., innocent prisoners) in distress. Subsequently, the actor needs to feel responsible for changing the problematic situation and responding to the distress of those affected. As a third component, the problem must be relevant to the personal norms of the actor (e.g., justice in the legal system), for these norms to be activated and guide the actor's behaviour. In combination, problem awareness, ascription of responsibility, and personal norms create a moral obligation to help reduce the distress of those affected (e.g., by making a donation to an NGO that re-investigates cases of wrongful imprisonment), so that the actor acts in accordance with their norms [@schwartz1977; @degroot2009]. Importantly, the NAM postulates a causal chain of the three components, which explains why people do not always adhere to all of their norms: If one is not aware of a problem or does not believe that they can change it, their norms are not activated in that situation and therefore can not guide their behaviour [although the empirical evidence regarding this causal chain is mixed\; @klockner2013].
 
-Studies on prosocial and pro-environmental behaviour [e.g., @degroot2009; @savari2023; @steg2010] commonly integrate the NAM with the theory of planned behaviour [TPB, @ajzen1991; @ajzen2011]. While there is some conceptual overlap between the constructs of the two theories, the TPB crucially contributes the *behavioural intention* as the most proximal predictor of behaviour. The idea is that rational (or planned) behaviour is always preceded by a decision to engage in that behaviour. Therefore, all other predictors of behaviour influence this decision, which in turn mediates the actual behaviour [@ajzen1991; @ajzen2011]. Separating intention and behaviour reduces noise in analyses, because the translation of intention into behaviour can be hindered by external factors beyond the scope of studying what motivates actors to engage in a behaviour [e.g., lack of resources, or unexpected situations\; @sheeran2002]. In conclusion, social justice advocacy can mobilize supportive behaviour by raising awareness for a problem, appealing to the audience's responsibility, or strengthening norms regarding social justice, which contribute to the intention to support the social justice cause. However, problem awareness might have to precede the other components, especially when the social justice issue is lesser known.
+Studies on prosocial and pro-environmental behaviour [e.g., @degroot2009; @savari2023; @steg2010] commonly integrate the NAM with the theory of planned behaviour [TPB, @ajzen1991; @ajzen2011]. While there is some conceptual overlap between the constructs of the two theories, the TPB crucially contributes the *behavioural intention* as the most proximal predictor of behaviour. The idea is that rational (or planned) behaviour is always preceded by a decision to engage in that behaviour. Therefore, all other predictors of behaviour influence this decision, which in turn mediates the actual behaviour [@ajzen1991; @ajzen2011]. Separating intention and behaviour reduces noise in analyses, because the translation of intention into behaviour can be hindered by external factors beyond the scope of motivational research [e.g., lack of resources, or unexpected situations\; @sheeran2002]. Taken together, the NAM and TPB suggest that social justice advocacy can mobilize supportive behaviour by raising awareness for a problem, appealing to the audience's responsibility, or strengthening norms regarding social justice, which contribute to the intention to support the social justice cause. However, problem awareness might have to precede the other components, especially when the social justice issue is lesser known.
 
-Beyond the moral motive, altruistic motives can promote the support of social justice causes. According to the empathy-altruism hypothesis, empathically adopting the perspective of a person in need creates an altruistic motivation to reduce their suffering. For example, empathizing with the experience of an innocent prisoner may give rise to a sense of concern about their well-being, which translates into a motivation to help to improve the well-being of the innocent prisoner, regardless of the behavioural consequences for oneself [@batson1987; @batson2011]. There has been a long debate on whether helping can be purely altruistic, in that the actor is only acting in the interest of the person receiving the help, or whether the actor always has an egoistic interest to reduce their own distress arising from witnessing the other person suffering [e.g., @cialdini1997; for a review, see @batson2011]. Both empathic concern and personal distress, however, arise from empathic perspective-taking. <!-- TODO add that empathizing is effortful, therefore motivate audiences to empathize (rather than improve their ability to empathize; Weisz & Zaki, 2017). --> Hence, social justice advocacy can mobilize supportive behaviour by conveying the experiences and point of view of those affected by the social justice issue, thereby facilitating empathic responses from the audience.
+Beyond the moral motive, altruistic motives can promote the support of social justice causes. According to the empathy-altruism hypothesis, empathically adopting the perspective of a person in need creates an altruistic motivation to reduce their suffering. For example, empathizing with the experience of an innocent prisoner may give rise to a sense of concern about their well-being, which translates into a motivation to help improve the well-being of the innocent prisoner, irrespective of the behavioural consequences for oneself [@batson1987; @batson2011]. There has been a long debate on whether helping can be purely altruistic, in that the actor is only acting in the interest of the person receiving the help, or whether the actor always has an egoistic interest to reduce their own distress arising from witnessing the other person suffering [e.g., @cialdini1997; for a review, see @batson2011]. Both empathic concern and personal distress, however, arise from empathic perspective-taking. <!-- TODO add that empathizing is effortful, therefore motivate audiences to empathize (rather than improve their ability to empathize; Weisz & Zaki, 2017). --> Hence, social justice advocacy can mobilize supportive behaviour by conveying the experiences and point of view of those affected by the social justice issue, thereby facilitating empathic responses from the audience.
 
-Finally, social relationships play an important role in supporting social justice causes. A body of literature reports that perceived similarity and familiarity with another person strengthens the tendency to help them [@burger2004; @batson1981; @batson1995; @sole1975]. One possible explanation is that if one feels closer to a person in need, it is easier to empathize with their need, and one cares more for their well-being, thus facilitating the empathically motivated altruism described above [@batson1981; @batson1995; @sturmer2009]. In another line of argumentation, if one feels closer to a person in need, one values their social approval more and therefore might help them in hopes of getting their approval, or avoiding the risk of social punishment for not helping them [@bekkers2011]. Similarly, a close relationship with those who observe the act of helping may also create a social pressure to help, given that the observers approve of the helping [@bekkers2011]. Therefore, social justice advocacy can mobilize supportive behaviour by tightening the social bonds between audiences and those affected by the social justice issue, which should increase the tendency to help.
+Finally, social relationships play an important role in supporting social justice causes. A body of literature reports that perceived similarity and familiarity with another person strengthen the tendency to help them [@burger2004; @batson1981; @batson1995; @sole1975]. One possible explanation is that if one feels closer to a person in need, it is easier to empathize with their need, and one cares more for their well-being, thus facilitating the empathically motivated altruism described above [@batson1981; @batson1995; @sturmer2009]. In another line of argumentation, if one feels closer to a person in need, one values their social approval more and therefore might help them in hopes of getting their approval, or avoiding the risk of social punishment for not helping them [@bekkers2011]. These lines of argumentation suggest that social justice advocacy can mobilize supportive behaviour by tightening the social bonds between audiences and those affected by the social justice issue, which should increase the tendency to help.
 
 <!-- TODO conceptual figure --> 
 
 ## Advocacy through art
 
-Social injustices often become the subject of art. Beyond a mere inspiration or description of society, art is used to criticize social injustices and advocate for social justice. Empirical evaluations of such advocacy through art have proven effects of media like documentary films, theatre, and songs on the aforementioned normative, empathic, and relational dimensions, and on behaviour in support of social justice causes. For example, @reddan2024 compared audience responses to a documentary about wrongful imprisonment and two documentaries about injustices in sports, and found that the former enhanced audiences' empathic responses towards prisoners, attitudes towards prison reform, and intentions to support a petition to restore voting rights for people with felony convictions. Documentaries about personal life stories also increase social bonding with other audience members [@dunbar2016]. These studies are comparable to the somewhat larger body of literature attesting that documentaries about climate change increase audiences' concern and pro-environmental intentions [@howell2011; @nolan2010; @sakellari2015]. Turning to theatre, audiences of performances about disadvantaged groups have been shown to be more empathetic with the represented groups and more willing to donate to charity after the performance, compared to before. Effects on measures of attitude change remained ambiguous [@rathje2021]. Moreover, songs with prosocial lyrics like "Love Generation" by Bob Sinclair have been shown to prompt prosocial thoughts and empathic responses in listeners, with empathy mediating the effect of the lyrical content on charitable donations [@greitemeyer2009; @greitemeyer2009a].
+Social injustices often become the subject of art. Beyond a mere inspiration or description of society, art often criticizes social injustices and advocates for change. Empirical evaluations of such advocacy through art have demonstrated effects of media like documentary films, theatre, and songs on the aforementioned normative, empathic, and relational dimensions, and on behaviour in support of social justice causes. For example, @reddan2024 compared audience responses to a documentary about wrongful imprisonment with two documentaries about injustices in sports, and found that the former enhanced audiences' empathic responses towards prisoners, attitudes towards prison reform, and intentions to support a petition to restore voting rights for people with felony convictions. While this study is unique in its focus on documentaries on social issues, its results are consistent with the somewhat larger body of literature attesting that documentaries about climate change can increase audiences' concern and pro-environmental intentions [@howell2011; @nolan2010; @sakellari2015]. Turning to theatre, audiences of performances about disadvantaged groups have been shown to be more empathetic with the represented groups and more willing to donate to charity after the performance, compared to before. Effects on measures of attitude change remained ambiguous [@rathje2021]. Moreover, even songs with prosocial lyrics like "Love Generation" by Bob Sinclair, though much shorter than documentaries or theatre, can prompt prosocial thoughts and empathic responses in listeners, with empathy mediating the effect of the lyrical content on charitable donations [@greitemeyer2009; @greitemeyer2009a; @hong2023].
 
-<!-- TODO Theatre: see alse Troxler et al., 2022 & Greene et al., 2018 -->
+Most of the research cited above theorizes that art, be it film, theatre, or song, achieves its advocacy effect through powerful narratives influencing audiences' emotions and cognition regarding the advocacy topic. However, not all art makes use of explicit narration. Visual art, for example, often conveys social critique in an implicit, symbolic, or abstract manner [e.g., @pelowski2024]. Similarly, much music beyond the song form is carried more by sounds and less by lyrics, and therefore has fewer tools for explicit narration. Still, there are many examples of classical and jazz music intended to advocate for concrete issues: The West-Eastern Divan Orchestra for instance, a classical symphony orchestra with Israeli and Palestinian musicians, promotes a peaceful solution to the Arab-Israeli conflict by playing for concert audiences and politicians alike (<https://west-eastern-divan.org/>). Jazz icons sonified the struggle for racial justice with works such as Duke Ellington's *Black and Tan Fantasy*, Oscar Peterson's *Hymn to Freedom*, and John Coltrane's *Alabama* (<https://naacpsfnm.org/jazz-and-civil-rights/>). In the current study, we evaluate Allen Otte and John Lane's *The Innocents,* a percussion performance about wrongful imprisonment in the United States, touring schools and universities to educate and engage its audience with this often overlooked social injustice (<https://www.the-innocents.com/>). How does such music mobilize support for social justice causes, if not through explicit narrative lyrics?
 
-Most of the research cited above theorizes that art, be it film, theatre, or song, achieves its advocacy effect through powerful narratives influencing audiences' emotions and cognition regarding the advocacy topic. However, not all art makes use of explicit narration. Visual art, for example, often conveys social critique in an implicit, symbolic, or abstract manner [e.g., @pelowski2024]. Similarly, much music beyond the song form is carried more by sounds and less by lyrics, and therefore has fewer tools for explicit narration. Still, there are many examples of classical and jazz music intended to advocate for concrete issues: The West-Eastern Divan Orchestra, a classical symphony orchestra with Israeli and Palestinian musicians, promotes a peaceful solution to the Arab-Israeli conflict by playing for concert audiences and politicians alike (<https://west-eastern-divan.org/>). Jazz icons sonified the struggle for racial justice with works such as Duke Ellington's *Black and Tan Fantasy*, Oscar Peterson's *Hymn to Freedom*, and John Coltrane's *Alabama* (<https://naacpsfnm.org/jazz-and-civil-rights/>). IN the current study, we explore Allen Otte and John Lane's *The Innocents,* a percussion performance about wrongful imprisonment in the United States, which tours schools and universities to educate and engage its audience with this often overlooked social injustice (<https://www.the-innocents.com/>). How does such music mobilize support for social justice causes, if not through explicit narrative lyrics?
-
-Music excels at arousing emotions in the listener. 
-<!-- Trevor & Früholz: music added a dimension to fiction that enhances strong emotional responses --> 
-It could therefore be expected that music advocates by eliciting empathic responses and strengthening social bonds among listeners, whereas narrative media like documentary films might be more effective in raising problem awareness. Indeed, making music together can promote empathy [@clarke2015; @rabinowitch2013; @tzanaki2025], though it remains unclear to which extent listening to music advocacy, rather than making music, can promote empathy. Moreover, both making and listening to music can strengthen social bonds with other musicians and listeners [@savage2021; @mogan2017; @swarbrick2023]. However, there is an ongoing debate as to who those social bonds extend to, beyond the musicians and listeners who are part of the music experience [@rabinowitch2023; @cirelli2016; @reddish2014; @reddish2016; @cross2020; @cross2019; @fink2021]. This latter aspect is crucial for advocacy contexts, because the recipients of charitable behaviour are usually absent during the advocacy [e.g., when an activist speaks to a potential donor at a fundraiser for prison reforms, the affected prisoners usually are not present, @bekkers2011]. In conclusion, if music advocacy can raise awareness about social injustice, promote empathy with victims of injustice, or strengthen social bonds with them, any of these effects could explain why audiences would support the advocacy cause.
+Music excels at deliberately eliciting specific intended emotions in the listener<!-- [@trevor2024]-->. Music-induced eudaimonic emotions, such as feeling moved or in awe, are thought to connect the listener to others and promote prosocial behaviour irrespective of lyrical content or narrative [@tukachinskyforster2025]. This proposition is supported by research showing that emotional music without lyrics facilitates empathy and willingness to help, compared to neutral music [@McDonald2022] or happy music [@Wu2025]. More generally, musical activities can promote empathy [@clarke2015; @rabinowitch2013; @tzanaki2025] and strengthen social bonds with other musicians and listeners [@savage2021; @mogan2017; @swarbrick2023]. However, there is an ongoing debate as to who those social bonds extend to, beyond the musicians and listeners who are part of the music experience [@rabinowitch2023; @cirelli2016; @reddish2014; @reddish2016; @cross2020; @cross2019; @fink2021]. This latter aspect is crucial for advocacy contexts, because the recipients of charitable behaviour are usually absent during the advocacy [e.g., when an activist speaks to a potential donor at a fundraiser for prison reforms, the affected prisoners usually are not present, @bekkers2011]. Here, we build on existing research on art advocacy, such as songs with prosocial lyrics, and prosocial effects of music activities more generally. We extend previous work by investigating the advocacy effects of a music performance with a specific advocacy aim that is pursued less through narrative (compared to songs) and more through emotions. Because most research on art advocacy and prosocial effects of art has studied narrative media, we compare the effects of the music to those of a narrative documentary film.
 
 ## Collective aspects of audience experience
 
-Historically, audiences of both music and film would typically gather together in a concert venue or cinema to collectively experience a performance or screening. Over the past decades, however, inventions in disc storage devices, and more recently in streaming services, have led to a shift towards individual experiences of music and film in private audiovisual environments at home or via personal screens and headphones. Media and communications research has theorized that being part of an audience gives rise to a different experience than watching or listening alone: In their reciprocal feedback model of musical communication, @hargreaves2005 emphasize that the presence or absence of others influences both the listener's response to music, as well as the performance of the music itself. In contrast to recorded or broadcast performances, live music performances allows for bidirectional communication between spatio-temporally co-present performers and audience members: The performer can communicate through more channels than just the sound itself, and the audience can shape the performance through their immediate reactions. @wald-fuhrmann2021 corroborate the importance of the presence of musicians and audience members in shaping audiences' aesthetic experience of music. In addition to the communication between musicians and audience members, they also consider the roles of the communication among audience members during, as well as before and after a music performance, and of the synchronization of bodily responses (like moving and cardiorespiratory activity) of co-present audience members. These factors might explain why music that is experienced together with other audience members has been found to elicit more intense emotional reactions [@liljestrom2013; though see @egermann2011], immersion/absorption [@kreuzer2025; @swarbrick2024], and intellectual stimulation [@kreuzer2025], than experiencing the same music alone or as part of a virtual audience.
+Historically, audiences of both music and film would typically gather together in a concert venue or cinema to collectively experience a performance or screening. Over the past decades, however, inventions such as disc storage devices, and more recently online streaming services, have led to a shift towards individual experiences of music and film in private audiovisual environments at home or via individual screens and headphones. Media and communications scholars have theorized that being part of an audience gives rise to a different experience than watching or listening alone: For music, @hargreaves2005 emphasize that the presence or absence of others influences both the listener's response to music, as well as the performer and thereby the music itself. Live music performances, other than recorded or broadcast performances, allow for bidirectional communication between spatio-temporally co-present performers and audience members: The performer can communicate through more channels than just the sound itself (e.g., body movements), and the audience can shape the performance through their immediate reactions. @wald-fuhrmann2021 corroborate the importance of the presence of musicians and audience members in shaping audiences' aesthetic experience of concerts. In addition to the communication between musicians and audience members, they also highlight the influence of the communication among audience members during, as well as before and after a music performance, and of the synchronization of bodily responses (like moving and cardiorespiratory activity) of co-present audience members. For film audiences, similar considerations have been put forward: Expressions (e.g., laughter) of other audience members can influence the viewing experience, but even a quietly attentive audience is aware of each other's presence, making collective film viewing in cinemas a social experience distinct from individual viewing at home [@hanich2014].
 
-TODO elaborate theoretical predictions [@hanich2017; @hanich2014] and empirical film research [@kaltwasser2019; @hammond2024]
+Empirical evidence confirms that music that is experienced together with other audience members elicits more intense emotional reactions [@liljestrom2013; though see @egermann2011 and @belfi2021], immersion and absorption [@kreuzer2025; @swarbrick2024], and intellectual stimulation [@kreuzer2025], than experiencing the same music alone or as part of a virtual audience. Regarding collective film viewing, @kaltwasser2019 report that some participants had physiological reactions to the co-presence of other audience members, though self-reported emotional reactions did not differ between collective and individual viewing conditions. Note that the studies reporting no differences had small sample sizes and thus lack the power to conclude the absence of an effect.
 
-To our knowledge, very little is known about how the presence or absence of other audience members affects the mobilization potential of advocacy through art. Not an artifical question because charity concerts are commonly livestreamed (from televised classics like Live Aid to entirely digital events like One World Together at Home)
-
--   [@swarbrick2023; @onderdijk2021]: audience/musician co-presence influences connectedness, which plays a role in advocacy
-
--   social pressure of other audience members could enhance effects
-
-in-person event: social contagion/collective action with performers (music only) or audience members (film and music) could enhance effects. And adds ecological validity
-
-no study has compared advocacy effects on individual vs. collective audience
-maybe adress liveness? spatiotemporal vs temporal vs no copresence across studies
+Very little is known about how the presence of other audience members might affect the mobilization potential of advocacy through art. This question is all the more relevant given that big charity concerts reach more livestream viewers at home than in-person attendees at the venue (from televised classics like Live Aid to entirely digital events like One World Together at Home). Swarbrick and colleagues found that co-presence in time and/or space strengthens connectedness among concert audiences [@swarbrick2021; @swarbrick2023; @onderdijk2021], suggesting that the co-presence of the performers (in the case of music, but not film) and of other audience members (for both film and music) might facilitate advocacy effects via stronger social bonds. <!-- @altenmuller20240909: social presence of audience could activate deeper processing or could distract from aesthetic experience (in museum context) -->To our knowledge, this is the first study to compare art advocacy effects in individual vs. collective audiences. 
 
 ## The present studies
 
@@ -858,7 +847,7 @@ At the end of the event, we observed whether participants took a flyer of *Innoc
 
 #### Affect
 
-We assessed affect with six items rated on a 4-point scale ranging from 1 ("I do not feel it") to 4 ("I feel it strongly"). The six items were combined into three bipolar dimensions alert-tired, relaxed-tense, and positive-negative by subtracting the rating of one pole from the rating of the opposite pole [@schimmack2000].
+We assessed affect with six items rated on a 4-point scale ranging from 1 ("I do not feel it") to 4 ("I feel it strongly"). The six items were combined into three bipolar dimensions alert-tired, relaxed-tense, and positive-negative by subtracting the rating of one pole from the rating of the opposite pole [@schimmack2000]. <!-- TODO explore single items with regards to mixed affect (feeling both happy and sad; e.g. tukachinskyforster2025) -->
 
 #### Event experience
 
@@ -1250,8 +1239,17 @@ study2_long <- study2_long %>%
 study2_intent <- study2_long %>%
   filter(timepoint == "End") 
 
-study2_intention_outcomes <- lm(behavioural_intention_z ~ liking_z + ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study2_intent)
-# check_assumptions(study2_intention_outcomes, "behavioural_intention_z", study2_intent)
+# study2_intention_outcomes <- lm(behavioural_intention_z ~ liking_z + ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study2_intent)
+# check_assumptions(study2_intention_outcomes, "behavioural_intention_z", study2_intent) # non-normal residuals
+# 
+# # extract residuals
+# intention_residuals <- resid(study2_intention_outcomes, type = "pearson")
+# # Find the indices of the most extreme residuals
+# order(abs(intention_residuals), decreasing = TRUE)[1:3] 
+# intention_residuals[c(83, 33, 80)] # indices: 87        36
+
+study2_intention_outcomes <- lm(behavioural_intention_z ~ liking_z + ios_anna_z + anna_empathic_concern_z + problem_awareness_z, data = study2_intent[-c(87, 36), ])
+# check_assumptions(study2_intention_outcomes, "behavioural_intention_z", study2_intent[-c(87, 36), ])
 
 study2_intention_outcomes2 <- lm(behavioural_intention_z ~ liking_z + ios_anna_z + target_empathic_concern_z + problem_awareness_z, data = study2_intent)
 # check_assumptions(study2_intention_outcomes2, "behavioural_intention_z", study2_intent)
@@ -1276,7 +1274,7 @@ Hypotheses 1b, 2b, and 3b were concerned with the influence of audiences' awaren
 #| echo: false
 
 # TODO manually copy this html table into the word doc or adjust styling inthe doc
-tab_model(intention_outcomes, study2_intention_outcomes, study2_intention_outcomes2, study2_intention_outcomes3, show.ci = FALSE, 
+tab_model(intention_outcomes, study2_intention_outcomes, study2_intention_outcomes2, study2_intention_outcomes3, show.ci = T, 
           pred.labels = c("Intercept", "Trait Empathic Concern", "Social Justice Motivation", "Closeness (Anna)", "Empathic Concern (Anna)", "Problem Awareness", "Liking Percussion", "Closeness (Acquaintance)", "Empathic Concern (Acquaintance)"), 
           dv.labels = c("Study 1", "Study 2 (M1)", "Study 2 (M2)", "Study 2 (M3)"))
 
@@ -1408,7 +1406,7 @@ Study 2 manipulated one factor with two levels: Participants watched either the 
 
 <!-- TODO describe pertinent characteristics, refer to suppl for detailed tables -->
 
-For study 2, we recruited all participants through Prolific between June and November 2025. For the first half of the sample, the study was open Tuesday through Sunday evening roughly between 5:30 and 8:30 pm Eastern Time to imitate the conditions of a livestreamed event as in Study 1. Because this slowed the data collection more than anticipated, for the second half of the sample, participants could access the study at any time. Participants had to be between 18 and 60 years old, be fluent in English, have healthy hearing, watch the event without glasses (healthy vision or correction with contact lenses), have not seen the film or the performance before, and reside in Canada. We added the last requirement to match the area of activity of our partner charity, Innocence Canada. We aimed to recruit 200 participants, 100 per condition. A simulation-based power analysis indicated that this sample size would yield a 75% power to detect the most ambiguous effect from Study 1, the interaction of stimuli and time on empathic concern (see preregistration for details). A total of 388 participants started the study and 192 (19.48%) completed it. Among the complete participants, 5 (2.6%) revoked their consent at the time of the debriefing and 12 (6.25%) were rejected because of incomplete webcam data, resulting in a sample of 175 participants with `r sum(study2_df$group == "group_film")` participants in the film and `r sum(study2_df$group == "group_perf")` in the performance condition. Upon completion of the study, participants were compensated with 6 GBP per hour, which was increased to 8 GBP for the last quarter of the sample to counteract the slowing recruitment.
+For study 2, we recruited all participants through Prolific between June and November 2025. For the first half of the sample, the study was open Tuesday through Sunday evening roughly between 5:30 and 8:30 pm Eastern Time to imitate the conditions of a livestreamed event as in Study 1. Because this slowed the data collection more than anticipated, for the second half of the sample, participants could access the study at any time. Participants had to be between 18 and 60 years old, be fluent in English, have healthy hearing, watch the event without glasses (healthy vision or correction with contact lenses), have not seen the film or the performance before, and reside in Canada. We added the last requirement to match the area of activity of our partner charity, Innocence Canada. We aimed to recruit 200 participants, 100 per condition. A simulation-based power analysis indicated that this sample size would yield a 75% power to detect the most ambiguous effect from Study 1, the interaction of stimuli and time on empathic concern (see preregistration for details). A total of 388 participants started the study and 192 (19.48%) completed it. Among the complete participants, 5 (2.6%) revoked their consent at the time of the debriefing and 1 was excluded from the analysis because of issues with the stream not loading, resulting in a sample of 175 participants with `r sum(study2_df$group == "group_film")` participants in the film and `r sum(study2_df$group == "group_perf")` in the performance condition. Upon completion of the study, participants were compensated with 6 GBP per hour, which was increased to 8 GBP for the last quarter of the sample to counteract the slowing recruitment.
 
 ### Procedure
 
@@ -1505,15 +1503,15 @@ study2_dichotom <- study2_long %>%
 control_vars <- c("age", "familiarity", "liking", "demo_openness", "income", "education", "omsi", "politics", multichoice_vars)
 
 # Check correlations with control variables
-dv_corr("ios_anna_z", control_vars, study2_dichotom, output = "table") # liking r = .36
+dv_corr("ios_anna_z", control_vars, study2_dichotom, output = "table") # liking r = .39
 dv_corr("ios_target_z", control_vars, study2_dichotom, output = "table") 
 dv_corr("anna_empathic_concern_z", control_vars, study2_dichotom, output = "table") 
-dv_corr("target_empathic_concern_z", control_vars, study2_dichotom, output = "table") # age r = .3, liking r = .31
-dv_corr("problem_awareness_z", control_vars, study2_dichotom, output = "table") # identity_lgbq r = .34
-dv_corr("behavioural_intention_z", control_vars, study2_dichotom, output = "table") # liking r = .38
+dv_corr("target_empathic_concern_z", control_vars, study2_dichotom, output = "table")
+dv_corr("problem_awareness_z", control_vars, study2_dichotom, output = "table") 
+dv_corr("behavioural_intention_z", control_vars, study2_dichotom, output = "table") # liking r = .41
 dv_corr("behavioural_intention_z", control_vars, subset(study2_dichotom, timepoint == "End"), output = "table") # liking r = .47
-dv_corr("behavioural_intention_z", control_vars, subset(study2_dichotom, timepoint == "Baseline"), output = "table") # liking r = .33
-dv_corr("sum_behaviour", control_vars, subset(study2_dichotom, timepoint == "End"), method = "spearman", output = "table") # liking r = .48; openness r = .33
+dv_corr("behavioural_intention_z", control_vars, subset(study2_dichotom, timepoint == "Baseline"), output = "table") # liking r = .35
+dv_corr("sum_behaviour", control_vars, subset(study2_dichotom, timepoint == "End"), method = "spearman", output = "table") # liking r = .44
 
 rm(study2_dichotom, control_vars, multichoice_vars)
 ```
@@ -1528,25 +1526,25 @@ study2_long <- study2_long %>%
                                         .default = 0),
          identity_none_dich = case_when(identity_none == 1 ~ 1,
                                         .default = 0),
-         age_z = my_z_score(age),
+         liking_z = my_z_score(liking),
          # for Bartlett test:
          cell = paste(group, timepoint))
 
 #### Awareness LMM ###
 
-# s2_awareness_lmm <- lmer(problem_awareness_z ~ identity_lgbq_dich + group * timepoint + (1|p_id), data = study2_long)
+# s2_awareness_lmm <- lmer(problem_awareness_z ~ group * timepoint + (1|p_id), data = study2_long)
 # check_assumptions(s2_awareness_lmm, "problem_awareness_z", study2_long) # intercepts violate normality
-#
+# 
 # # Extract random intercepts
 # awareness_intercepts <- ranef(s2_awareness_lmm)$p_id
 # # Find the indices of the most extreme residuals
 # order(abs(awareness_intercepts$`(Intercept)`), decreasing = TRUE)[1:4] # indices: c(12, 171,  64, 145)
-# rownames(awareness_intercepts)[c(12, 171,  64, 145)] # p_id = c("sub-on2109", "sub-on295",  "sub-on2156", "sub-on271")
+# rownames(awareness_intercepts)[c(8, 23, 76, 109)] # p_id = c("sub-on2109", "sub-on295",  "sub-on2156", "sub-on271")
 # 
 # rm(awareness_intercepts)
 
-s2_awareness_lmm <- lmer(problem_awareness_z ~ identity_lgbq_dich + group * timepoint + (1|p_id), data = subset(study2_long, !p_id %in% c("sub-on2109")))
-# check_assumptions(s2_awareness_lmm, "problem_awareness_z", subset(study2_long, !p_id %in% c("sub-on2109"))) # removing one outlier fixed assumptions
+s2_awareness_lmm <- lmer(problem_awareness_z ~ group * timepoint + (1|p_id), data = subset(study2_long, !p_id %in% c("sub-on2105", "sub-on2119")))
+# check_assumptions(s2_awareness_lmm, "problem_awareness_z", subset(study2_long, !p_id %in% c("sub-on2105", "sub-on2119"))) # removing two outliers improves intercept Q-Q plot, but shapiro test still significant
 
 summary(s2_awareness_lmm)
 my_effectsize(s2_awareness_lmm)
@@ -1564,39 +1562,39 @@ my_effectsize(s2_awareness_lmm)
 # # Extract and standardize residuals
 # anna_empathy_residuals <- resid(anna_empathy_lmm, type = "pearson")
 # # Find the indices of the most extreme residuals
-# order(abs(anna_empathy_residuals), decreasing = TRUE)[1:7]
+# order(abs(anna_empathy_residuals), decreasing = TRUE)[1:11]
 # # Alternatively, plot outlier rows
 # lattice::qqmath(anna_empathy_lmm, id=0.1, idLabels=~.obs)
 # 
 # rm(anna_empathy_residuals)
 
-anna_empathy_lmm <- lmer(anna_empathic_concern_z ~ group * timepoint + (1|p_id), data = study2_long[-c(173, 174, 7, 60, 8, 59, 70), ])
-check_assumptions(anna_empathy_lmm, "anna_empathic_concern_z", study2_long[-c(173, 174, 7, 60, 8, 59, 70), ]) # normality of intercepts still violated
+anna_empathy_lmm <- lmer(anna_empathic_concern_z ~ group * timepoint + (1|p_id), data = study2_long[-c(191, 192,  66,   7,   8,  65,  77, 104, 158, 147), ])
+# check_assumptions(anna_empathy_lmm, "anna_empathic_concern_z", study2_long[-c(191, 192,  66,   7,   8,  65,  77, 104, 158, 147), ]) # normality of intercepts still violated
 
 # anna_empathy_intercepts <- ranef(anna_empathy_lmm)$p_id
-# order(anna_empathy_intercepts$`(Intercept)`, decreasing = T)[1:2] # 25, 69
-# rownames(anna_empathy_intercepts)[c(25, 69)] # "sub-on2120" "sub-on2160"
-# which(study2_long$p_id %in% c("sub-on2120", "sub-on2160")) # 239 240 319 320
+# order(anna_empathy_intercepts$`(Intercept)`, decreasing = T)[1:3] # 25, 69
+# rownames(anna_empathy_intercepts)[c(36, 99, 81)] # "sub-on2120" "sub-on2160"
+# which(study2_long$p_id %in% c("sub-on2130", "sub-on2188", "sub-on2171")) # 239 240 319 320
 # 
 # rm(anna_empathy_intercepts)
 # 
-# anna_empathy_lmm <- lmer(anna_empathic_concern_z ~ group * timepoint + (1|p_id), data = study2_long[-c(173, 174, 7, 60, 8, 59, 70, 239, 240, 319, 320), ])
-# check_assumptions(anna_empathy_lmm, "anna_empathic_concern_z", study2_long[-c(173, 174, 7, 60, 8, 59, 70, 239, 240, 319, 320), ]) # normality of intercepts STILL violated
+# anna_empathy_lmm <- lmer(anna_empathic_concern_z ~ group * timepoint + (1|p_id), data = study2_long[-c(191, 192,  66,   7,   8,  65,  77, 104, 158, 147, 259, 260, 341, 342, 375, 376), ])
+# check_assumptions(anna_empathy_lmm, "anna_empathic_concern_z", study2_long[-c(191, 192,  66,   7,   8,  65,  77, 104, 158, 147, 259, 260, 341, 342, 375, 376), ]) # normality of intercepts STILL violated
 
 summary(anna_empathy_lmm)
 my_effectsize(anna_empathy_lmm)
 
 #### Target Empathy LMM ###
 
-target_empathy_lmm <- lmer(target_empathic_concern_z ~ age_z + liking_z + group * timepoint + (1|p_id), data = study2_long)
-check_assumptions(target_empathy_lmm, "target_empathic_concern_z", study2_long) # normality of intercepts violated
+target_empathy_lmm <- lmer(target_empathic_concern_z ~ group * timepoint + (1|p_id), data = study2_long)
+# check_assumptions(target_empathy_lmm, "target_empathic_concern_z", study2_long) # normality of intercepts violated
 
 # target_empathy_intercepts <- ranef(target_empathy_lmm)$p_id
-# order(target_empathy_intercepts$`(Intercept)`, decreasing = T)[1:4] # 40, 115, 99, 144
-# rownames(target_empathy_intercepts)[c(40, 115, 99, 144)] # "sub-on2139", "sub-on260", "sub-on242", "sub-on29" 
+# order(target_empathy_intercepts$`(Intercept)`, decreasing = T)[1:8] # 40, 115, 99, 144
+# rownames(target_empathy_intercepts)[c(36, 117, 132, 189)] # "sub-on2139", "sub-on260", "sub-on242", "sub-on29"
 # 
-# target_empathy_lmm <- lmer(target_empathic_concern_z ~ age_z + liking_z + group * timepoint + (1|p_id), data = subset(study2_long, !p_id %in% c("sub-on2139", "sub-on260", "sub-on242", "sub-on29")))
-# check_assumptions(target_empathy_lmm, "target_empathic_concern_z", subset(study2_long, !p_id %in% c("sub-on2139", "sub-on260", "sub-on242", "sub-on29"))) # normality of intercepts STILL violated
+# target_empathy_lmm <- lmer(target_empathic_concern_z ~ group * timepoint + (1|p_id), data = subset(study2_long, !p_id %in% c("sub-on2130", "sub-on2203", "sub-on234",  "sub-on286", "sub-on23",   "sub-on296",  "sub-on260",  "sub-on294")))
+# check_assumptions(target_empathy_lmm, "target_empathic_concern_z", subset(study2_long, !p_id %in% c("sub-on2130", "sub-on2203", "sub-on234",  "sub-on286", "sub-on23",   "sub-on296",  "sub-on260",  "sub-on294"))) # normality of intercepts STILL violated
 
 summary(target_empathy_lmm)
 my_effectsize(target_empathy_lmm)
@@ -1610,12 +1608,12 @@ anna_closeness_lmm <- lmer(ios_anna_z ~ liking_z + group * timepoint + (1|p_id),
 # anna_closeness_residuals <- resid(anna_closeness_lmm, type = "pearson")
 # # Find the indices of the most extreme residuals
 # order(abs(anna_closeness_residuals), decreasing = T)[1:6] # 29 30 57 63 58 64 ISSUE: list of residuals is shorter than original df, therefore indices change. Use number names instead of indices
-# anna_closeness_residuals[c(29, 30, 57, 63, 58, 64)] # indices: 31, 32, 63, 69, 64, 70
+# anna_closeness_residuals[c(31, 32, 63, 71, 64, 72)] # indices: 31, 32, 63, 69, 64, 70
 # 
 # rm(anna_closeness_residuals)
 # 
-# anna_closeness_lmm <- lmer(ios_anna_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long[-c(31, 32, 63, 69, 64, 70), ])
-# check_assumptions(anna_closeness_lmm, "ios_anna_z", study2_long[-c(31, 32, 63, 69, 64, 70), ]) # residual outliers are gone, but assumptions are still violated
+# anna_closeness_lmm <- lmer(ios_anna_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long[-c(33,        34,        69,        77,        70,        78), ])
+# check_assumptions(anna_closeness_lmm, "ios_anna_z", study2_long[-c(33,        34,        69,        77,        70,        78), ]) # assumptions are still violated
 
 summary(anna_closeness_lmm)
 my_effectsize(anna_closeness_lmm)
@@ -1623,53 +1621,62 @@ my_effectsize(anna_closeness_lmm)
 #### Target Closeness LMM ###
 
 target_closeness_lmm <- lmer(ios_target_z ~ group * timepoint + (1|p_id), data = study2_long)
-check_assumptions(target_closeness_lmm, "ios_target_z", study2_long) # residuals & intercepts violate normality, though intercept q-q looks good to me...
+# check_assumptions(target_closeness_lmm, "ios_target_z", study2_long) # residuals & intercepts violate normality
 
 # study2_long <- study2_long %>%
 #   mutate(target_closeness_log = log(ios_target), # worse
 #          target_closeness_sqrt = sqrt(ios_target), # worse
 #          target_closeness_recpr = 1/ios_target) # the worst
+#
+# target_closeness_intercepts <- ranef(target_closeness_lmm)$p_id
+# order(target_closeness_intercepts$`(Intercept)`, decreasing = T)[1:8] # 40, 115, 99, 144
+# rownames(target_closeness_intercepts)[c(3, 145, 198,  36, 182, 187,  43,  47)] # "sub-on2139", "sub-on260", "sub-on242", "sub-on29"
+
+# target_closeness_lmm <- lmer(ios_target_z ~ group * timepoint + (1|p_id), data = subset(study2_long, !p_id %in% c("sub-on2100", "sub-on246",  "sub-on294",  "sub-on2130", "sub-on28",   "sub-on284",  "sub-on2137", "sub-on2140")))
+# check_assumptions(target_closeness_lmm, "ios_target_z", subset(study2_long, !p_id %in% c("sub-on2100", "sub-on246",  "sub-on294",  "sub-on2130", "sub-on28",   "sub-on284",  "sub-on2137", "sub-on2140"))) # that's worse for some reason
 
 summary(target_closeness_lmm)
 my_effectsize(target_closeness_lmm)
 
 #### Behavioural intention LMM ###
-s2_intention_lmm <- lmer(behavioural_intention_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long)
-# check_assumptions(s2_intention_lmm, "behavioural_intention_z", study2_long) # non-normal residuals
-
+# s2_intention_lmm <- lmer(behavioural_intention_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long)
+# check_assumptions(s2_intention_lmm, "behavioural_intention_z", study2_long) # non-normal residuals & intercepts
+# 
 # # Extract and standardize residuals
 # intention_residuals <- resid(s2_intention_lmm, type = "pearson")
 # # Find the most extreme residuals
-# order(abs(intention_residuals), decreasing = T)[1:4] # 149 150 297 298
+# order(abs(intention_residuals), decreasing = T)[1:7] # 149 150 297 298
 # # look up their indices
-# intention_residuals[c(149, 150, 297, 298)] # 149       150       297       298
+# intention_residuals[c(301, 160, 159,  83,  66, 246, 302)] # 149       150       297       298
 # 
 # rm(intention_residuals)
 
-s2_intention_lmm <- lmer(behavioural_intention_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long[-c(149, 150, 297, 298), ])
-# check_assumptions(s2_intention_lmm, "behavioural_intention_z", study2_long[-c(149, 150, 297, 298), ]) # now, residuals are normal
-
-# # extract intercepts
-# intention_intercepts <- ranef(s2_intention_lmm)$p_id
-# # find p_ids with largest positive and negative intercepts
-# order(intention_intercepts$`(Intercept)`, decreasing = T)[1] # 143
-# order(intention_intercepts$`(Intercept)`, decreasing = F)[1] # 145
-# rownames(intention_intercepts)[c(143, 145)] # "sub-on27"   "sub-on271"
-# # find indices of those p_ids in original data
-# which(study2_long$p_id %in% c("sub-on27", "sub-on271")) # 13  14 141 142
-# 
-# s2_intention_lmm <- lmer(behavioural_intention_z ~ group * timepoint + (1|p_id), data = study2_long[-c(149, 150, 297, 298, 13, 14, 141, 142), ])
-# check_assumptions(s2_intention_lmm, "behavioural_intention_z", study2_long[-c(149, 150, 297, 298, 13, 14, 141, 142), ]) # exclusion did not help
+s2_intention_lmm <- lmer(behavioural_intention_z ~ liking_z + group * timepoint + (1|p_id), data = study2_long[-c(319,       168), ])
+# check_assumptions(s2_intention_lmm, "behavioural_intention_z", study2_long[-c(319,       168), ]) # now, residuals & intercepts are normal
 
 summary(s2_intention_lmm)
 my_effectsize(s2_intention_lmm)
 ```
+```{r}
+#| label: study2-subset-tests
+#| include: false
 
-As opposed to study 1, openness and political orientation had associations smaller than $r = .3$ with problem awareness and were not included as covariates in the model. However, participants who self-identified with a marginalized sexual orientation tended to have a higher problem awareness (`r apa_print(cor.test(study2_long$problem_awareness_z, study2_long$identity_lgbq_dich, method = "spearman"))$full_result`); hence this variable was controlled for. Consistent with study 1, the model $Awareness \sim LGBQ + Stimulus * Time + (1|Participant)$ yielded the hypothesized small effect of time `r eval_fixed(s2_awareness_lmm, "timepointPostvsPre")`, with participants reporting higher problem awareness after the event (`r print_descr(study2_df$post_problem_awareness)`) than before (`r print_descr(study2_df$base_problem_awareness)`; see @fig-awareness). The stimuli did not have a significant main effect or interaction with time.
+# test increase separately for film and performance
+t.test(subset(study2_df, group == "group_film")$post_problem_awareness, subset(study2_df, group == "group_film")$base_problem_awareness, paired = T, alternative = "greater")
+t.test(subset(study2_df, group == "group_perf")$post_problem_awareness, subset(study2_df, group == "group_perf")$base_problem_awareness, paired = T, alternative = "greater")
+
+t.test(subset(study2_df, group == "group_film")$post_anna_empathic_concern, subset(study2_df, group == "group_film")$base_anna_empathic_concern, paired = T, alternative = "greater")
+t.test(subset(study2_df, group == "group_perf")$post_anna_empathic_concern, subset(study2_df, group == "group_perf")$base_anna_empathic_concern, paired = T, alternative = "greater")
+
+t.test(subset(study2_df, group == "group_film")$post_ios_anna, subset(study2_df, group == "group_film")$base_ios_anna, paired = T, alternative = "greater")
+t.test(subset(study2_df, group == "group_perf")$post_ios_anna, subset(study2_df, group == "group_perf")$base_ios_anna, paired = T, alternative = "greater")
+```
+
+As opposed to study 1, openness and political orientation had associations smaller than $r = .3$ with problem awareness and were not included as covariates in the model. Consistent with study 1, the model $Awareness \sim Stimulus * Time + (1|Participant)$ yielded the hypothesized small effect of time `r eval_fixed(s2_awareness_lmm, "timepointPostvsPre")`, with participants reporting higher problem awareness after the event (`r print_descr(study2_df$post_problem_awareness)`) than before (`r print_descr(study2_df$base_problem_awareness)`; see @fig-awareness). The stimuli did not have a significant main effect or interaction with stimuli
 
 ### Empathy
 
-We fitted two LMMs for empathy with Anna Vasquez and with a hypothetical victim of wrongful imprisonment separately. As expected, empathy with Anna Vasquez showed a small increase from baseline (`r print_descr(study2_df$base_anna_empathic_concern)`) to after the event (`r print_descr(study2_df$post_anna_empathic_concern)`), `r eval_fixed(anna_empathy_lmm, "timepointPostvsPre")` (see @fig-empathy), but the interaction with the stimuli from study 1 did not replicate, nor did the stimuli have a significant main effect. Empathy with the hypothetical victim was associated with older age (`r apa_print(cor.test(study2_long$target_empathic_concern_z, study2_long$age, method = "spearman"))$full_result`) and with liking contemporary percussion music (`r apa_print(cor.test(study2_long$target_empathic_concern_z, study2_long$liking, method = "spearman"))$full_result`), hence these variable were included as covariates in the model. Empathy with the hypothetical victim showed a very small increase from baseline (`r print_descr(study2_df$base_target_empathic_concern)`) to after the event (`r print_descr(study2_df$post_target_empathic_concern)`), `r eval_fixed(target_empathy_lmm, "timepointPostvsPre")` (see @fig-empathy-2), whereas the main and interaction effects of the stimuli were not significant.
+We fitted two LMMs for empathy with Anna Vasquez and with a hypothetical victim of wrongful imprisonment separately. As expected, empathy with Anna Vasquez showed a small increase from baseline (`r print_descr(study2_df$base_anna_empathic_concern)`) to after the event (`r print_descr(study2_df$post_anna_empathic_concern)`), `r eval_fixed(anna_empathy_lmm, "timepointPostvsPre")` (see @fig-empathy). The stimuli also had a small main effect, `r eval_fixed(anna_empathy_lmm, "groupPerfvsFilm")`, with higher empathy both before and after watching the film, compared to the performance, but the interaction of time and stimuli found in study 1 did not replicate. Empathy with the hypothetical victim showed a very small increase from baseline (`r print_descr(study2_df$base_target_empathic_concern)`) to after the event (`r print_descr(study2_df$post_target_empathic_concern)`), `r eval_fixed(target_empathy_lmm, "timepointPostvsPre")` (see @fig-empathy-2), whereas the main and interaction effects of the stimuli were not significant.
 
 ```{r}
 #| label: fig-empathy-2
@@ -1763,7 +1770,7 @@ Finally, we exploratively replaced the closeness target as well: $Intention \sim
 study2_df <- study2_df %>%
   mutate(post_behavioural_intention_z = my_z_score(post_behavioural_intention))
 
-# behaviour ~ intention
+# behaviour ~ intention TODO control for liking?
 study2_sumbehav_intention <- MASS::polr(sum_behaviour_fact ~ post_behavioural_intention_z, data = study2_df, Hess = TRUE)
 
 # store OR values in an object 
@@ -1910,7 +1917,7 @@ model_comp_table <- matrix(ncol = 2, nrow = 0) %>% # initiate table structure
   rbind(c("", "")) %>%
   rbind(c("Intention$^b$", paste0("$N_{observations} = ", nobs(intention_lmm), "$; $N_{participants} = ", intention_lmm@Gp[2], "$"))) %>%
   rbind(c("  Base Model", "Intention \\textasciitilde SocialJusticeMotivation + TraitEmpathicConcern + Baseline + (1|Participant)")) %>%
-  rbind(c("  Full Model", "Awareness \\textasciitilde SocialJusticeMotivation + TraitEmpathicConcern + Baseline + Attendance * Stimulus * Time + (1|Participant)")) %>%
+  rbind(c("  Full Model", "Intention \\textasciitilde SocialJusticeMotivation + TraitEmpathicConcern + Baseline + Attendance * Stimulus * Time + (1|Participant)")) %>%
   rbind(c("  LRT Test", model_comp(intention_cov, intention_lmm)))
   
 # set colnames
