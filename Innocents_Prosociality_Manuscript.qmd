@@ -80,9 +80,9 @@ language:
   title-block-role-introduction: "Author roles were classified using the Contributor Role Taxonomy (CRediT; [credit.niso.org](https://credit.niso.org)) as follows:"
   title-impact-statement: "Impact Statement"
 format:
-  apaquarto-docx: 
-    toc: false
-  apaquarto-pdf:
+  # apaquarto-docx: 
+  #   toc: false
+  apaquarto-html:
     documentmode: man # Can be jou (journal), man (manuscript), stu (student), or doc (document)
     keep-tex: true
 ---
@@ -1891,8 +1891,6 @@ The LIVELab is equipped with technology that meets the demands of concert halls 
 
 # Event Experience {#apx-eventexperience}
 
-TODO plot engagement items from both studies
-
 ```{r}
 #| label: fig-affect
 #| fig-cap: TODO
@@ -1935,7 +1933,8 @@ combined_long %>%
   facet_grid(cols = vars(facet), 
              rows = vars(Emotion),
              scales = "free",
-             labeller = as_labeller(emotion_labels)) 
+             labeller = as_labeller(emotion_labels)) +
+  theme(aspect.ratio = 1.5)
 ```
 
 ```{r}
@@ -1947,6 +1946,35 @@ combined_long %>%
 #| warning: false
 
 # use combined_long$facet variable, y = engagement_variable, x = -3.5 bis +6.5, plot orange and blue pointranges 
+combined_long %>%
+  filter(medium != "Baseline") %>%
+  pivot_longer(
+    cols = c(enjoy, interest, moved, insight, concentration, chills, tears, reengage, duration), 
+    names_to = "Engagement", 
+    values_to = "engagement_rating"
+  ) %>%
+  mutate(
+    Engagement = fct_reorder(Engagement, engagement_rating, .fun = "mean"),
+    Order = order
+  ) %>%
+  ggplot(
+    aes(x = engagement_rating,
+         y = Engagement,
+         group = interaction(medium, Order),
+         color = medium,
+        linetype = Order,
+        shape = Order)) + 
+  stat_summary(
+    fun.data = mean_cl_boot, # add 95% bootstrapped CI with 1000 samples
+    geom = "pointrange",
+    alpha = .8,
+    position = position_dodge(.6)
+  ) +
+  labs(x = "Rating") +
+  scale_color_manual(values = medium_cols, name = "Stimulus") +
+  facet_grid(cols = vars(facet)) + 
+  theme_bw() +
+  theme(aspect.ratio = 2)
 
 ```
 
