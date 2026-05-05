@@ -165,7 +165,10 @@ plot_dotbars <- function(df, dv, by_v, ylab, xlab, my_colour) {
 # Plot means and CI by order across timepoint function
 plot_meanSE <- function(df, dv, ylab, xlab, colors, facet_var = NULL) {
 
-dv <- sym(dv)
+  
+  min <- min(df[, dv], na.rm = TRUE) - .1
+  max <- max(df[, dv], na.rm = TRUE) + .1
+  dv <- sym(dv)
 
     splot <- 
       ggplot(data = df,
@@ -211,7 +214,7 @@ dv <- sym(dv)
                  position = position_nudge(.08)) +
     scale_fill_manual(values = c("gray30", colors), name = "Measurement") +
     scale_shape_manual(values = c(21, 24, 22), name = "Measurement") +
-    scale_y_continuous(limits = c(0.8,7.2)) +
+    scale_y_continuous(limits = c(min, max)) +
     theme_bw() +
     labs(x = xlab,
          y = ylab) +
