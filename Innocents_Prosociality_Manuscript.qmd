@@ -2031,7 +2031,6 @@ apa_table(
 table(study2_df$group)
 
 s2_perf <- subset(study2_df, group == "group_perf")
-s2_perf_long <- subset(study2_long, group == "group_perf")
 
 library(effectsize)
 conflicts_prefer(effsize::cohen.d)
@@ -2048,6 +2047,13 @@ cohen.d(s2_perf$base_ios_anna, s2_perf$post_ios_anna, paired = TRUE)
 cat("S2 Intention")
 cohen.d(s2_perf$base_behavioural_intention, s2_perf$post_behavioural_intention, paired = TRUE)
 
+s2_perf <- s2_perf %>%
+  mutate(
+    across(.cols = all_of(c("post_ios_anna", "post_anna_empathic_concern", "post_problem_awareness", "post_behavioural_intention", "liking")), .fns = my_z_score, .names = "{.col}_z")
+    )
+s2_regr_intention <- lm(post_behavioural_intention_z ~ liking_z + post_ios_anna_z + post_anna_empathic_concern_z + post_problem_awareness_z, data = s2_perf)
+summary(s2_regr_intention)
+
 cat("##### Comparison with Study 1 Peformance (1st half only) #####")
 
 s1_perffirst <- subset(study1_df, order == "Perf first")
@@ -2063,4 +2069,12 @@ cohen.d(s1_perffirst$base_ios_anna, s1_perffirst$perfo_ios_anna, paired = TRUE, 
 
 cat("S1 Intention")
 cohen.d(s1_perffirst$base_behavioural_intention, s1_perffirst$perfo_behavioural_intention, paired = TRUE, na.rm = TRUE)
+
+s1_perffirst <- s1_perffirst %>%
+  mutate(
+    across(.cols = all_of(c("perfo_ios_anna", "perfo_anna_empathic_concern", "perfo_problem_awareness", "perfo_behavioural_intention", "trait_empathic_concern")), .fns = my_z_score, .names = "{.col}_z"),
+    motivation_socialjustice_dich = factor(motivation_socialjustice, levels = c(0, 1), labels = c("No", "Yes"))
+    )
+s1_regr_intent <- lm(perfo_behavioural_intention_z ~ trait_empathic_concern_z + motivation_socialjustice_dich + perfo_ios_anna_z + perfo_problem_awareness_z + perfo_anna_empathic_concern_z, data = s1_perffirst)
+summary(s1_regr_intent)
 ```
