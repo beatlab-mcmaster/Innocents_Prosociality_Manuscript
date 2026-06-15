@@ -1932,3 +1932,45 @@ apa_table(
   escape = FALSE
 )
 ```
+
+# SysMus analyses
+
+```{r}
+#| label: sysmus26
+
+table(study2_df$group)
+
+s2_perf <- subset(study2_df, group == "group_perf")
+s2_perf_long <- subset(study2_long, group == "group_perf")
+
+library(effectsize)
+conflicts_prefer(effsize::cohen.d)
+
+cat("S2 Awareness")
+cohen.d(s2_perf$base_problem_awareness, s2_perf$post_problem_awareness, paired = TRUE) # converges with my_effectsize() output
+
+cat("S2 Empathy")
+cohen.d(s2_perf$base_anna_empathic_concern, s2_perf$post_anna_empathic_concern, paired = TRUE)
+
+cat("S2 Closeness")
+cohen.d(s2_perf$base_ios_anna, s2_perf$post_ios_anna, paired = TRUE)
+
+cat("S2 Intention")
+cohen.d(s2_perf$base_behavioural_intention, s2_perf$post_behavioural_intention, paired = TRUE)
+
+cat("##### Comparison with Study 1 Peformance (1st half only) #####")
+
+s1_perffirst <- subset(study1_df, order == "Perf first")
+
+cat("S1 Awareness")
+cohen.d(s1_perffirst$base_problem_awareness, s1_perffirst$perfo_problem_awareness, paired = TRUE, na.rm = TRUE) # converges with my_effectsize() output
+
+cat("S1 Empathy")
+cohen.d(s1_perffirst$base_anna_empathic_concern, s1_perffirst$perfo_anna_empathic_concern, paired = TRUE, na.rm = TRUE)
+
+cat("S1 Closeness")
+cohen.d(s1_perffirst$base_ios_anna, s1_perffirst$perfo_ios_anna, paired = TRUE, na.rm = TRUE)
+
+cat("S1 Intention")
+cohen.d(s1_perffirst$base_behavioural_intention, s1_perffirst$perfo_behavioural_intention, paired = TRUE, na.rm = TRUE)
+```
