@@ -2028,36 +2028,17 @@ apa_table(
 ```{r}
 #| label: sysmus26
 
-table(study2_df$group)
-
-s2_perf <- subset(study2_df, group == "group_perf")
-
 library(effectsize)
 conflicts_prefer(effsize::cohen.d)
 
-cat("S2 Awareness")
-cohen.d(s2_perf$base_problem_awareness, s2_perf$post_problem_awareness, paired = TRUE) # converges with my_effectsize() output
 
-cat("S2 Empathy")
-cohen.d(s2_perf$base_anna_empathic_concern, s2_perf$post_anna_empathic_concern, paired = TRUE)
 
-cat("S2 Closeness")
-cohen.d(s2_perf$base_ios_anna, s2_perf$post_ios_anna, paired = TRUE)
+cat("##### Comparison: Study 1 Peformance (1st half only) #####")
 
-cat("S2 Intention")
-cohen.d(s2_perf$base_behavioural_intention, s2_perf$post_behavioural_intention, paired = TRUE)
-
-s2_perf <- s2_perf %>%
-  mutate(
-    across(.cols = all_of(c("post_ios_anna", "post_anna_empathic_concern", "post_problem_awareness", "post_behavioural_intention", "liking")), .fns = my_z_score, .names = "{.col}_z")
-    )
-s2_regr_intention <- lm(post_behavioural_intention_z ~ liking_z + post_ios_anna_z + post_anna_empathic_concern_z + post_problem_awareness_z, data = s2_perf)
-summary(s2_regr_intention)
-
-cat("##### Comparison with Study 1 Peformance (1st half only) #####")
-
+## subset the data
 s1_perffirst <- subset(study1_df, order == "Perf first")
 
+## Calculate effect sizes
 cat("S1 Awareness")
 cohen.d(s1_perffirst$base_problem_awareness, s1_perffirst$perfo_problem_awareness, paired = TRUE, na.rm = TRUE) # converges with my_effectsize() output
 
@@ -2070,6 +2051,7 @@ cohen.d(s1_perffirst$base_ios_anna, s1_perffirst$perfo_ios_anna, paired = TRUE, 
 cat("S1 Intention")
 cohen.d(s1_perffirst$base_behavioural_intention, s1_perffirst$perfo_behavioural_intention, paired = TRUE, na.rm = TRUE)
 
+## Regression of behavioural intention
 s1_perffirst <- s1_perffirst %>%
   mutate(
     across(.cols = all_of(c("perfo_ios_anna", "perfo_anna_empathic_concern", "perfo_problem_awareness", "perfo_behavioural_intention", "trait_empathic_concern")), .fns = my_z_score, .names = "{.col}_z"),
@@ -2077,4 +2059,142 @@ s1_perffirst <- s1_perffirst %>%
     )
 s1_regr_intent <- lm(perfo_behavioural_intention_z ~ trait_empathic_concern_z + motivation_socialjustice_dich + perfo_ios_anna_z + perfo_problem_awareness_z + perfo_anna_empathic_concern_z, data = s1_perffirst)
 summary(s1_regr_intent)
+
+## Plot behaviour
+s1_behaviour <- s1_perffirst %>%
+ggplot(aes(x = 1,
+           y = behaviour_dich)
+       ) + 
+  stat_summary(
+    fun = mean,
+    geom = "col",
+    fill = "#002060",
+    width = 0.5
+  ) +
+  stat_summary(
+    fun = mean,
+    geom = "text",
+    aes(label = sprintf("%.0f%%", ..y.. * 100)),
+    colour = "white",
+    size   = 5,
+    vjust  = 2
+  ) +
+  labs(x = NULL,
+       y = "Participants who Supported Charity") +
+  scale_x_continuous(breaks = NULL) +
+  scale_y_continuous(limits = c(0, 1),
+                     expand = c(0, 0),
+                     labels=scales::percent) +
+  papaja::theme_apa()
+ggsave("Innocents_Prosociality_Manuscript_files/sysmus26/s1_behaviour.png", plot = s1_behaviour, width = 2, height = 4)
+
+
+
+cat("##### Study 2 Peformance only #####")
+
+table(study2_df$group)
+
+## Subset the data
+s2_perf <- subset(study2_df, group == "group_perf")
+
+## Calculate effect sizes
+cat("S2 Awareness")
+cohen.d(s2_perf$base_problem_awareness, s2_perf$post_problem_awareness, paired = TRUE) # converges with my_effectsize() output
+
+cat("S2 Empathy")
+cohen.d(s2_perf$base_anna_empathic_concern, s2_perf$post_anna_empathic_concern, paired = TRUE)
+
+cat("S2 Closeness")
+cohen.d(s2_perf$base_ios_anna, s2_perf$post_ios_anna, paired = TRUE)
+
+cat("S2 Intention")
+cohen.d(s2_perf$base_behavioural_intention, s2_perf$post_behavioural_intention, paired = TRUE)
+
+## Regression of behavioural intention
+s2_perf <- s2_perf %>%
+  mutate(
+    across(.cols = all_of(c("post_ios_anna", "post_anna_empathic_concern", "post_problem_awareness", "post_behavioural_intention", "liking")), .fns = my_z_score, .names = "{.col}_z")
+    )
+s2_regr_intention <- lm(post_behavioural_intention_z ~ liking_z + post_ios_anna_z + post_anna_empathic_concern_z + post_problem_awareness_z, data = s2_perf)
+summary(s2_regr_intention)
+
+
+
+## Plot attitude changes across both studies
+s2_attitudechange <- s2_perf %>%
+  mutate(awareness_change = post_problem_awareness - base_problem_awareness,
+         empathy_change = post_anna_empathic_concern - base_anna_empathic_concern,
+         ios_anna_change = post_ios_anna - base_ios_anna,
+         sample = "Online Replication") %>%
+  select(sample, awareness_change, empathy_change, ios_anna_change, behaviour_dich)
+combined_change <- s1_perffirst %>%
+  mutate(awareness_change = perfo_problem_awareness - base_problem_awareness,
+         empathy_change = perfo_anna_empathic_concern - base_anna_empathic_concern,
+         ios_anna_change = perfo_ios_anna - base_ios_anna, 
+         sample = case_match(attendance,
+                             "In-person" ~ "Study 1 In-person",
+                             "Livestream" ~ "Study 1 Livestream")) %>%
+  select(sample, awareness_change, empathy_change, ios_anna_change, behaviour_dich) %>%
+  bind_rows(s2_attitudechange)
+
+attitudechangeplot <- combined_change %>%
+  pivot_longer(cols = c(awareness_change, empathy_change, ios_anna_change), names_to = "Attitude", values_to = "Change") %>%
+  mutate(Attitude = factor(Attitude, 
+                           levels = c("awareness_change", "empathy_change", "ios_anna_change"), 
+                           labels = c("Awareness", "Empathy", "Closeness")),
+         sample = factor(sample, levels = c("Study 1 In-person", "Study 1 Livestream", "Online Replication"))
+         ) %>%
+  ggplot(aes(x = sample,
+             y = Change,
+             group = sample,
+             color = sample,
+             shape = sample)) +
+  geom_hline(yintercept = 0) +
+  geom_point(color = "grey",
+             alpha = .4,
+             size = 2,
+             position = position_jitter(width = .15, height = .2)) +
+  stat_summary(fun.data = mean_cl_boot, 
+               geom = "pointrange",
+               size = .8,
+               linewidth = .8) +
+  facet_grid(cols = vars(Attitude)) +
+  scale_color_viridis_d() +
+  labs(x = "Sample",
+       y = "Attitude Change") +
+  papaja::theme_apa() +
+  theme(legend.position="none",
+        axis.text.x = element_text(angle=30, hjust=0.9))
+ggsave("Innocents_Prosociality_Manuscript_files/sysmus26/attitudechange.png", plot = attitudechangeplot, width = 8, height = 6)
+
+## Plot behaviour across both studies
+combinedbehaviourplot <- combined_change %>%
+  mutate(sample = factor(sample, 
+                         levels = c("Study 1 In-person", "Study 1 Livestream", "Online Replication"))) %>%
+  ggplot(aes(x = sample,
+             y = behaviour_dich,
+             fill = sample)) +
+  stat_summary(
+    fun = mean,
+    geom = "col",
+    width = 0.5
+  ) +
+  stat_summary(
+    fun = mean,
+    geom = "text",
+    aes(label = sprintf("%.0f%%", ..y.. * 100)),
+    colour = "white",
+    size   = 5,
+    vjust  = 2
+  ) +
+  labs(x = NULL,
+       y = "Participants who Supported Charity") +
+  scale_y_continuous(limits = c(0, 1),
+                     expand = c(0, 0),
+                     labels=scales::percent) +
+  scale_fill_viridis_d() +
+  papaja::theme_apa() +
+  theme(legend.position="none",
+        axis.text.x = element_text(angle=30, hjust=0.9))
+ggsave("Innocents_Prosociality_Manuscript_files/sysmus26/s1s2behaviour.png", plot = combinedbehaviourplot, width = 4, height = 6)
 ```
