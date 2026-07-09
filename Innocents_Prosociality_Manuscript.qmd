@@ -2142,7 +2142,8 @@ attitudechangeplot <- combined_change %>%
   mutate(Attitude = factor(Attitude, 
                            levels = c("awareness_change", "empathy_change", "ios_anna_change"), 
                            labels = c("Awareness", "Empathy", "Closeness")),
-         sample = factor(sample, levels = c("Study 1 In-person", "Study 1 Livestream", "Online Replication"))
+         sample = factor(sample, levels = c("Study 1 In-person", "Study 1 Livestream", "Online Replication")), 
+         change_capped = pmax(pmin(Change, 2.5), -2)
          ) %>%
   ggplot(aes(x = sample,
              y = Change,
@@ -2150,22 +2151,24 @@ attitudechangeplot <- combined_change %>%
              color = sample,
              shape = sample)) +
   geom_hline(yintercept = 0) +
-  geom_point(color = "grey",
+  geom_point(aes(y = change_capped),
+             color = "grey",
              alpha = .4,
              size = 2,
              position = position_jitter(width = .15, height = .2)) +
-  stat_summary(fun.data = mean_cl_boot, 
+  stat_summary(fun.data = mean_cl_normal, 
                geom = "pointrange",
                size = .8,
                linewidth = .8) +
   facet_grid(cols = vars(Attitude)) +
   scale_color_viridis_d() +
+  coord_cartesian(ylim = c(-2, 2.5)) +
   labs(x = "Sample",
        y = "Attitude Change") +
   papaja::theme_apa() +
   theme(legend.position="none",
         axis.text.x = element_text(angle=30, hjust=0.9))
-ggsave("Innocents_Prosociality_Manuscript_files/sysmus26/attitudechange.png", plot = attitudechangeplot, width = 8, height = 6)
+ggsave("Innocents_Prosociality_Manuscript_files/sysmus26/attitudechangecapped.png", plot = attitudechangeplot, width = 8, height = 6)
 
 ## Plot behaviour across both studies
 combinedbehaviourplot <- combined_change %>%
